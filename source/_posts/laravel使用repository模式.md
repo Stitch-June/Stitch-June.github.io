@@ -1,10 +1,10 @@
 ---
 title: Laravel使用repository模式
 tags: []
-id: '66'
+id: '17'
 categories:
   - - uncategorized
-date: 2020-09-23 07:14:02
+date: 2019-10-27 15:31:22
 ---
 
 > **什么是Repository模式？**Repository 模式是架构模式，在设计架构时，才有参考价值； Repository 模式主要是封装数据查询和存储逻辑； Repository 模式实际用途：更换、升级 ORM 引擎，不影响业务逻辑； Repository 模式能提高测试效率，单元测试时，用 Mock 对象代替实际的数据库存取，可以成倍地提高测试用例运行速度。
