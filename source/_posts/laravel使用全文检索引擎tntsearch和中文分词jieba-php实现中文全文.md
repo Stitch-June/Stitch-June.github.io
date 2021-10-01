@@ -26,20 +26,22 @@ date: 2019-10-27 00:16:39
 添加字段  
 /database/migrations/2019\_01\_16\_055730\_create\_tests\_table.php
 
-1.  `/**`
-2.  `* Run the migrations.`
-3.  `*`
-4.  `* @return void`
-5.  `*/`
-6.  `public function up()`
-7.  `{`
-8.  `Schema::create('tests', function (Blueprint $table) {`
-9.  `$table->increments('id');`
-10.  `$table->string('title')->default('')->comment('测试标题');`
-11.  `$table->mediumText('content')->comment('测试内容');`
-12.  `$table->timestamps();`
-13.  `});`
-14.  `}`
+```
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('tests', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title')->default('')->comment('测试标题');
+            $table->mediumText('content')->comment('测试内容');
+            $table->timestamps();
+        });
+    }
+```
 
 .env文件数据库配置 就不用多说了吧
 
@@ -54,19 +56,21 @@ date: 2019-10-27 00:16:39
 生成测试数据  
 /database/seeds/TestsTableSeeder.php
 
-1.  `public function run()`
-2.  `{`
-3.  `DB::table('tests')->insert([`
-4.  `[`
-5.  `'title' => 'TNTSearch',`
-6.  `'content' => 'PHP编写的全文搜索引擎,非常强大'`
-7.  `],`
-8.  `[`
-9.  `'title' => 'jieba-php',`
-10.  `'content' => '强大的中文分词，最好的php中文分词，中文拆分成关键字'`
-11.  `]`
-12.  `]);`
-13.  `}`
+```
+public function run()
+    {
+        DB::table('tests')->insert([
+            [
+                'title' => 'TNTSearch',
+                'content' => 'PHP编写的全文搜索引擎,非常强大'
+            ],
+            [
+                'title' => 'jieba-php',
+                'content' => '强大的中文分词，最好的php中文分词，中文拆分成关键字'
+            ]
+        ]);
+    }
+```
 
 运行填充
 
@@ -79,10 +83,12 @@ date: 2019-10-27 00:16:39
 
 /routes/web.php
 
-1.  `use App\Models\Test;`
-2.  `Route::get('search', function () {`
-3.  `dump(Test::all()->toArray());`
-4.  `});`
+```
+use App\Models\Test;
+Route::get('search', function () {
+    dump(Test::all()->toArray());
+});
+```
 
 进入web页面 显示以下数据  
 ![](http://blog.gaobinzhan.com/uploads/article/20190116/fd1f2e0093ad3628c94408bb557c1b7c.png)
@@ -104,12 +110,14 @@ vanry为我们造的轮子 laravel-scout-tntsearch
 
 config/app.php
 
-1.  `// config/app.php`
-2.  `'providers' => [`
-3.  `// ...`
-4.  `Laravel\Scout\ScoutServiceProvider::class,`
-5.  `Vanry\Scout\TNTSearchScoutServiceProvider::class,`
-6.  `],`
+```
+// config/app.php
+'providers' => [
+    // ...
+    Laravel\Scout\ScoutServiceProvider::class,
+    Vanry\Scout\TNTSearchScoutServiceProvider::class,
+],
+```
 
 在 .env 文件中添加 SCOUT\_DRIVER=tntsearch  
 然后就可以将 scout.php 配置文件发布到 config 目录。
@@ -118,42 +126,50 @@ config/app.php
 
 在 config/scout.php 中添加:
 
-1.  `'tntsearch' => [`
-2.  `'storage' => storage_path('indexes'), //必须有可写权限`
-3.  `'fuzziness' => env('TNTSEARCH_FUZZINESS', false),`
-4.  `'searchBoolean' => env('TNTSEARCH_BOOLEAN', false),`
-5.  `'asYouType' => false,`
-6.  `'fuzzy' => [`
-7.  `'prefix_length' => 2,`
-8.  `'max_expansions' => 50,`
-9.  `'distance' => 2,`
-10.  `],`
-11.  `'tokenizer' => [`
-12.  `'driver' => env('TNTSEARCH_TOKENIZER', 'default'),`
-13.  `'jieba' => [`
-14.  `'dict' => 'small',`
-15.  `//'user_dict' => resource_path('dicts/mydict.txt'), //自定义词典路径`
-16.  `],`
-17.  `'analysis' => [`
-18.  `'result_type' => 2,`
-19.  `'unit_word' => true,`
-20.  `'differ_max' => true,`
-21.  `],`
-22.  `'scws' => [`
-23.  `'charset' => 'utf-8',`
-24.  `'dict' => '/usr/local/scws/etc/dict.utf8.xdb',`
-25.  `'rule' => '/usr/local/scws/etc/rules.utf8.ini',`
-26.  `'multi' => 1,`
-27.  `'ignore' => true,`
-28.  `'duality' => false,`
-29.  `],`
-30.  `],`
-31.  `'stopwords' => [`
-32.  `'的',`
-33.  `'了',`
-34.  `'而是',`
-35.  `],`
-36.  `],`
+```
+'tntsearch' => [
+    'storage' => storage_path('indexes'), //必须有可写权限
+    'fuzziness' => env('TNTSEARCH_FUZZINESS', false),
+    'searchBoolean' => env('TNTSEARCH_BOOLEAN', false),
+    'asYouType' => false,
+
+    'fuzzy' => [
+        'prefix_length' => 2,
+        'max_expansions' => 50,
+        'distance' => 2,
+    ],
+
+    'tokenizer' => [
+        'driver' => env('TNTSEARCH_TOKENIZER', 'default'),
+
+        'jieba' => [
+            'dict' => 'small',
+            //'user_dict' => resource_path('dicts/mydict.txt'), //自定义词典路径
+        ],
+
+        'analysis' => [
+            'result_type' => 2,
+            'unit_word' => true,
+            'differ_max' => true,
+        ],
+
+        'scws' => [
+            'charset' => 'utf-8',
+            'dict' => '/usr/local/scws/etc/dict.utf8.xdb',
+            'rule' => '/usr/local/scws/etc/rules.utf8.ini',
+            'multi' => 1,
+            'ignore' => true,
+            'duality' => false,
+        ],
+    ],
+
+    'stopwords' => [
+        '的',
+        '了',
+        '而是',
+    ],
+],
+```
 
 目前支持 jieba, phpanalysis 和 scws 中文分词，在 .env 文件中配置 TNTSEARCH\_TOKENIZER 可选值 为 jieba, analysis, scws, default， 其中 default 为 TNTSearch 自带的分词器。  
 考虑到性能问题，建议生产环境使用由C语言编写的scws分词扩展。
