@@ -5,7 +5,7 @@ keywords: null
 author: stitch
 language: zh-CN
 timezone: ''
-url: http://stitch.cn
+url: https://stitch.cn
 permalink: ':year/:month/:day/:title.html'
 permalink_defaults: null
 pretty_urls:
@@ -62,3 +62,11 @@ ignore: null
 theme: icarus
 deploy:
   type: ''
+# Extensions
+plugins:
+  hexo-generator-feed
+# Feed Atom
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
