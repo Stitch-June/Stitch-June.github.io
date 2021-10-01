@@ -7,7 +7,7 @@ categories:
 date: 2019-10-27 15:31:22
 ---
 
-> **什么是Repository模式？**Repository 模式是架构模式，在设计架构时，才有参考价值；Repository 模式主要是封装数据查询和存储逻辑；Repository 模式实际用途：更换、升级 ORM 引擎，不影响业务逻辑；Repository 模式能提高测试效率，单元测试时，用 Mock 对象代替实际的数据库存取，可以成倍地提高测试用例运行速度。
+> **什么是Repository模式？**Repository 模式是架构模式，在设计架构时，才有参考价值； Repository 模式主要是封装数据查询和存储逻辑； Repository 模式实际用途：更换、升级 ORM 引擎，不影响业务逻辑； Repository 模式能提高测试效率，单元测试时，用 Mock 对象代替实际的数据库存取，可以成倍地提高测试用例运行速度。
 > 
 > 详细了解 https://blog.csdn.net/ZuoAnYinXiang/article/details/80711936
 > 
@@ -50,19 +50,25 @@ laravel>=5.5
 
 在你的控制器中
 
-1.  `namespace App\Http\Controllers;`
-2.  `use App\PostRepository;`
-3.  `class PostsController extends Controller {`
-4.  `/**`
-5.  `* @var PostRepository`
-6.  `*/`
-7.  `protected $repository;`
-8.  `public function __construct(PostRepository $repository){`
-9.  `$this->repository = $repository;`
-10.  `}`
-11.  `public function index(){`
-12.  `return $this->repository->all();`
-13.  `}`
-14.  `}`
+```
+namespace App\Http\Controllers;
+
+use App\PostRepository;
+
+class PostsController extends Controller {
+
+    /**
+     * @var PostRepository
+     */
+    protected $repository;
+
+    public function __construct(PostRepository $repository){
+        $this->repository = $repository;
+    }
+    public function index(){
+        return $this->repository->all();
+    }
+}
+```
 
 更多操作：GitHub : https://github.com/andersao/l5-repository/tree/3.0-develop
