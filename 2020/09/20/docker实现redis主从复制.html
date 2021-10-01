@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>docker实现redis主从复制 - Stitch&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Stitch&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Stitch&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="在实际的场景当中单一节点的redis容易面临风险。比如:    机器故障。我们部署到一台 Redis 服务器，当发生机器故障时，需要迁移到另外一台服务器并且要保证数据是同步的。而数据是最重要的，如果你不在乎， 基本上也就不会使用 Redis 了。  要实现分布式数据库的更大的存储容量和承受高并发访问量，我们会将原来集中式数据库的数据分别存储到其他多个网络节点上。 Redis 为了解决这个单一节点的"><meta property="og:type" content="blog"><meta property="og:title" content="docker实现redis主从复制"><meta property="og:url" content="https://stitch.cn/2020/09/20/docker%E5%AE%9E%E7%8E%B0redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6.html"><meta property="og:site_name" content="Stitch&#039;s Blog"><meta property="og:description" content="在实际的场景当中单一节点的redis容易面临风险。比如:    机器故障。我们部署到一台 Redis 服务器，当发生机器故障时，需要迁移到另外一台服务器并且要保证数据是同步的。而数据是最重要的，如果你不在乎， 基本上也就不会使用 Redis 了。  要实现分布式数据库的更大的存储容量和承受高并发访问量，我们会将原来集中式数据库的数据分别存储到其他多个网络节点上。 Redis 为了解决这个单一节点的"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="http://qiniu.gaobinzhan.com/2019/12/19/55f5372ea5837.png"><meta property="og:image" content="http://qiniu.gaobinzhan.com/2019/12/19/45619a5aa919b.png"><meta property="og:image" content="http://qiniu.gaobinzhan.com/2019/12/19/1c2dc132f6731.png"><meta property="og:image" content="http://qiniu.gaobinzhan.com/2019/12/19/639b41e07023f.png"><meta property="article:published_time" content="2020-09-20T19:49:58.000Z"><meta property="article:modified_time" content="2021-10-01T03:05:23.216Z"><meta property="article:author" content="stitch"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="http://qiniu.gaobinzhan.com/2019/12/19/55f5372ea5837.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stitch.cn/2020/09/20/docker%E5%AE%9E%E7%8E%B0redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6.html"},"headline":"docker实现redis主从复制","image":["http://qiniu.gaobinzhan.com/2019/12/19/55f5372ea5837.png","http://qiniu.gaobinzhan.com/2019/12/19/45619a5aa919b.png","http://qiniu.gaobinzhan.com/2019/12/19/1c2dc132f6731.png","http://qiniu.gaobinzhan.com/2019/12/19/639b41e07023f.png"],"datePublished":"2020-09-20T19:49:58.000Z","dateModified":"2021-10-01T03:05:23.216Z","author":{"@type":"Person","name":"stitch"},"publisher":{"@type":"Organization","name":"Stitch's Blog","logo":{"@type":"ImageObject","url":{"text":"Stitch's Blog"}}},"description":"在实际的场景当中单一节点的redis容易面临风险。比如:    机器故障。我们部署到一台 Redis 服务器，当发生机器故障时，需要迁移到另外一台服务器并且要保证数据是同步的。而数据是最重要的，如果你不在乎， 基本上也就不会使用 Redis 了。  要实现分布式数据库的更大的存储容量和承受高并发访问量，我们会将原来集中式数据库的数据分别存储到其他多个网络节点上。 Redis 为了解决这个单一节点的"}</script><link rel="canonical" href="https://stitch.cn/2020/09/20/docker%E5%AE%9E%E7%8E%B0redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6.html"><link rel="alternate" href="/atom.xml" title="Stitch&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Stitch&#039;s Blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-20T19:49:58.000Z" title="9/20/2020, 7:49:58 PM">2020-09-20</time>发表</span><span class="level-item"><time dateTime="2021-10-01T03:05:23.216Z" title="10/1/2021, 3:05:23 AM">2021-10-01</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">10 分钟读完 (大约1474个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">docker实现redis主从复制</h1><div class="content"><p>在实际的场景当中单一节点的redis容易面临风险。<br>比如:</p>
+<ul>
+<li>  机器故障。我们部署到一台 Redis 服务器，当发生机器故障时，需要迁移到另外一台服务器并且要保证数据是同步的。而数据是最重要的，如果你不在乎， 基本上也就不会使用 Redis 了。</li>
+</ul>
+<p>要实现分布式数据库的更大的存储容量和承受高并发访问量，我们会将原来集中式数据库的数据分别存储到其他多个网络节点上。</p>
+<p>Redis 为了解决这个单一节点的问题，也会把数据复制多个副本部署到其他节点上进行复制，实现 Redis的高可用，实现对数据的冗余备份，从而保证数据和服务 的高可用。</p>
+<h4 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h4><ul>
+<li>  主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master)，后者称为从节点(slave),数据的复制是单向的，只能由主节点到 从节点。</li>
+<li>  默认情况下，每台Redis服务器都是主节点，且一个主节点可以有多个从节点(或没有从节点)，但一个从节点只能有一个主节点。</li>
+</ul>
+<h3 id="主从复制的作用"><a href="#主从复制的作用" class="headerlink" title="主从复制的作用"></a>主从复制的作用</h3><ul>
+<li>  数据冗余:主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
+<li>  故障恢复:当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复;实际上是一种服务的冗余。</li>
+<li>  负载均衡:在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务(即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点) 分担服务器负载;尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。</li>
+<li>  读写分离:可以用于实现读写分离，主库写、从库读，读写分离不仅可以提高服务器的负载能力，同时可根据需求的变化，改变从库的数量;</li>
+<li>  高可用基石:除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础。</li>
+</ul>
+<h4 id="主从复制启用"><a href="#主从复制启用" class="headerlink" title="主从复制启用"></a>主从复制启用</h4><p>从节点开启主从复制，有3种方式:</p>
+<ul>
+<li>配置文件  在从服务器的配置文件中加入:slaveof<br>  不推荐使用 配置文件可被动态修改</li>
+<li>启动命令  redis-server启动命令后加入 –slaveof</li>
+<li>客户端命令  Redis服务器启动后，直接通过客户端执行命令:slaveof ，则该Redis实例成为从节点。<br>  通过 info replication 命令可以看到复制的一些参数信息</li>
+</ul>
+<h4 id="主从复制原理"><a href="#主从复制原理" class="headerlink" title="主从复制原理"></a>主从复制原理</h4><p>主从复制的原理以及过程必须要掌握，这样我们才知道为什么会出现这些问题 主从复制过程大体可以分为3个阶段:连接建立阶段(即准备阶段)、数据同步阶段、命令传播阶段。在从节点执行 slaveof 命令后，复制过程便开始运作，下面图示大概可以看到， 从图中可以看出复制过程大致分为6个过程</p>
+<p><img src="http://qiniu.gaobinzhan.com/2019/12/19/55f5372ea5837.png"></p>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><h4 id="dockerfile构建redis镜像"><a href="#dockerfile构建redis镜像" class="headerlink" title="dockerfile构建redis镜像"></a>dockerfile构建redis镜像</h4><p>DockerFile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">FROM alpine</span><br><span class="line">RUN sed -i &#x27;s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g&#x27; /etc/apk/repositories \</span><br><span class="line">  &amp;&amp; apk add  gcc g++ libc-dev  wget vim  openssl-dev make  linux-headers \</span><br><span class="line">  &amp;&amp; rm -rf /var/cache/apk/*</span><br><span class="line"></span><br><span class="line">#通过选择更小的镜像，删除不必要文件清理不必要的安装缓存，从而瘦身镜像</span><br><span class="line">#创建相关目录能够看到日志信息跟数据跟配置文件</span><br><span class="line">RUN mkdir -p /usr/src/redis \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/data \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/conf \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/log   \</span><br><span class="line">      &amp;&amp; mkdir -p /var/log/redis</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RUN wget  -O /usr/src/redis/redis-4.0.11.tar.gz  &quot;http://download.redis.io/releases/redis-4.0.11.tar.gz&quot; \</span><br><span class="line">   &amp;&amp; tar -xzf /usr/src/redis/redis-4.0.11.tar.gz  -C /usr/src/redis \</span><br><span class="line">   &amp;&amp; rm -rf /usr/src/redis/redis-4.0.11.tar.tgz</span><br><span class="line"></span><br><span class="line">RUN cd /usr/src/redis/redis-4.0.11 &amp;&amp;  make &amp;&amp; make PREFIX=/usr/local/redis install \</span><br><span class="line">&amp;&amp; ln -s /usr/local/redis/bin/*  /usr/local/bin/  &amp;&amp; rm -rf /usr/src/redis/redis-4.0.11</span><br><span class="line"></span><br><span class="line">#COPY ./conf/redis.conf  /usr/src/redis/conf</span><br><span class="line"></span><br><span class="line">CMD [&quot;/usr/local/bin/redis-server&quot;,&quot;/usr/src/redis/conf/redis.conf&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>切换到当前dockfile文件目录下 执行命令</p>
+<p><code>docker build -t redis .</code></p>
+<p>等待构建完成就可以了</p>
+<h4 id="docker创建自定义网络及redis主从集群规划"><a href="#docker创建自定义网络及redis主从集群规划" class="headerlink" title="docker创建自定义网络及redis主从集群规划"></a>docker创建自定义网络及redis主从集群规划</h4><p>执行自定义网络命令<br><code>docker network create --subnet=192.168.1.0/24 redis-network</code></p>
+<p>容器名称</p>
+<p>容器IP地址</p>
+<p>映射端口号</p>
+<p>宿主机IP地址</p>
+<p>服务运行模式</p>
+<p>redis-master</p>
+<p>192.168.1.2</p>
+<p>6380-&gt;6379</p>
+<p>127.0.0.1</p>
+<p>master</p>
+<p>redis-slave</p>
+<p>192.168.1.3</p>
+<p>6381-&gt;6379</p>
+<p>127.0.0.1</p>
+<p>slave</p>
+<h4 id="docker启动容器"><a href="#docker启动容器" class="headerlink" title="docker启动容器"></a>docker启动容器</h4><p>在 /data/ 下面创建该目录结构</p>
+<p>data和log下面文件忽略</p>
+<p><img src="http://qiniu.gaobinzhan.com/2019/12/19/45619a5aa919b.png"></p>
+<p>目录代码</p>
+<p>提取码：r8r1</p>
+<p>下载完放到 /data 下面</p>
+<p>用户可自行定义宿主机目录</p>
+<p>master<br><code>docker run -itd --name redis-master --net redis-network -v /data/redis/master:/usr/src/redis -p 6380:6379 --ip 192.168.1.2 redis</code></p>
+<p>slave<br><code>docker run -itd --name redis-slave --net redis-network -v /data/redis/slave:/usr/src/redis -p 6381:6379 --ip 192.168.1.3 redis</code></p>
+<h4 id="测试主从复制"><a href="#测试主从复制" class="headerlink" title="测试主从复制"></a>测试主从复制</h4><p>主从的配置文件 没有设置redis密码</p>
+<p>开两个终端分别执行</p>
+<p><code>docker exec -it redis-master sh</code></p>
+<p><code>docker exec -it redis-slave sh</code></p>
+<p>进入容器后执行(都要执行)</p>
+<p><code>redis-cli</code></p>
+<p>在slave执行</p>
+<p><code>SLAVEOF 192.168.1.2 6379</code></p>
+<p><code>info replication</code></p>
+<p><img src="http://qiniu.gaobinzhan.com/2019/12/19/1c2dc132f6731.png"></p>
+<p><code>master_link_status</code>为up就成功了！</p>
+<p>当前是通过内网连接 端口号为6379</p>
+<p>如果通过宿主机IP连接 端口号为6380</p>
+<p>这时候在master进行操作 就可以看到slave的变化了！</p>
+<p><img src="http://qiniu.gaobinzhan.com/2019/12/19/639b41e07023f.png"></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>docker实现redis主从复制</p><p><a href="https://stitch.cn/2020/09/20/docker实现redis主从复制.html">https://stitch.cn/2020/09/20/docker实现redis主从复制.html</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>stitch</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-09-20</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2021-10-01</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2020/09/20/hellogo.html"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Hello,Go</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2020/09/20/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6kafka-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%AE%89%E8%A3%85.html"><span class="level-item">消息中间件Kafka - 介绍及安装</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/44792981?s=400&amp;u=273c6d745868dcacf7889e5da4499b751179f773&amp;v=4" alt="Stitch"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Stitch</p><p class="is-size-6 is-block">Alien monster</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Alien</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">45</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">1</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Stitch-June" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/Stitch-June"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/uncategorized/"><span class="level-start"><span class="level-item">uncategorized</span></span><span class="level-end"><span class="level-item tag">45</span></span></a></li></ul></div></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/09/"><span class="level-start"><span class="level-item">九月 2020</span></span><span class="level-end"><span class="level-item tag">37</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/08/"><span class="level-start"><span class="level-item">八月 2020</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/10/"><span class="level-start"><span class="level-item">十月 2019</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li></ul></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-04-01T00:40:00.000Z">2021-04-01</time></p><p class="title"><a href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-03-31T01:09:00.000Z">2021-03-31</time></p><p class="title"><a href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-27T12:28:48.000Z">2020-09-27</time></p><p class="title"><a href="/2020/09/27/go%E5%B8%B8%E7%94%A8%E9%9B%86%E5%90%88.html">Go常用集合</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-27T12:15:12.000Z">2020-09-27</time></p><p class="title"><a href="/2020/09/27/redis%E4%B9%8B%E4%B8%BB%E4%BB%8E%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86.html">redis之主从问题处理</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-23T09:21:33.000Z">2020-09-23</time></p><p class="title"><a href="/2020/09/23/go%E5%B8%B8%E8%A7%81%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0.html">Go常见架构模式的实现</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Stitch&#039;s Blog</a><p class="is-size-7"><span>&copy; 2021 stitch</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
