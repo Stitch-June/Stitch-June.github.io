@@ -3,38 +3,52 @@ title: Go单元测试及Benchmark
 tags: []
 id: '69'
 categories:
-  - - uncategorized
-date: 2020-09-23 07:30:04
+  - - Go
+date: 2020-05-24 20:47:37
 ---
 
-之前在刚开始写了如何编写测试程序。
+## 单元测试
+
+之前在刚开始写了如何编写测试程序
 
 内置单元测试框架：
 
-```
+- Fail, Error: 该测试失败，该测试继续，其他测试继续执⾏
+
+- FailNow, Fatal: 该测试失败，该测试中⽌，其他测试继续执⾏
+
+- 代码覆盖率
+
+  `go test -v -cover`
+
+- 断言
+
+  https://github.com/stretchr/testify
+
+```go
 func TestErrorInCode(t *testing.T) {
-    fmt.Println("Start")
-    t.Error("Error")
-    fmt.Println("End")
-    /** 运行结果：
-    === RUN   TestErrorInCode
-    Start
-        TestErrorInCode: functions_test.go:25: Error
-    End
-    --- FAIL: TestErrorInCode (0.00s)
-    */
+	fmt.Println("Start")
+	t.Error("Error")
+	fmt.Println("End")
+	/** 运行结果：
+	=== RUN   TestErrorInCode
+	Start
+	    TestErrorInCode: functions_test.go:25: Error
+	End
+	--- FAIL: TestErrorInCode (0.00s)
+	*/
 }
 
 func TestFatalInCode(t *testing.T) {
-    fmt.Println("Start")
-    t.Fatal("Error")
-    fmt.Println("End")
-    /** 运行结果：
-    === RUN   TestFatalInCode
-    Start
-        TestFatalInCode: functions_test.go:38: Error
-    --- FAIL: TestFatalInCode (0.00s)
-    */
+	fmt.Println("Start")
+	t.Fatal("Error")
+	fmt.Println("End")
+	/** 运行结果：
+	=== RUN   TestFatalInCode
+	Start
+	    TestFatalInCode: functions_test.go:38: Error
+	--- FAIL: TestFatalInCode (0.00s)
+	*/
 }
 ```
 
@@ -42,69 +56,71 @@ func TestFatalInCode(t *testing.T) {
 
 `go get -u github.com/stretchr/testify`
 
-```
+```go
 func square(op int) int {
-    return op * op
+	return op * op
 }
 
 func TestSquareWithAssert(t *testing.T) {
-    inputs := [...]int{1, 2, 3}
-    expected := [...]int{1, 4, 9}
-    for i := 0; i < len(inputs); i++ {
-        ret := square(inputs[i])
-        assert.Equal(t, expected[i], ret)
-    }
+	inputs := [...]int{1, 2, 3}
+	expected := [...]int{1, 4, 9}
+	for i := 0; i < len(inputs); i++ {
+		ret := square(inputs[i])
+		assert.Equal(t, expected[i], ret)
+	}
 }
 ```
+
+
 
 ## Benchmark
 
 文件名以下划线`_benchmark`结尾，方法名以`Benchmark`开头，参数为`b *testing.B`
 
-```
+```go
 // 利用+=连接
 func TestConcatStringByAdd(t *testing.T) {
-    assert := assert.New(t)
-    elems := []string{"1", "2", "3", "4", "5"}
-    ret := ""
-    for _, elem := range elems {
-        ret += elem
-    }
-    assert.Equal("12345", ret)
+	assert := assert.New(t)
+	elems := []string{"1", "2", "3", "4", "5"}
+	ret := ""
+	for _, elem := range elems {
+		ret += elem
+	}
+	assert.Equal("12345", ret)
 }
 
 // 利用buffer连接
 func TestConcatStringBytesBuffer(t *testing.T) {
-    assert := assert.New(t)
-    var buf bytes.Buffer
-    elems := []string{"1", "2", "3", "4", "5"}
-    for _, elem := range elems {
-        buf.WriteString(elem)
-    }
-    assert.Equal("12345", buf.String())
+	assert := assert.New(t)
+	var buf bytes.Buffer
+	elems := []string{"1", "2", "3", "4", "5"}
+	for _, elem := range elems {
+		buf.WriteString(elem)
+	}
+	assert.Equal("12345", buf.String())
 }
 
 func BenchmarkConcatStringByAdd(b *testing.B) {
-    elems := []string{"1", "2", "3", "4", "5"}
-    b.ResetTimer()
-    for i := 0; i < b.N; i++ {
-        ret := ""
-        for _, elem := range elems {
-            ret += elem
-        }
-    }
-    b.StopTimer()
+	elems := []string{"1", "2", "3", "4", "5"}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		ret := ""
+		for _, elem := range elems {
+			ret += elem
+		}
+	}
+	b.StopTimer()
 }
 
 func BenchmarkConcatStringBytesBuffer(b *testing.B) {
-    elems := []string{"1", "2", "3", "4", "5"}
-    b.ResetTimer()
-    for i := 0; i < b.N; i++ {
-        var buf bytes.Buffer
-        for _, elem := range elems {
-            buf.WriteString(elem)
-        }
-    }
+	elems := []string{"1", "2", "3", "4", "5"}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		var buf bytes.Buffer
+		for _, elem := range elems {
+			buf.WriteString(elem)
+		}
+	}
 }
 ```
 
@@ -114,7 +130,7 @@ Windows 下使⽤ go test 命令⾏时，-bench=.应写为-bench="."
 
 运行结果：
 
-```
+```bash
 $ go test -bench=. -benchmem
 goos: darwin
 goarch: amd64
@@ -143,24 +159,24 @@ https://github.com/smartystreets/goconvey
 
 `$GOPATH/bin/goconvey`
 
-```
+```go
 func TestSpec(t *testing.T) {
-    convey.Convey("Given 2 even numbers", t, func() {
-        a := 2
-        b := 4
-        convey.Convey("When add the two numbers", func() {
-            c := a + b
-            convey.Convey("Then the result is still even", func() {
-                convey.So(c%2, convey.ShouldEqual, 0)
-            })
-        })
-    })
+	convey.Convey("Given 2 even numbers", t, func() {
+		a := 2
+		b := 4
+		convey.Convey("When add the two numbers", func() {
+			c := a + b
+			convey.Convey("Then the result is still even", func() {
+				convey.So(c%2, convey.ShouldEqual, 0)
+			})
+		})
+	})
 }
 ```
 
 运行结果：
 
-```
+```bash
 $ go test -v  bdd_spec_test.go 
 === RUN   TestSpec
 
@@ -177,3 +193,5 @@ ok      command-line-arguments  0.006s
 ```
 
 可以看到最后一步为 ✔
+
+

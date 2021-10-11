@@ -3,37 +3,40 @@ title: Go包和依赖管理
 tags: []
 id: '41'
 categories:
-  - - uncategorized
-date: 2020-09-20 18:38:27
+  - - Go
+date: 2020-05-20 10:24:48
 ---
+
+## 构建可复用的模块（包）
 
 package：
 
-*   基本复用模块单元
-    
-    以首字母大写来表明可被包外代码访问
-    
-*   代码的 package 可以和所在的目录不一致
-*   同一目录里的 Go 代码的 package 要保持一致
+- 基本复用模块单元
+
+  以首字母大写来表明可被包外代码访问
+
+- 代码的 package 可以和所在的目录不一致
+
+- 同一目录里的 Go 代码的 package 要保持一致
 
 需要把包目录加入到GOPATH
 
 目录结构：
 
-```
+```bash
 ~/Documents/Go
 - learning
-    - src
-        - fifteen
-            - client
-                - package_test.go
-            - series
-                - my_series.go
+	- src
+		- fifteen
+			- client
+				- package_test.go
+			- series
+				- my_series.go
 ```
 
 查看 go env
 
-```
+```bash
 $ go env
 GOPATH="/Users/gaobinzhan/Documents/Go/learning:/Users/gaobinzhan/Documents/Go"
 ```
@@ -42,138 +45,143 @@ GOPATH="/Users/gaobinzhan/Documents/Go/learning:/Users/gaobinzhan/Documents/Go"
 
 `my_series.go`
 
-```
+```go
 package series
 
 // 首字母必须大写 才可被包外代码访问
 func GetFibonacci(n int) ([]int, error) {
-    fibList := []int{1, 2}
+	fibList := []int{1, 2}
 
-    for i := 2; i < n; i++ {
-        fibList = append(fibList, fibList[i-2]+fibList[i-1])
-    }
-    return fibList, nil
+	for i := 2; i < n; i++ {
+		fibList = append(fibList, fibList[i-2]+fibList[i-1])
+	}
+	return fibList, nil
 }
 ```
 
 `package_test.go`
 
-```
+```go
 package client
 
 import (
-    "fifteen/series"
-    "testing"
+	"fifteen/series"
+	"testing"
 )
 
 func TestPackage(t *testing.T) {
-    t.Log(series.GetFibonacci(5))
-    /** 运行结果：
-    === RUN   TestPackage
-        TestPackage: package_test.go:9: [1 2 3 5 8] 
-    --- PASS: TestPackage (0.00s)
-    */
+	t.Log(series.GetFibonacci(5))
+	/** 运行结果：
+	=== RUN   TestPackage
+	    TestPackage: package_test.go:9: [1 2 3 5 8] <nil>
+	--- PASS: TestPackage (0.00s)
+	*/
 }
 ```
 
 init方法：
 
-*   在 `main` 被执行前，所有依赖的 `package` 的 `init` 方法都会被执行
-*   不同包的 `init` 函数按照包导入的依赖关系决定执行顺序
-*   每个包可以有多个 `init` 函数
-*   包的每个源文件
+- 在 `main` 被执行前，所有依赖的 `package` 的 `init` 方法都会被执行
+- 不同包的 `init` 函数按照包导入的依赖关系决定执行顺序
+- 每个包可以有多个 `init` 函数
+- 包的每个源文件
 
 下面修改文件
 
+
 `my_series.go`
 
-```
+```go
 package series
 
 import "fmt"
 
 func init() {
-    fmt.Println("init 1")
+	fmt.Println("init 1")
 }
 
 func init() {
-    fmt.Println("init 2")
+	fmt.Println("init 2")
 }
 
 func GetFibonacci(n int) ([]int, error) {
-    fibList := []int{1, 2}
+	fibList := []int{1, 2}
 
-    for i := 2; i < n; i++ {
-        fibList = append(fibList, fibList[i-2]+fibList[i-1])
-    }
-    return fibList, nil
+	for i := 2; i < n; i++ {
+		fibList = append(fibList, fibList[i-2]+fibList[i-1])
+	}
+	return fibList, nil
 }
+
 ```
 
 `package_test.go`
 
-```
+```go
 package client
 
 import (
-    "fifteen/series"
-    "testing"
+	"fifteen/series"
+	"testing"
 )
 
 func TestPackage(t *testing.T) {
-    t.Log(series.GetFibonacci(5))
-    /** 运行结果：
-    init 1
-    init 2
-    === RUN   TestPackage
-        TestPackage: package_test.go:10: [1 2 3 5 8] 
-    --- PASS: TestPackage (0.00s)
-    */
+	t.Log(series.GetFibonacci(5))
+	/** 运行结果：
+	init 1
+	init 2
+	=== RUN   TestPackage
+	    TestPackage: package_test.go:10: [1 2 3 5 8] <nil>
+	--- PASS: TestPackage (0.00s)
+	*/
 }
 ```
 
 获取远程package：
 
-*   通过 go get 来获取远程依赖
-    
-    go get -u 强制从网络更新远程依赖
-    
-*   注意代码在 Github 上的组织形式，以适应 go get
-    
-    直接以代码路径开始，不要有 src
-    
+- 通过 go get 来获取远程依赖
 
-示例：go get -u https://github.com/easierway/concurrent\_map
+  go get -u 强制从网络更新远程依赖
+
+- 注意代码在 Github 上的组织形式，以适应 go get
+
+  直接以代码路径开始，不要有 src
+
+示例：go get -u https://github.com/easierway/concurrent_map
 
 代码：
 
-```
+```go
 package remote_package
 
 import (
-    cm "github.com/easierway/concurrent_map"
-    "testing"
+	cm "github.com/easierway/concurrent_map"
+	"testing"
 )
 
 func TestConcurrentMap(t *testing.T) {
-    m := cm.CreateConcurrentMap(99)
-    m.Set(cm.StrKey("key"), 10)
-    t.Log(m.Get(cm.StrKey("key")))
-    /** 运行结果：
-    === RUN   TestConcurrentMap
-        TestConcurrentMap: remote_package_test.go:11: 10 true
-    --- PASS: TestConcurrentMap (0.00s)
-    */
+	m := cm.CreateConcurrentMap(99)
+	m.Set(cm.StrKey("key"), 10)
+	t.Log(m.Get(cm.StrKey("key")))
+	/** 运行结果：
+	=== RUN   TestConcurrentMap
+	    TestConcurrentMap: remote_package_test.go:11: 10 true
+	--- PASS: TestConcurrentMap (0.00s)
+	*/
 
 }
 ```
+
+
 
 ## 依赖管理
 
 Go未解决的依赖问题：
 
-*   同一环境下，不同项目使用同一包的不同版本
-*   无法管理对包的特定版本的依赖
+- 同一环境下，不同项目使用同一包的不同版本
+- 无法管理对包的特定版本的依赖
+
+
 
 vendor路径：
 
@@ -183,14 +191,27 @@ GOROOT 之外的依赖⽬录查找的解决⽅案。在 Go 1.6 之前，你需�
 
 的设置环境变量
 
+
+
 查找依赖包路径的解决⽅案如下：
 
-*   当前包下的 vendor ⽬录
-*   向上级⽬录查找，直到找到 src 下的 vendor ⽬录
-*   在 GOPATH 下⾯查找依赖包
-*   在 GOROOT ⽬录下查
+- 当前包下的 vendor ⽬录
+
+- 向上级⽬录查找，直到找到 src 下的 vendor ⽬录
+
+- 在 GOPATH 下⾯查找依赖包
+
+- 在 GOROOT ⽬录下查
+
+
 
 常用的依赖管理工具：
+
+- godep https://github.com/tools/godep
+
+- glide https://github.com/Masterminds/glide
+
+- dep https://github.com/golang/dep 
 
 简单用一下
 
@@ -200,10 +221,12 @@ GOROOT 之外的依赖⽬录查找的解决⽅案。在 Go 1.6 之前，你需�
 
 删除我们刚刚 go get 下来的包 然后执行 glide init
 
-![](http://qiniu.gaobinzhan.com/2020/05/20/2c92c86163d52.png)
+![](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA1LzIwLzJjOTJjODYxNjNkNTIucG5n?x-oss-process=image/format,png)
 
 然后会在目录下面生成一个 `glide.yaml`文件
 
 执行 `glide install` 会生成 `vendor` 目录 里面就是我们的依赖包
 
 执行原来的测试文件，依然可以执行成功。
+
+

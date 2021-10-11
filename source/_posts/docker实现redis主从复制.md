@@ -3,14 +3,19 @@ title: docker实现redis主从复制
 tags: []
 id: '59'
 categories:
-  - - uncategorized
-date: 2020-09-20 19:49:58
+  - - Redis
+date: 2019-12-19 17:01:46
 ---
 
-在实际的场景当中单一节点的redis容易面临风险。  
+
+### 主从复制说明
+
+#### 面临问题
+
+在实际的场景当中单一节点的redis容易面临风险。 
 比如:
 
-*   机器故障。我们部署到一台 Redis 服务器，当发生机器故障时，需要迁移到另外一台服务器并且要保证数据是同步的。而数据是最重要的，如果你不在乎， 基本上也就不会使用 Redis 了。
+* 机器故障。我们部署到一台 Redis 服务器，当发生机器故障时，需要迁移到另外一台服务器并且要保证数据是同步的。而数据是最重要的，如果你不在乎， 基本上也就不会使用 Redis 了。
 
 要实现分布式数据库的更大的存储容量和承受高并发访问量，我们会将原来集中式数据库的数据分别存储到其他多个网络节点上。
 
@@ -18,48 +23,40 @@ Redis 为了解决这个单一节点的问题，也会把数据复制多个副�
 
 #### 什么是主从复制
 
-*   主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master)，后者称为从节点(slave),数据的复制是单向的，只能由主节点到 从节点。
-*   默认情况下，每台Redis服务器都是主节点，且一个主节点可以有多个从节点(或没有从节点)，但一个从节点只能有一个主节点。
+* 主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master)，后者称为从节点(slave),数据的复制是单向的，只能由主节点到 从节点。
+* 默认情况下，每台Redis服务器都是主节点，且一个主节点可以有多个从节点(或没有从节点)，但一个从节点只能有一个主节点。
 
 ### 主从复制的作用
 
-*   数据冗余:主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。
-*   故障恢复:当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复;实际上是一种服务的冗余。
-*   负载均衡:在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务(即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点) 分担服务器负载;尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。
-*   读写分离:可以用于实现读写分离，主库写、从库读，读写分离不仅可以提高服务器的负载能力，同时可根据需求的变化，改变从库的数量;
-*   高可用基石:除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础。
+* 数据冗余:主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。
+* 故障恢复:当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复;实际上是一种服务的冗余。
+* 负载均衡:在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务(即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点) 分担服务器负载;尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。
+* 读写分离:可以用于实现读写分离，主库写、从库读，读写分离不仅可以提高服务器的负载能力，同时可根据需求的变化，改变从库的数量;
+* 高可用基石:除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础。		
 
 #### 主从复制启用
 
 从节点开启主从复制，有3种方式:
-
-*   配置文件
-    
-    在从服务器的配置文件中加入:slaveof  
-    不推荐使用 配置文件可被动态修改
-    
-*   启动命令
-    
-    redis-server启动命令后加入 --slaveof
-    
-*   客户端命令
-    
-    Redis服务器启动后，直接通过客户端执行命令:slaveof ，则该Redis实例成为从节点。  
-    通过 info replication 命令可以看到复制的一些参数信息
-    
+1. 配置文件
+在从服务器的配置文件中加入:slaveof <masterip> <masterport>
+不推荐使用 配置文件可被动态修改
+2. 启动命令
+redis-server启动命令后加入 --slaveof <masterip> <masterport>
+3. 客户端命令
+Redis服务器启动后，直接通过客户端执行命令:slaveof <masterip> <masterport>，则该Redis实例成为从节点。
+通过 info replication 命令可以看到复制的一些参数信息
 
 #### 主从复制原理
 
-主从复制的原理以及过程必须要掌握，这样我们才知道为什么会出现这些问题 主从复制过程大体可以分为3个阶段:连接建立阶段(即准备阶段)、数据同步阶段、命令传播阶段。在从节点执行 slaveof 命令后，复制过程便开始运作，下面图示大概可以看到， 从图中可以看出复制过程大致分为6个过程
-
-![](http://qiniu.gaobinzhan.com/2019/12/19/55f5372ea5837.png)
+主从复制的原理以及过程必须要掌握，这样我们才知道为什么会出现这些问题 主从复制过程大体可以分为3个阶段:连接建立阶段(即准备阶段)、数据同步阶段、命令传播阶段。
+在从节点执行 slaveof 命令后，复制过程便开始运作，下面图示大概可以看到， 从图中可以看出复制过程大致分为6个过程
+![](https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNTVmNTM3MmVhNTgzNy5wbmc?x-oss-process=image/format,png)
 
 ### 构建
 
 #### dockerfile构建redis镜像
 
 DockerFile
-
 ```
 FROM alpine
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
@@ -86,7 +83,6 @@ RUN cd /usr/src/redis/redis-4.0.11 &&  make && make PREFIX=/usr/local/redis inst
 
 CMD ["/usr/local/bin/redis-server","/usr/src/redis/conf/redis.conf"]
 ```
-
 切换到当前dockfile文件目录下 执行命令
 
 `docker build -t redis .`
@@ -95,48 +91,25 @@ CMD ["/usr/local/bin/redis-server","/usr/src/redis/conf/redis.conf"]
 
 #### docker创建自定义网络及redis主从集群规划
 
-执行自定义网络命令  
+执行自定义网络命令
+
 `docker network create --subnet=192.168.1.0/24 redis-network`
 
-容器名称
-
-容器IP地址
-
-映射端口号
-
-宿主机IP地址
-
-服务运行模式
-
-redis-master
-
-192.168.1.2
-
-6380->6379
-
-127.0.0.1
-
-master
-
-redis-slave
-
-192.168.1.3
-
-6381->6379
-
-127.0.0.1
-
-slave
+| 容器名称 | 容器IP地址 | 映射端口号 | 宿主机IP地址 | 服务运行模式 |
+| --- | --- | --- | --- | --- |
+| redis-master  | 192.168.1.2 | 6380->6379 | 127.0.0.1 | master |
+| redis-slave  | 192.168.1.3 | 6381->6379 | 127.0.0.1 | slave |
 
 #### docker启动容器
 
 在 /data/ 下面创建该目录结构
 
+
 data和log下面文件忽略
 
-![](http://qiniu.gaobinzhan.com/2019/12/19/45619a5aa919b.png)
+![](https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNDU2MTlhNWFhOTE5Yi5wbmc?x-oss-process=image/format,png)
 
-目录代码
+[目录代码](https://pan.baidu.com/s/1hi4eAt6RZTBhGNX-bawecA)
 
 提取码：r8r1
 
@@ -144,11 +117,11 @@ data和log下面文件忽略
 
 用户可自行定义宿主机目录
 
-master  
-`docker run -itd --name redis-master --net redis-network -v /data/redis/master:/usr/src/redis -p 6380:6379 --ip 192.168.1.2 redis`
+master
+`docker run -itd --name  redis-master  --net redis-network -v /data/redis/master:/usr/src/redis  -p 6380:6379  --ip 192.168.1.2  redis `
 
-slave  
-`docker run -itd --name redis-slave --net redis-network -v /data/redis/slave:/usr/src/redis -p 6381:6379 --ip 192.168.1.3 redis`
+slave
+`docker run -itd --name  redis-slave  --net redis-network -v /data/redis/slave:/usr/src/redis  -p 6381:6379  --ip 192.168.1.3  redis `
 
 #### 测试主从复制
 
@@ -168,9 +141,9 @@ slave
 
 `SLAVEOF 192.168.1.2 6379`
 
-`info replication`
+`info repliaction`
 
-![](http://qiniu.gaobinzhan.com/2019/12/19/1c2dc132f6731.png)
+![](https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvMWMyZGMxMzJmNjczMS5wbmc?x-oss-process=image/format,png)
 
 `master_link_status`为up就成功了！
 
@@ -180,4 +153,9 @@ slave
 
 这时候在master进行操作 就可以看到slave的变化了！
 
-![](http://qiniu.gaobinzhan.com/2019/12/19/639b41e07023f.png)
+![](https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNjM5YjQxZTA3MDIzZi5wbmc?x-oss-process=image/format,png)
+
+
+
+* * *
+
