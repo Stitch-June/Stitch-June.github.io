@@ -1,636 +1,421 @@
 <!doctype html>
-<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Stitch&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Stitch&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Stitch&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Stitch&#039;s Blog"><meta property="og:url" content="https://stitch.cn/"><meta property="og:site_name" content="Stitch&#039;s Blog"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://stitch.cn/img/og_image.png"><meta property="article:author" content="stitch"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stitch.cn"},"headline":"Stitch's Blog","image":["https://stitch.cn/img/og_image.png"],"author":{"@type":"Person","name":"stitch"},"publisher":{"@type":"Organization","name":"Stitch's Blog","logo":{"@type":"ImageObject","url":{"text":"Stitch's Blog"}}},"description":""}</script><link rel="alternate" href="/atom.xml" title="Stitch&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Stitch&#039;s Blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-20T18:39:38.000Z" title="9/20/2020, 6:39:38 PM">2020-09-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T04:07:58.363Z" title="10/11/2021, 4:07:58 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">3 分钟读完 (大约457个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/20/php%E8%BF%AD%E4%BB%A3%E5%99%A8.html">php迭代器</a></h1><div class="content"><ul>
-<li>  博主： gaobinzhan</li>
-<li>  发布时间：2018 年 12 月 25 日</li>
-<li>  701次浏览</li>
-<li>  暂无评论</li>
-<li>  945字数</li>
-<li>  分类： PHP</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Season implements Iterator&#123;</span><br><span class="line">    private $position = 0;//指针指向0</span><br><span class="line">    private $arr = array(&#x27;一&#x27;,&#x27;二&#x27;,&#x27;三&#x27;,&#x27;四&#x27;);</span><br><span class="line">    //重置迭代器</span><br><span class="line">    public function rewind()&#123;</span><br><span class="line">        return $this -&gt; position = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    //验证迭代器是否有数据</span><br><span class="line">    public function valid() &#123;</span><br><span class="line">//        return isset($this -&gt; arr[$this -&gt; position]);</span><br><span class="line">        return $this-&gt;positionarr);</span><br><span class="line">    &#125;</span><br><span class="line">    //获取当前内容</span><br><span class="line">    public function current()&#123;</span><br><span class="line">        return $this -&gt; arr[$this -&gt; position];</span><br><span class="line">    &#125;</span><br><span class="line">    //获取迭代器位置key</span><br><span class="line">    public function key()&#123;</span><br><span class="line">        return $this -&gt; position;</span><br><span class="line">    &#125;</span><br><span class="line">    //移动key到下一个</span><br><span class="line">    public function next() &#123;</span><br><span class="line">        ++$this -&gt; position;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$obj = new Season();</span><br><span class="line">foreach ($obj as $k =&gt; $v)&#123;</span><br><span class="line">    echo $k.&#x27;:&#x27;.$v.&#x27;&#x27;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>结果：</p>
-<p>0:一1:二2:三</p>
-<p>3:四</p>
-<h5 id="php有对数组指针的操作，可不用定义-position"><a href="#php有对数组指针的操作，可不用定义-position" class="headerlink" title="php有对数组指针的操作，可不用定义$position"></a>php有对数组指针的操作，可不用定义$position</h5><p>1.key();从关联数组中取得键名，没有取到返回NULL2.current();返回数组中当前单元3.next();将数组中的内部指针向前移动一位4.prev();将数组的内部指针倒回一位5.reset();将数组的内部指针指向第一个单元</p>
-<p>6.end();将数组的内部指针指向最后一个单元</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class Season implements Iterator&#123;</span><br><span class="line">    private $position = 0;//指针指向0</span><br><span class="line">    private $arr = array(&#x27;一&#x27;,&#x27;二&#x27;,&#x27;三&#x27;,&#x27;四&#x27;);</span><br><span class="line">    //重置迭代器</span><br><span class="line">    public function rewind()&#123;</span><br><span class="line">        return $this -&gt; position = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    //验证迭代器是否有数据</span><br><span class="line">    public function valid() &#123;</span><br><span class="line">//        return isset($this -&gt; arr[$this -&gt; position]);</span><br><span class="line">        return $this-&gt;positionarr);</span><br><span class="line">    &#125;</span><br><span class="line">    //获取当前内容</span><br><span class="line">    public function current()&#123;</span><br><span class="line">        return $this -&gt; arr[$this -&gt; position];</span><br><span class="line">    &#125;</span><br><span class="line">    //获取迭代器位置key</span><br><span class="line">    public function key()&#123;</span><br><span class="line">        return $this -&gt; position;</span><br><span class="line">    &#125;</span><br><span class="line">    //移动key到下一个</span><br><span class="line">    public function next() &#123;</span><br><span class="line">        ++$this -&gt; position;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$obj = new Season();</span><br><span class="line">foreach ($obj as $k =&gt; $v)&#123;</span><br><span class="line">    echo $k.&#x27;:&#x27;.$v.&#x27;&#x27;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>结果：</p>
-<p>0:一1:二2:三</p>
-<p>3:四</p>
-<h5 id="php有对数组指针的操作，可不用定义-position-1"><a href="#php有对数组指针的操作，可不用定义-position-1" class="headerlink" title="php有对数组指针的操作，可不用定义$position"></a>php有对数组指针的操作，可不用定义$position</h5><p>1.key();从关联数组中取得键名，没有取到返回NULL2.current();返回数组中当前单元3.next();将数组中的内部指针向前移动一位4.prev();将数组的内部指针倒回一位5.reset();将数组的内部指针指向第一个单元</p>
-<p>6.end();将数组的内部指针指向最后一个单元</p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-20T18:38:27.000Z" title="9/20/2020, 6:38:27 PM">2020-09-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T04:07:58.363Z" title="10/11/2021, 4:07:58 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">5 分钟读完 (大约730个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/20/go%E5%8C%85%E5%92%8C%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86.html">Go包和依赖管理</a></h1><div class="content"><p>package：</p>
-<ul>
-<li>基本复用模块单元  以首字母大写来表明可被包外代码访问</li>
-<li>  代码的 package 可以和所在的目录不一致</li>
-<li>  同一目录里的 Go 代码的 package 要保持一致</li>
-</ul>
-<p>需要把包目录加入到GOPATH</p>
-<p>目录结构：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">~/Documents/Go</span><br><span class="line">- learning</span><br><span class="line">    - src</span><br><span class="line">        - fifteen</span><br><span class="line">            - client</span><br><span class="line">                - package_test.go</span><br><span class="line">            - series</span><br><span class="line">                - my_series.go</span><br></pre></td></tr></table></figure>
-
-<p>查看 go env</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ go env</span><br><span class="line">GOPATH=&quot;/Users/gaobinzhan/Documents/Go/learning:/Users/gaobinzhan/Documents/Go&quot;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到这个目录已经加入<code>GOPATH</code>里了。</p>
-<p><code>my_series.go</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">package series</span><br><span class="line"></span><br><span class="line">// 首字母必须大写 才可被包外代码访问</span><br><span class="line">func GetFibonacci(n int) ([]int, error) &#123;</span><br><span class="line">    fibList := []int&#123;1, 2&#125;</span><br><span class="line"></span><br><span class="line">    for i := 2; i &lt; n; i++ &#123;</span><br><span class="line">        fibList = append(fibList, fibList[i-2]+fibList[i-1])</span><br><span class="line">    &#125;</span><br><span class="line">    return fibList, nil</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>package_test.go</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">package client</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    &quot;fifteen/series&quot;</span><br><span class="line">    &quot;testing&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func TestPackage(t *testing.T) &#123;</span><br><span class="line">    t.Log(series.GetFibonacci(5))</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestPackage</span><br><span class="line">        TestPackage: package_test.go:9: [1 2 3 5 8] </span><br><span class="line">    --- PASS: TestPackage (0.00s)</span><br><span class="line">    */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>init方法：</p>
-<ul>
-<li>  在 <code>main</code> 被执行前，所有依赖的 <code>package</code> 的 <code>init</code> 方法都会被执行</li>
-<li>  不同包的 <code>init</code> 函数按照包导入的依赖关系决定执行顺序</li>
-<li>  每个包可以有多个 <code>init</code> 函数</li>
-<li>  包的每个源文件</li>
-</ul>
-<p>下面修改文件</p>
-<p><code>my_series.go</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">package series</span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line">func init() &#123;</span><br><span class="line">    fmt.Println(&quot;init 1&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func init() &#123;</span><br><span class="line">    fmt.Println(&quot;init 2&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func GetFibonacci(n int) ([]int, error) &#123;</span><br><span class="line">    fibList := []int&#123;1, 2&#125;</span><br><span class="line"></span><br><span class="line">    for i := 2; i &lt; n; i++ &#123;</span><br><span class="line">        fibList = append(fibList, fibList[i-2]+fibList[i-1])</span><br><span class="line">    &#125;</span><br><span class="line">    return fibList, nil</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>package_test.go</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">package client</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    &quot;fifteen/series&quot;</span><br><span class="line">    &quot;testing&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func TestPackage(t *testing.T) &#123;</span><br><span class="line">    t.Log(series.GetFibonacci(5))</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    init 1</span><br><span class="line">    init 2</span><br><span class="line">    === RUN   TestPackage</span><br><span class="line">        TestPackage: package_test.go:10: [1 2 3 5 8] </span><br><span class="line">    --- PASS: TestPackage (0.00s)</span><br><span class="line">    */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>获取远程package：</p>
-<ul>
-<li>通过 go get 来获取远程依赖  go get -u 强制从网络更新远程依赖</li>
-<li>注意代码在 Github 上的组织形式，以适应 go get  直接以代码路径开始，不要有 src</li>
-</ul>
-<p>示例：go get -u <a target="_blank" rel="noopener" href="https://github.com/easierway/concurrent/_map">https://github.com/easierway/concurrent\_map</a></p>
-<p>代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">package remote_package</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">    cm &quot;github.com/easierway/concurrent_map&quot;</span><br><span class="line">    &quot;testing&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func TestConcurrentMap(t *testing.T) &#123;</span><br><span class="line">    m := cm.CreateConcurrentMap(99)</span><br><span class="line">    m.Set(cm.StrKey(&quot;key&quot;), 10)</span><br><span class="line">    t.Log(m.Get(cm.StrKey(&quot;key&quot;)))</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestConcurrentMap</span><br><span class="line">        TestConcurrentMap: remote_package_test.go:11: 10 true</span><br><span class="line">    --- PASS: TestConcurrentMap (0.00s)</span><br><span class="line">    */</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h2><p>Go未解决的依赖问题：</p>
-<ul>
-<li>  同一环境下，不同项目使用同一包的不同版本</li>
-<li>  无法管理对包的特定版本的依赖</li>
-</ul>
-<p>vendor路径：</p>
-<p>随着 Go 1.5 release 版本的发布，vendor ⽬录被添加到除了 GOPATH 和</p>
-<p>GOROOT 之外的依赖⽬录查找的解决⽅案。在 Go 1.6 之前，你需要⼿动</p>
-<p>的设置环境变量</p>
-<p>查找依赖包路径的解决⽅案如下：</p>
-<ul>
-<li>  当前包下的 vendor ⽬录</li>
-<li>  向上级⽬录查找，直到找到 src 下的 vendor ⽬录</li>
-<li>  在 GOPATH 下⾯查找依赖包</li>
-<li>  在 GOROOT ⽬录下查</li>
-</ul>
-<p>常用的依赖管理工具：</p>
-<p>简单用一下</p>
-<p>安装 gilde</p>
-<p><code>brew install glide</code></p>
-<p>删除我们刚刚 go get 下来的包 然后执行 glide init</p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/05/20/2c92c86163d52.png"></p>
-<p>然后会在目录下面生成一个 <code>glide.yaml</code>文件</p>
-<p>执行 <code>glide install</code> 会生成 <code>vendor</code> 目录 里面就是我们的依赖包</p>
-<p>执行原来的测试文件，依然可以执行成功。</p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-20T18:21:05.000Z" title="9/20/2020, 6:21:05 PM">2020-09-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T04:07:58.363Z" title="10/11/2021, 4:07:58 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">9 分钟读完 (大约1275个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/20/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.html">微服务架构常见的分布式事务解决方案</a></h1><div class="content"><p>多个服务，位于不同主机，不同的网络当中，没有办法用本地事务保证要么一起成功，要么一起失败。</p>
-<h2 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h2><p><strong>BA</strong>: Basic Availability 基本业务可用性（支持分区失败）</p>
-<p><strong>S</strong>: Soft state 柔性状态（状态允许有短时间不同步，异步）</p>
-<p><strong>E</strong>: Eventual consistency 最终一致性（最终数据是一致的，但不是实时一致）</p>
-<p>原子性（A）与持久性（D）必须根本保障</p>
-<p>为了可用性、性能与降级服务的需要，只有降低一致性( C ) 与 隔离性( I ) 的要求</p>
-<p>酸碱平衡(ACID-BASE Balance)</p>
-<h2 id="CAP定理"><a href="#CAP定理" class="headerlink" title="CAP定理"></a>CAP定理</h2><p>对于共享数据系统，最多只能同时拥有CAP其中的两个，没法三者兼顾。</p>
-<p>任意两者的组合都有其适用场景</p>
-<p>真实系统应当是ACID与BASE的混合体</p>
-<p>不同类型的业务可以也应当区别对待</p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/03/25/3513fb8ec53c2.png"></p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p><img src="http://qiniu.gaobinzhan.com/2020/03/25/7a81db1712105.png"></p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>业务处理服务在业务事务提交前，向实时消息服务请求发送消息，实时消息服务只记录消息数据，而不真正发送。业务处理服务在业务事务提交后，向实时消息服务确认发送。只有在得到确认发送指令后，实时消息服务才真正发送</p>
-<h3 id="消息"><a href="#消息" class="headerlink" title="消息"></a>消息</h3><p>业务处理服务在业务事务回滚后，向实时消息服务取消发送。消息状态确认系统定期找到未确认发送或回滚发送的消息，向业务处理服务询问消息状态，业务处理服务根据消息ID或消息内容确定该消息是否有效</p>
-<h3 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h3><p>被动方的处理结果不影响主动方的处理结果,被动方的消息处理操作是幂等操作</p>
-<h3 id="成本"><a href="#成本" class="headerlink" title="成本"></a>成本</h3><p>可靠消息系统建设成本</p>
-<p>一次消息发送需要两次请求，业务处理服务需实现消息状态回查接口</p>
-<h3 id="优点、适用范围"><a href="#优点、适用范围" class="headerlink" title="优点、适用范围"></a>优点、适用范围</h3><p>消息数据独立存储、独立伸缩，降低业务系统与消息系统间的耦合</p>
-<h3 id="方案特点"><a href="#方案特点" class="headerlink" title="方案特点"></a>方案特点</h3><p>兼容所有实现AMQP标准的MQ中间件</p>
-<p>确保业务数据可靠的前提下，实现业务数据的最终一致（理想状态下基本是准实时一致）</p>
-<h2 id="柔性事务解决方案-TCC（两阶段型、补偿型）"><a href="#柔性事务解决方案-TCC（两阶段型、补偿型）" class="headerlink" title="柔性事务解决方案 TCC（两阶段型、补偿型）"></a>柔性事务解决方案 TCC（两阶段型、补偿型）</h2><p><img src="http://qiniu.gaobinzhan.com/2020/03/25/dacf286d3b822.png"></p>
-<h3 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h3><p>一个完整的业务活动由一个主业务服务与若干从业务服务组成</p>
-<p>主业务服务负责发起并完成整个业务活动</p>
-<p>从业务服务提供TCC型业务操作</p>
-<p>业务活动管理器控制业务活动的一致性，它登记业务活动中的操作，并在业务活动提交时确认所有的TCC型操作的confirm操作，在业务活动取消时调用所有TCC型操作的cancel操作</p>
-<h3 id="成本-1"><a href="#成本-1" class="headerlink" title="成本"></a>成本</h3><p>实现TCC操作的成本</p>
-<p>业务活动结束时confirm或cancel操作的执行成本</p>
-<p>业务活动日志成本</p>
-<h3 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h3><p>强隔离性、严格一致性要求的业务活动</p>
-<p>适用于执行时间较短的业务（比如处理账户、收费等业务）</p>
-<h3 id="用到的服务模式"><a href="#用到的服务模式" class="headerlink" title="用到的服务模式"></a>用到的服务模式</h3><p>TCC操作、幂等操作、可补偿操作、可查询操作</p>
-<h3 id="方案特点-1"><a href="#方案特点-1" class="headerlink" title="方案特点"></a>方案特点</h3><p>不与具体的服务框架耦合（在RPC架构中通用）</p>
-<p>位于业务服务层，而非资源层</p>
-<p>可以灵活选择业务资源的锁定粒度</p>
-<h2 id="最大努力通知型"><a href="#最大努力通知型" class="headerlink" title="最大努力通知型"></a>最大努力通知型</h2><p><img src="http://qiniu.gaobinzhan.com/2020/03/25/6b81229982919.png"></p>
-<h3 id="实现-2"><a href="#实现-2" class="headerlink" title="实现"></a>实现</h3><p>业务活动的主动方，在完成业务处理之后，向业务活动的被动方发送消息，允许消息丢失。</p>
-<p>业务活动的被动方根据定时策略，向业务活动主动方查询，恢复丢失的业务消息。</p>
-<h3 id="约束-1"><a href="#约束-1" class="headerlink" title="约束"></a>约束</h3><p>被动方的处理结果不影响主动方的处理结果</p>
-<h3 id="成本-2"><a href="#成本-2" class="headerlink" title="成本"></a>成本</h3><p>业务查询与校对系统的建设成本</p>
-<h3 id="使用范围"><a href="#使用范围" class="headerlink" title="使用范围"></a>使用范围</h3><p>对业务最终一致性的时间敏感度低</p>
-<p>跨企业的业务活动</p>
-<h3 id="方案特点-2"><a href="#方案特点-2" class="headerlink" title="方案特点"></a>方案特点</h3><p>业务活动的主动方在完成业务处理后，向业务活动被动方发送通知消息（允许消息丢失）主动方可以设置时间阶梯型通知规则，在通知失败后按规则重复通知，直到通知N次后不主动方提供校对查询接口给被动方按需校对查询，用于恢复丢失的业务消息</p>
-<h3 id="应用案例"><a href="#应用案例" class="headerlink" title="应用案例"></a>应用案例</h3><p>银行通知、商户通知等（各大交易业务平台间的商户通知：多次通知、查询校对、对账文件）</p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-20T18:15:45.000Z" title="9/20/2020, 6:15:45 PM">2020-09-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T04:07:58.363Z" title="10/11/2021, 4:07:58 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">10 分钟读完 (大约1531个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/20/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF.html">消息队列 - 应用场景</a></h1><div class="content"><ul>
-<li>  博主： gaobinzhan</li>
-<li>  发布时间：2019 年 03 月 20 日</li>
-<li>  736次浏览</li>
-<li>  暂无评论</li>
-<li>  1069字数</li>
-<li>  分类： 消息中间件</li>
-</ul>
-<p>[TOC]</p>
-<h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><blockquote>
-<p><strong>消息队列中间件时分布式系统中重要的组件，主要解决应用耦合，异步消息，流量削锋等问题。实现高性能，高可用，可伸缩和最终一致性架构。是大型分布式系统不可缺少的中间件。</strong></p>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Stitch&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Stitch&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Stitch&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Stitch&#039;s Blog"><meta property="og:url" content="https://stitch.cn/"><meta property="og:site_name" content="Stitch&#039;s Blog"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://stitch.cn/img/og_image.png"><meta property="article:author" content="stitch"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stitch.cn"},"headline":"Stitch's Blog","image":["https://stitch.cn/img/og_image.png"],"author":{"@type":"Person","name":"stitch"},"publisher":{"@type":"Organization","name":"Stitch's Blog","logo":{"@type":"ImageObject","url":{"text":"Stitch's Blog"}}},"description":""}</script><link rel="alternate" href="/atom.xml" title="Stitch&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Stitch&#039;s Blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-12-20T17:41:47.000Z" title="12/20/2019, 5:41:47 PM">2019-12-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Linux/">Linux</a></span><span class="level-item">6 分钟读完 (大约878个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/20/linux%E4%BA%94%E5%A4%A7%E7%BD%91%E7%BB%9Cio%E6%A8%A1%E5%9E%8B%E5%9B%BE%E8%A7%A3.html">Linux五大网络IO模型图解</a></h1><div class="content"><blockquote>
+<p>对于一个应用程序即一个操作系统进程来说，它既有内核空间(与其他进程共享),也有用户空间(进程私有)，它们都是处于虚拟地址空间中。用户进程是无法访问内核空间的，它只能访问用户空间，通过用户空间去内核空间复制数据，然后进行处理。</p>
 </blockquote>
-<h5 id="异步处理"><a href="#异步处理" class="headerlink" title="异步处理"></a>异步处理</h5><ul>
-<li>  <strong>场景说明</strong>：用户注册成功后，发送注册邮件，再发送注册短信。</li>
-<li>  <strong>串行方式</strong>：将注册信息写入数据库成功后，向用户发送邮件，再发送注册短信，将结果返回客户端。</li>
-<li>  <strong>并行方式</strong>：将注册信息写入数据库成功后，发送注册邮件的同时，发送注册短信，以上三个任务完成后，返回给客户端。</li>
-<li>  <strong>消息队列</strong>：将注册信息写入数据库成功后，注册信息写入消息队列，发送邮件和短信的消费者异步读取消息队列，写入消息队列即将返回给客户端。</li>
+<h1 id="阻塞io-同步io"><a href="#阻塞io-同步io" class="headerlink" title="阻塞io(同步io)"></a>阻塞io(同步io)</h1><p>发起请求就一直等待，直到数据返回。好比你去商场试衣间，里面有人，那你就一直在门外等着。(全程阻塞)</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMjAvZjlmYWY2ZGY3YWQxZS5wbmc?x-oss-process=image/format,png" alt="阻塞io(同步io).png"></p>
+<h1 id="非阻塞io-同步io"><a href="#非阻塞io-同步io" class="headerlink" title="非阻塞io(同步io)"></a>非阻塞io(同步io)</h1><p>不管有没有数据都返回，没有就隔一段时间再来请求，如此循环。好比你要喝水，水还没烧开，你就隔段时间去看一下饮水机，直到水烧开为止。(复制数据时阻塞)</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMjAvZGMzMWY5NjE5NWI5YS5wbmc?x-oss-process=image/format,png" alt="非阻塞io(同步io).png"></p>
+<h1 id="io复用-同步io"><a href="#io复用-同步io" class="headerlink" title="io复用(同步io)"></a>io复用(同步io)</h1><p>I/O是指网络I/O,多路指多个TCP连接(即socket或者channel）,复用指复用一个或几个线程。意思说一个或一组线程处理多个连接。比如课堂上学生做完了作业就举手，老师就下去检查作业。(对一个IO端口，两次调用，两次返回，比阻塞IO并没有什么优越性；关键是能实现同时对多个IO端口进行监听，可以同时对多个读/写操作的IO函数进行轮询检测，直到有数据可读或可写时，才真正调用IO操作函数。)　<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMjAvZDk2YTU2YTJiMjRiYS5wbmc?x-oss-process=image/format,png" alt="io复用(同步io).png"></p>
+<h1 id="信号驱动io-同步io"><a href="#信号驱动io-同步io" class="headerlink" title="信号驱动io(同步io)"></a>信号驱动io(同步io)</h1><p>事先发出一个请求，当有数据后会返回一个标识回调，这时你可以去请求数据。好比银行排号，当叫到你的时候，你就可以去处理业务了(复制数据时阻塞)。<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMjAvMWE4NjM3MTg3MjcwMi5wbmc?x-oss-process=image/format,png" alt="信号驱动io(同步io).png"></p>
+<h1 id="异步io"><a href="#异步io" class="headerlink" title="异步io"></a>异步io</h1><p>发出请求就返回，剩下的事情会异步自动完成，不需要做任何处理。好比有事秘书干，自己啥也不用管。　　<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMjAvNzk4MGI4MjlhM2YxMS5wbmc?x-oss-process=image/format,png" alt="异步io.png"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>五种IO的模型：阻塞IO、非阻塞IO、多路复用IO、信号驱动IO和异步IO；前四种都是同步IO，在内核数据copy到用户空间时都是阻塞的。</p>
+<p>阻塞IO和非阻塞IO的区别在于第一步，发起IO请求是否会被阻塞，如果会那就是传统的阻塞IO，如果不会那就是非阻塞IO。</p>
+<p>同步IO和异步IO的区别就在于第二个步骤是否阻塞，如果实际的IO读写阻塞请求进程，那么就是同步IO；如果不阻塞，而是操作系统帮你做完IO操作再将结果返回给你，那么就是异步IO</p>
+<hr>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-12-19T17:01:46.000Z" title="12/19/2019, 5:01:46 PM">2019-12-19</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">10 分钟读完 (大约1539个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/19/docker%E5%AE%9E%E7%8E%B0redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6.html">docker实现redis主从复制</a></h1><div class="content"><h3 id="主从复制说明"><a href="#主从复制说明" class="headerlink" title="主从复制说明"></a>主从复制说明</h3><h4 id="面临问题"><a href="#面临问题" class="headerlink" title="面临问题"></a>面临问题</h4><p>在实际的场景当中单一节点的redis容易面临风险。<br>比如:</p>
+<ul>
+<li>机器故障。我们部署到一台 Redis 服务器，当发生机器故障时，需要迁移到另外一台服务器并且要保证数据是同步的。而数据是最重要的，如果你不在乎， 基本上也就不会使用 Redis 了。</li>
 </ul>
-<h5 id="应用解耦"><a href="#应用解耦" class="headerlink" title="应用解耦"></a>应用解耦</h5><ul>
-<li>  <strong>场景说明</strong>：用户下单后，订单系统需要通知库存系统。</li>
-<li>  <strong>传统方式</strong>：订单系统调用库存系统的接口。</li>
-<li>  <strong>消息队列</strong>-&gt;</li>
+<p>要实现分布式数据库的更大的存储容量和承受高并发访问量，我们会将原来集中式数据库的数据分别存储到其他多个网络节点上。</p>
+<p>Redis 为了解决这个单一节点的问题，也会把数据复制多个副本部署到其他节点上进行复制，实现 Redis的高可用，实现对数据的冗余备份，从而保证数据和服务 的高可用。</p>
+<h4 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h4><ul>
+<li>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master)，后者称为从节点(slave),数据的复制是单向的，只能由主节点到 从节点。</li>
+<li>默认情况下，每台Redis服务器都是主节点，且一个主节点可以有多个从节点(或没有从节点)，但一个从节点只能有一个主节点。</li>
 </ul>
-<p>_订单系统_：用户下单后，订单系统完成持久化处理，将消息写入消息队列，返回用户订单下单成功。<br>_库存系统_：订阅下单的消息，采用拉/推的方式，获取下单信息，库存系统根据下单信息，进行库存操作。</p>
-<h5 id="流量削锋"><a href="#流量削锋" class="headerlink" title="流量削锋"></a>流量削锋</h5><ul>
-<li>  <strong>场景说明</strong>：秒杀活动，一般会因为流量过大，导致流量暴增。</li>
-<li>  <strong>传统方式</strong>：服务端突然接受来自前端的大量订单请求</li>
-<li>  <strong>消息队列</strong>：在应用前端加入消息队列-&gt;</li>
+<h3 id="主从复制的作用"><a href="#主从复制的作用" class="headerlink" title="主从复制的作用"></a>主从复制的作用</h3><ul>
+<li>数据冗余:主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
+<li>故障恢复:当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复;实际上是一种服务的冗余。</li>
+<li>负载均衡:在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务(即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点) 分担服务器负载;尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。</li>
+<li>读写分离:可以用于实现读写分离，主库写、从库读，读写分离不仅可以提高服务器的负载能力，同时可根据需求的变化，改变从库的数量;</li>
+<li>高可用基石:除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础。        </li>
 </ul>
+<h4 id="主从复制启用"><a href="#主从复制启用" class="headerlink" title="主从复制启用"></a>主从复制启用</h4><p>从节点开启主从复制，有3种方式:</p>
 <ol>
-<li> 用户的请求，服务器接收后，首先写入消息队列。假如消息队列长度超过最大数量，则直接抛弃用户请求或跳转到错误页面</li>
-<li> 秒杀业务根据消息队列中的请求信息，再做后续处理</li>
+<li>配置文件<br>在从服务器的配置文件中加入:slaveof <masterip> <masterport><br>不推荐使用 配置文件可被动态修改</li>
+<li>启动命令<br>redis-server启动命令后加入 –slaveof <masterip> <masterport></li>
+<li>客户端命令<br>Redis服务器启动后，直接通过客户端执行命令:slaveof <masterip> <masterport>，则该Redis实例成为从节点。<br>通过 info replication 命令可以看到复制的一些参数信息</li>
 </ol>
-<h5 id="日志处理"><a href="#日志处理" class="headerlink" title="日志处理"></a>日志处理</h5><ul>
-<li>  解决大量日志传输的问题</li>
-<li>  日志采集客户端，负责日志数据采集，写入消息队列</li>
-<li>  消息队列，负责日志数据的接收，存储和转发</li>
-<li>  日志处理应用：订阅并消费消息队列中的日志数据</li>
+<h4 id="主从复制原理"><a href="#主从复制原理" class="headerlink" title="主从复制原理"></a>主从复制原理</h4><p>主从复制的原理以及过程必须要掌握，这样我们才知道为什么会出现这些问题 主从复制过程大体可以分为3个阶段:连接建立阶段(即准备阶段)、数据同步阶段、命令传播阶段。<br>在从节点执行 slaveof 命令后，复制过程便开始运作，下面图示大概可以看到， 从图中可以看出复制过程大致分为6个过程<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNTVmNTM3MmVhNTgzNy5wbmc?x-oss-process=image/format,png"></p>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><h4 id="dockerfile构建redis镜像"><a href="#dockerfile构建redis镜像" class="headerlink" title="dockerfile构建redis镜像"></a>dockerfile构建redis镜像</h4><p>DockerFile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">FROM alpine</span><br><span class="line">RUN sed -i &#x27;s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g&#x27; /etc/apk/repositories \</span><br><span class="line">  &amp;&amp; apk add  gcc g++ libc-dev  wget vim  openssl-dev make  linux-headers \</span><br><span class="line">  &amp;&amp; rm -rf /var/cache/apk/*</span><br><span class="line"></span><br><span class="line">#通过选择更小的镜像，删除不必要文件清理不必要的安装缓存，从而瘦身镜像</span><br><span class="line">#创建相关目录能够看到日志信息跟数据跟配置文件</span><br><span class="line">RUN mkdir -p /usr/src/redis \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/data \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/conf \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/log   \</span><br><span class="line">      &amp;&amp; mkdir -p /var/log/redis</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RUN wget  -O /usr/src/redis/redis-4.0.11.tar.gz  &quot;http://download.redis.io/releases/redis-4.0.11.tar.gz&quot; \</span><br><span class="line">   &amp;&amp; tar -xzf /usr/src/redis/redis-4.0.11.tar.gz  -C /usr/src/redis \</span><br><span class="line">   &amp;&amp; rm -rf /usr/src/redis/redis-4.0.11.tar.tgz</span><br><span class="line"></span><br><span class="line">RUN cd /usr/src/redis/redis-4.0.11 &amp;&amp;  make &amp;&amp; make PREFIX=/usr/local/redis install \</span><br><span class="line">&amp;&amp; ln -s /usr/local/redis/bin/*  /usr/local/bin/  &amp;&amp; rm -rf /usr/src/redis/redis-4.0.11</span><br><span class="line"></span><br><span class="line">#COPY ./conf/redis.conf  /usr/src/redis/conf</span><br><span class="line"></span><br><span class="line">CMD [&quot;/usr/local/bin/redis-server&quot;,&quot;/usr/src/redis/conf/redis.conf&quot;]</span><br></pre></td></tr></table></figure>
+<p>切换到当前dockfile文件目录下 执行命令</p>
+<p><code>docker build -t redis .</code></p>
+<p>等待构建完成就可以了</p>
+<h4 id="docker创建自定义网络及redis主从集群规划"><a href="#docker创建自定义网络及redis主从集群规划" class="headerlink" title="docker创建自定义网络及redis主从集群规划"></a>docker创建自定义网络及redis主从集群规划</h4><p>执行自定义网络命令</p>
+<p><code>docker network create --subnet=192.168.1.0/24 redis-network</code></p>
+<table>
+<thead>
+<tr>
+<th>容器名称</th>
+<th>容器IP地址</th>
+<th>映射端口号</th>
+<th>宿主机IP地址</th>
+<th>服务运行模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>redis-master</td>
+<td>192.168.1.2</td>
+<td>6380-&gt;6379</td>
+<td>127.0.0.1</td>
+<td>master</td>
+</tr>
+<tr>
+<td>redis-slave</td>
+<td>192.168.1.3</td>
+<td>6381-&gt;6379</td>
+<td>127.0.0.1</td>
+<td>slave</td>
+</tr>
+</tbody></table>
+<h4 id="docker启动容器"><a href="#docker启动容器" class="headerlink" title="docker启动容器"></a>docker启动容器</h4><p>在 /data/ 下面创建该目录结构</p>
+<p>data和log下面文件忽略</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNDU2MTlhNWFhOTE5Yi5wbmc?x-oss-process=image/format,png"></p>
+<p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1hi4eAt6RZTBhGNX-bawecA">目录代码</a></p>
+<p>提取码：r8r1</p>
+<p>下载完放到 /data 下面</p>
+<p>用户可自行定义宿主机目录</p>
+<p>master<br><code>docker run -itd --name  redis-master  --net redis-network -v /data/redis/master:/usr/src/redis  -p 6380:6379  --ip 192.168.1.2  redis </code></p>
+<p>slave<br><code>docker run -itd --name  redis-slave  --net redis-network -v /data/redis/slave:/usr/src/redis  -p 6381:6379  --ip 192.168.1.3  redis </code></p>
+<h4 id="测试主从复制"><a href="#测试主从复制" class="headerlink" title="测试主从复制"></a>测试主从复制</h4><p>主从的配置文件 没有设置redis密码</p>
+<p>开两个终端分别执行</p>
+<p><code>docker exec -it redis-master sh</code></p>
+<p><code>docker exec -it redis-slave sh</code></p>
+<p>进入容器后执行(都要执行)</p>
+<p><code>redis-cli</code></p>
+<p>在slave执行</p>
+<p><code>SLAVEOF 192.168.1.2 6379</code></p>
+<p><code>info repliaction</code></p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvMWMyZGMxMzJmNjczMS5wbmc?x-oss-process=image/format,png"></p>
+<p><code>master_link_status</code>为up就成功了！</p>
+<p>当前是通过内网连接 端口号为6379</p>
+<p>如果通过宿主机IP连接 端口号为6380</p>
+<p>这时候在master进行操作 就可以看到slave的变化了！</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNjM5YjQxZTA3MDIzZi5wbmc?x-oss-process=image/format,png"></p>
+<hr>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-12-15T16:20:41.000Z" title="12/15/2019, 4:20:41 PM">2019-12-15</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Swoole/">Swoole</a></span><span class="level-item">6 分钟读完 (大约946个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/15/swoole%E5%A4%84%E7%90%86tcp%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98%EF%BC%88%E9%9D%A2%E5%90%91%E8%BF%87%E7%A8%8B%EF%BC%89.html">Swoole处理Tcp粘包问题（面向过程）</a></h1><div class="content"><h1 id="TCP通信特点"><a href="#TCP通信特点" class="headerlink" title="TCP通信特点"></a>TCP通信特点</h1><ul>
+<li>TCP 是流式协议没有消息边界，客户端向服务器端发送一次数据，可能会被服务器端分成多次收到。客户端向服务器端发送多条数据。服务器端可能一次全部收到。</li>
+<li>保证传输的可靠性，顺序。</li>
+<li>TCP拥有拥塞控制，所以数据包可能会延后发送。</li>
 </ul>
-<h5 id="消息通讯"><a href="#消息通讯" class="headerlink" title="消息通讯"></a>消息通讯</h5><ul>
-<li>  点对点消息队列，或者聊天室</li>
-<li>  客户端A和客户端B使用同一队列，进行消息通讯</li>
-<li>  客户端A，客户端B，客服端N订阅同一主题，进行消息发布和接收</li>
+<h1 id="TCP粘包"><a href="#TCP粘包" class="headerlink" title="TCP粘包"></a>TCP粘包</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>TCP 粘包是指发送方发送的若干包数据 到 接收方接收时粘成一包，从接收缓冲区看，后一包数据的头紧接着前一包数据的尾。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>发送方：发送方需要等缓冲区满才发送出去，造成粘包<br>接收方：接收方不及时接收缓冲区的包，造成多个包接收<br>下图为tcp协议在传输数据的过程：<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTUvNmU5YmM5M2I4N2RjNC5qcGc?x-oss-process=image/format,png" alt="Tcp协议传输数据过程.jpg"></p>
+<h2 id="swoole处理粘包"><a href="#swoole处理粘包" class="headerlink" title="swoole处理粘包"></a>swoole处理粘包</h2><ul>
+<li><p>EOF结束协议：<br>EOF切割需要遍历整个数据包的内容，查找EOF，因此会消耗大量CPU资源。上手比较简单</p>
+</li>
+<li><p>固定包头+包体协议<br>长度检测协议，只需要计算一次长度，数据处理仅进行指针偏移，性能非常高</p>
+</li>
 </ul>
-<h4 id="主要产品"><a href="#主要产品" class="headerlink" title="主要产品"></a>主要产品</h4><blockquote>
-<p><strong>目前在生成环境，使用较多的消息队列有ActiveMQ，RabbitMQ，ZeroMQ，Kafka，MetaMQ，RocketMQ等</strong></p>
+<h1 id="重现TCP粘包问题"><a href="#重现TCP粘包问题" class="headerlink" title="重现TCP粘包问题"></a>重现TCP粘包问题</h1><p>服务端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">//创建Server对象，监听 127.0.0.1:9501端口</span><br><span class="line">$server = new Swoole\Server(&quot;127.0.0.1&quot;, 9501);</span><br><span class="line"></span><br><span class="line">//监听连接进入事件</span><br><span class="line">$server-&gt;on(&#x27;Connect&#x27;, function ($server, $fd) &#123;</span><br><span class="line">    echo &quot;Client: Connect.\n&quot;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//监听数据接收事件</span><br><span class="line">$server-&gt;on(&#x27;Receive&#x27;, function ($server, $fd, $from_id, $data) &#123;</span><br><span class="line"></span><br><span class="line">    echo &#x27;接到消息&#x27;.$data.PHP_EOL;</span><br><span class="line">    </span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//监听连接关闭事件</span><br><span class="line">$server-&gt;on(&#x27;Close&#x27;, function ($serv, $fd) &#123;</span><br><span class="line">    echo &quot;Client: Close.\n&quot;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//启动服务器</span><br><span class="line">$server-&gt;start();</span><br></pre></td></tr></table></figure>
+
+<p>客户端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$client = new swoole_client(SWOOLE_SOCK_TCP);</span><br><span class="line">//连接到服务器</span><br><span class="line">if (!$client-&gt;connect(&#x27;127.0.0.1&#x27;, 9501, 0.5)) die(&quot;connect failed.&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//向服务器发送数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for ($i = 0; $i &lt;= 100; $i++) $client-&gt;send(&#x27;12345678&#x27;);</span><br><span class="line"></span><br><span class="line">//从服务器接收数据</span><br><span class="line">$data = $client-&gt;recv();</span><br><span class="line">if (!$data) die(&quot;recv failed.&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//关闭连接</span><br><span class="line">$client-&gt;close();</span><br></pre></td></tr></table></figure>
+
+<p>如下图：此时数据并不是完整的数据<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTUvODg1MGU2MWMyMjUwZi5wbmc?x-oss-process=image/format,png" alt="服务端.png"></p>
+<h1 id="固定包头-包体协议"><a href="#固定包头-包体协议" class="headerlink" title="固定包头+包体协议"></a>固定包头+包体协议</h1><p>服务端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">//创建Server对象，监听 127.0.0.1:9501端口</span><br><span class="line">$server = new Swoole\Server(&quot;127.0.0.1&quot;, 9501);</span><br><span class="line"></span><br><span class="line">$server-&gt;set(</span><br><span class="line">    [</span><br><span class="line">        &#x27;open_length_check&#x27; =&gt; true, // 打开包长检测特性</span><br><span class="line">        &#x27;package_max_length&#x27; =&gt; 1024 * 1024 * 2, // 包最大长度</span><br><span class="line">        &#x27;package_length_type&#x27; =&gt; &#x27;N&#x27;, // 长度值的类型</span><br><span class="line">        &#x27;package_length_offset&#x27; =&gt; 0, // 从第几个字节开始计算长度</span><br><span class="line">        &#x27;package_body_offset&#x27; =&gt; 4, // 长度值在包头的第几个字节</span><br><span class="line">    ]</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">//监听连接进入事件</span><br><span class="line">$server-&gt;on(&#x27;Connect&#x27;, function ($server, $fd) &#123;</span><br><span class="line">    echo &quot;Client: Connect.\n&quot;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//监听数据接收事件</span><br><span class="line">$server-&gt;on(&#x27;Receive&#x27;, function ($server, $fd, $from_id, $data) &#123;</span><br><span class="line">    //解包 去掉包头数据</span><br><span class="line">    $body = unpack(&#x27;N&#x27;,$data);</span><br><span class="line">    $content = substr($data,4,reset($body)); // 这里的 4 的计算公式  N 为32字节序 1字节等于8bit 32 / 8 = 4</span><br><span class="line">    var_dump($content);</span><br><span class="line"></span><br><span class="line">    //回复客户端消息 如果客户端设置了 open_length_check 也需要将数据打包</span><br><span class="line">    $message = &#x27;this is Server !&#x27;;</span><br><span class="line">    $send = pack(&#x27;N&#x27;,strlen($message)).$message;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    $server-&gt;send($fd,$send);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//监听连接关闭事件</span><br><span class="line">$server-&gt;on(&#x27;Close&#x27;, function ($serv, $fd) &#123;</span><br><span class="line">    echo &quot;Client: Close.\n&quot;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//启动服务器</span><br><span class="line">$server-&gt;start();</span><br></pre></td></tr></table></figure>
+
+<p>客户端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$client = new swoole_client(SWOOLE_SOCK_TCP);</span><br><span class="line">$client-&gt;set(</span><br><span class="line">    [</span><br><span class="line">        &#x27;open_length_check&#x27; =&gt; true, // 打开包长检测特性</span><br><span class="line">        &#x27;package_max_length&#x27; =&gt; 1024 * 1024 * 2, // 包最大长度</span><br><span class="line">        &#x27;package_length_type&#x27; =&gt; &#x27;N&#x27;, // 长度值的类型</span><br><span class="line">        &#x27;package_length_offset&#x27; =&gt; 0, // 从第几个字节开始计算长度</span><br><span class="line">        &#x27;package_body_offset&#x27; =&gt; 4, // 长度值在包头的第几个字节</span><br><span class="line">    ]</span><br><span class="line">);</span><br><span class="line">//连接到服务器</span><br><span class="line">if (!$client-&gt;connect(&#x27;127.0.0.1&#x27;, 9501, 0.5)) die(&quot;connect failed.&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$content = &#x27;Hello world&#x27;;</span><br><span class="line">$body = pack(&#x27;N&#x27;, strlen($content)) . $content;</span><br><span class="line"></span><br><span class="line">//向服务器发送数据</span><br><span class="line">if (!$client-&gt;send($body)) die(&quot;send failed.&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//从服务器接收数据</span><br><span class="line">$data = $client-&gt;recv();</span><br><span class="line">if (!$data) die(&quot;recv failed.&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//解包 去掉包头数据</span><br><span class="line">$body = unpack(&#x27;N&#x27;,$data);</span><br><span class="line">$content = substr($data,4,reset($body)); // 这里的 4 的计算公式  N 为32字节序 1字节等于8bit 32 / 8 = 4 </span><br><span class="line">var_dump($content);</span><br><span class="line"></span><br><span class="line">//关闭连接</span><br><span class="line">$client-&gt;close();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>swoole-version 4.4.12</p>
 </blockquote>
-<p>[TOC]</p>
-<h4 id="相关概念-1"><a href="#相关概念-1" class="headerlink" title="相关概念"></a>相关概念</h4><blockquote>
-<p><strong>消息队列中间件时分布式系统中重要的组件，主要解决应用耦合，异步消息，流量削锋等问题。实现高性能，高可用，可伸缩和最终一致性架构。是大型分布式系统不可缺少的中间件。</strong></p>
+<hr>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-12-14T12:23:11.000Z" title="12/14/2019, 12:23:11 PM">2019-12-14</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Swoole/">Swoole</a></span><span class="level-item">3 分钟读完 (大约378个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/14/Swoole%20TCP%E5%92%8CUDP%EF%BC%88%E5%90%8C%E6%AD%A5%E5%92%8C%E5%BC%82%E6%AD%A5%EF%BC%89.html">Swoole TCP和UDP（同步和异步）</a></h1><div class="content"><blockquote>
+<p>Tcp: 舔狗行为 可靠 先连接然后发消息等待回复</p>
 </blockquote>
-<h5 id="异步处理-1"><a href="#异步处理-1" class="headerlink" title="异步处理"></a>异步处理</h5><ul>
-<li>  <strong>场景说明</strong>：用户注册成功后，发送注册邮件，再发送注册短信。</li>
-<li>  <strong>串行方式</strong>：将注册信息写入数据库成功后，向用户发送邮件，再发送注册短信，将结果返回客户端。</li>
-<li>  <strong>并行方式</strong>：将注册信息写入数据库成功后，发送注册邮件的同时，发送注册短信，以上三个任务完成后，返回给客户端。</li>
-<li>  <strong>消息队列</strong>：将注册信息写入数据库成功后，注册信息写入消息队列，发送邮件和短信的消费者异步读取消息队列，写入消息队列即将返回给客户端。</li>
+<blockquote>
+<p>Udp: 渣男行为 不可靠 不需要建立连接 通信不需要一直保持</p>
+</blockquote>
+<ul>
+<li><p>tcp服务端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">//创建Server对象，监听 127.0.0.1:9501端口</span><br><span class="line">$serv = new Swoole\Server(&quot;127.0.0.1&quot;, 9501);</span><br><span class="line"></span><br><span class="line">//监听连接进入事件</span><br><span class="line">$serv-&gt;on(&#x27;Connect&#x27;, function ($serv, $fd) &#123;</span><br><span class="line">    echo &quot;Client: Connect.\n&quot;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//监听数据接收事件</span><br><span class="line">$serv-&gt;on(&#x27;Receive&#x27;, function ($serv, $fd, $from_id, $data) &#123;</span><br><span class="line">    $serv-&gt;send($fd, &quot;Server: &quot;.$data);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//监听连接关闭事件</span><br><span class="line">$serv-&gt;on(&#x27;Close&#x27;, function ($serv, $fd) &#123;</span><br><span class="line">    echo &quot;Client: Close.\n&quot;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//启动服务器</span><br><span class="line">$serv-&gt;start();</span><br></pre></td></tr></table></figure></li>
+<li><p>tcp同步客户端</p>
+</li>
 </ul>
-<h5 id="应用解耦-1"><a href="#应用解耦-1" class="headerlink" title="应用解耦"></a>应用解耦</h5><ul>
-<li>  <strong>场景说明</strong>：用户下单后，订单系统需要通知库存系统。</li>
-<li>  <strong>传统方式</strong>：订单系统调用库存系统的接口。</li>
-<li>  <strong>消息队列</strong>-&gt;</li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$client = new swoole_client(SWOOLE_SOCK_TCP);</span><br><span class="line"></span><br><span class="line">//连接到服务器</span><br><span class="line">if (!$client-&gt;connect(&#x27;127.0.0.1&#x27;, 9501, 0.5))</span><br><span class="line">&#123;</span><br><span class="line">    die(&quot;connect failed.&quot;);</span><br><span class="line">&#125;</span><br><span class="line">//向服务器发送数据</span><br><span class="line">if (!$client-&gt;send(&quot;hello world&quot;))</span><br><span class="line">&#123;</span><br><span class="line">    die(&quot;send failed.&quot;);</span><br><span class="line">&#125;</span><br><span class="line">//从服务器接收数据</span><br><span class="line">$data = $client-&gt;recv();</span><br><span class="line">if (!$data)</span><br><span class="line">&#123;</span><br><span class="line">    die(&quot;recv failed.&quot;);</span><br><span class="line">&#125;</span><br><span class="line">echo $data.PHP_EOL;</span><br><span class="line">//关闭连接</span><br><span class="line">$client-&gt;close();</span><br><span class="line"></span><br><span class="line">echo &#x27;这里是同步客户端！&#x27;.PHP_EOL;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>tcp异步客户端（只能在cli模式下运行）</li>
 </ul>
-<p>_订单系统_：用户下单后，订单系统完成持久化处理，将消息写入消息队列，返回用户订单下单成功。<br>_库存系统_：订阅下单的消息，采用拉/推的方式，获取下单信息，库存系统根据下单信息，进行库存操作。</p>
-<h5 id="流量削锋-1"><a href="#流量削锋-1" class="headerlink" title="流量削锋"></a>流量削锋</h5><ul>
-<li>  <strong>场景说明</strong>：秒杀活动，一般会因为流量过大，导致流量暴增。</li>
-<li>  <strong>传统方式</strong>：服务端突然接受来自前端的大量订单请求</li>
-<li>  <strong>消息队列</strong>：在应用前端加入消息队列-&gt;</li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">$client = new Swoole\Async\Client(SWOOLE_SOCK_TCP);</span><br><span class="line"></span><br><span class="line">$client-&gt;on(&quot;connect&quot;, function($cli) &#123;</span><br><span class="line">    $cli-&gt;send(&quot;GET / HTTP/1.1\r\n\r\n&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">$client-&gt;on(&quot;receive&quot;, function($cli, $data)&#123;</span><br><span class="line">    echo &quot;Receive: $data&quot;;</span><br><span class="line">    $cli-&gt;send(time().&quot;\n&quot;);</span><br><span class="line">    sleep(1);</span><br><span class="line">&#125;);</span><br><span class="line">$client-&gt;on(&quot;error&quot;, function($cli)&#123;</span><br><span class="line">    echo &quot;error\n&quot;;</span><br><span class="line">&#125;);</span><br><span class="line">$client-&gt;on(&quot;close&quot;, function($cli)&#123;</span><br><span class="line">    echo &quot;Connection close\n&quot;;</span><br><span class="line">&#125;);</span><br><span class="line">$client-&gt;connect(&#x27;127.0.0.1&#x27;, 9501);</span><br><span class="line"></span><br><span class="line">echo &#x27;这里是异步客户端&#x27;.PHP_EOL;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>udp服务端</li>
 </ul>
-<ol>
-<li> 用户的请求，服务器接收后，首先写入消息队列。假如消息队列长度超过最大数量，则直接抛弃用户请求或跳转到错误页面</li>
-<li> 秒杀业务根据消息队列中的请求信息，再做后续处理</li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">//创建Server对象，监听 127.0.0.1:9502端口，类型为SWOOLE_SOCK_UDP</span><br><span class="line">$serv = new Swoole\Server(&quot;127.0.0.1&quot;, 9502, SWOOLE_PROCESS, SWOOLE_SOCK_UDP);</span><br><span class="line"></span><br><span class="line">//监听数据接收事件</span><br><span class="line">$serv-&gt;on(&#x27;Packet&#x27;, function ($serv, $data, $clientInfo) &#123;</span><br><span class="line">    $serv-&gt;sendto($clientInfo[&#x27;address&#x27;], $clientInfo[&#x27;port&#x27;], &quot;Server &quot;.$data);</span><br><span class="line">    var_dump($clientInfo);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//启动服务器</span><br><span class="line">$serv-&gt;start();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>udp客户端</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$client = new Swoole\Client(SWOOLE_SOCK_UDP);</span><br><span class="line"></span><br><span class="line">$client-&gt;sendto(&#x27;127.0.0.1&#x27;,9502,&#x27;哈哈哈&#x27;);</span><br><span class="line">$result = $client-&gt;recv();</span><br><span class="line">echo $result;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>swoole-version 4.4.12</p>
+</blockquote>
+<hr>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-10-27T15:30:51.000Z" title="10/27/2019, 3:30:51 PM">2019-10-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">4 分钟读完 (大约617个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/10/27/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E5%AE%89%E8%A3%85.html">ElasticSearch全文检索引擎-安装</a></h1><div class="content"><h1 id="ElasticSearch安装"><a href="#ElasticSearch安装" class="headerlink" title="ElasticSearch安装"></a>ElasticSearch安装</h1><h4 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h4><ol>
+<li><p><strong>下载rpm包</strong></p>
+<p> <code>wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.rpm&quot;</code></p>
+</li>
+<li><p><strong>rpm安装</strong></p>
+<p> <code>rpm -ivh jdk-8u201-linux-x64.rpm</code><br> 安装成功后测试 java javac java -version 命令都能使用</p>
+</li>
 </ol>
-<h5 id="日志处理-1"><a href="#日志处理-1" class="headerlink" title="日志处理"></a>日志处理</h5><ul>
-<li>  解决大量日志传输的问题</li>
-<li>  日志采集客户端，负责日志数据采集，写入消息队列</li>
-<li>  消息队列，负责日志数据的接收，存储和转发</li>
-<li>  日志处理应用：订阅并消费消息队列中的日志数据</li>
-</ul>
-<h5 id="消息通讯-1"><a href="#消息通讯-1" class="headerlink" title="消息通讯"></a>消息通讯</h5><ul>
-<li>  点对点消息队列，或者聊天室</li>
-<li>  客户端A和客户端B使用同一队列，进行消息通讯</li>
-<li>  客户端A，客户端B，客服端N订阅同一主题，进行消息发布和接收</li>
-</ul>
-<h4 id="主要产品-1"><a href="#主要产品-1" class="headerlink" title="主要产品"></a>主要产品</h4><blockquote>
-<p><strong>目前在生成环境，使用较多的消息队列有ActiveMQ，RabbitMQ，ZeroMQ，Kafka，MetaMQ，RocketMQ等</strong></p>
-</blockquote>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-20T18:05:09.000Z" title="9/20/2020, 6:05:09 PM">2020-09-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T04:07:58.363Z" title="10/11/2021, 4:07:58 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">10 分钟读完 (大约1544个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/20/go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B.html">Go并发编程</a></h1><div class="content"><p><strong>Thead</strong> vs. <strong>Groutine</strong></p>
-<ul>
-<li>创建时默认的 <strong>stack</strong> 的大小<ul>
-<li>  JDK5 以后的 Java Thread stack 默认为1M</li>
-<li>  Groutine 的 <strong>Stack</strong> 初始化大小为2k</li>
-</ul>
+<h4 id="安装ElasticSearch"><a href="#安装ElasticSearch" class="headerlink" title="安装ElasticSearch"></a>安装ElasticSearch</h4><ol>
+<li><p><strong>官网</strong><br><a target="_blank" rel="noopener" href="https://www.elastic.co/">ElasticSearch</a></p>
 </li>
-<li>和 KSE（Kernel Space Entity）的对应关系<ul>
-<li>  Java Thread 是 1:1</li>
-<li>  Groutine 是 M:N</li>
-</ul>
+<li><p><strong>下载</strong><br>这里我下载的2.4.6版本</p>
+<p><code>wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/rpm/elasticsearch/2.4.6/elasticsearch-2.4.6.rpm</code></p>
 </li>
-</ul>
-<p><img src="http://qiniu.gaobinzhan.com/2020/05/21/2e36143a05eb0.png"></p>
-<p><strong>Go</strong>的<strong>GMP</strong>调度：</p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/05/21/acfb6c6dd2127.png"></p>
-<p><strong>M</strong>：系统线程</p>
-<p><strong>P</strong>：Go实现的协程处理器</p>
-<p><strong>G</strong>：协程</p>
-<p>从图中可看出，<strong>Processor</strong> 在不同的系统线程中，每个 <strong>Processor</strong> 都挂着准备运行的协程队列。</p>
-<p><strong>Processor</strong> 依次运行协程队列中的协程。</p>
-<p>这时候问题就来了，假如一个协程运行的时间特别长，把整个 <strong>Processor</strong> 都占住了，那么在队列中的协程是不是就会被延迟的很久？</p>
-<p>在Go启动的时候，会有一个守护线程来去做一个计数，计每个 <strong>Processor</strong> 运行完成的协程的数量，当一段时间内发现，某个 <strong>Processor</strong> 完成协程的数量没有发生变化的时候，就会往这个正在运行的协程任务栈插入一个特别的标记，协程在运行的时候遇到非内联函数，就会读到这个标记，就会把自己中断下来，然后插到这个等候协程队列的队尾，切换到别的协程进行运行。</p>
-<p>当某一个协程被系统中断了，例如说 <strong>io</strong> 需要等待的时候，为了提高整体的并发，<strong>Processor</strong> 会把自己移到另一个可使用的系统线程当中，继续执行它所挂的协程队列，当这个被中断的协程被唤醒完成之后，会把自己加入到其中某个 <strong>Processor</strong> 的队列里，会加入到全局等待队列中。</p>
-<p>当一个协程被中断的时候，它在寄存器里的运行状态也会保存到这个协程对象里，当协程再次获得运行状态的时候，重写写入寄存器，继续运行。</p>
-<p>话不多说，直接上代码，如何在代码里启动一个协程：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">func TestGroutine(t *testing.T) &#123;</span><br><span class="line">    for i := 0; i &lt; 10; i++ &#123;</span><br><span class="line">        // int 参数</span><br><span class="line">        go func(i int) &#123;</span><br><span class="line">            fmt.Println(i)</span><br><span class="line">        &#125;(i) // 传入参数</span><br><span class="line">    &#125;</span><br><span class="line">    // 有可能测试程序结束的非常快 加个等待</span><br><span class="line">    time.Sleep(time.Millisecond * 50)</span><br><span class="line">    /** 运行结果</span><br><span class="line">    === RUN   TestGroutine</span><br><span class="line">    1</span><br><span class="line">    4</span><br><span class="line">    5</span><br><span class="line">    2</span><br><span class="line">    6</span><br><span class="line">    3</span><br><span class="line">    0</span><br><span class="line">    8</span><br><span class="line">    9</span><br><span class="line">    7</span><br><span class="line">    --- PASS: TestGroutine (0.05s)</span><br><span class="line">    */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="共享内存并发机制"><a href="#共享内存并发机制" class="headerlink" title="共享内存并发机制"></a>共享内存并发机制</h2><h3 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h3><p>如果你是 <strong>Java</strong> 或者 <strong>C++</strong> 程序员，那么以下代码非常常见，使用锁来进行并发控制（可惜我是个Phper）：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">lock lock = ...;</span><br><span class="line">lock.lock();</span><br><span class="line">try&#123;</span><br><span class="line">  // process (thread-safe)</span><br><span class="line">&#125;catch(Exception ex)&#123;</span><br><span class="line">  </span><br><span class="line">&#125;finally&#123;</span><br><span class="line">  lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>同样Go也提供了这样的机 package sync：</p>
-<p><strong>Mutex</strong> 互斥锁</p>
-<p><strong>RWLock</strong> 读写锁</p>
-<p>不使用锁的情况：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">func TestCounter(t *testing.T) &#123;</span><br><span class="line">    counter := 0</span><br><span class="line">    for i := 0; i &lt; 5000; i++ &#123;</span><br><span class="line">        go func(i int) &#123;</span><br><span class="line">            counter++</span><br><span class="line">        &#125;(i)</span><br><span class="line">    &#125;</span><br><span class="line">    time.Sleep(time.Second * 1)</span><br><span class="line">    t.Logf(&quot;counter = %d&quot;, counter)</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestCounter</span><br><span class="line">        TestCounter: share_memory_test.go:16: counter = 4627</span><br><span class="line">    --- PASS: TestCounter (1.01s)</span><br><span class="line">    */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以发现结果与预期结果不一样，这是因为 <code>conuter</code> 变量在不同的协程里面去做自增，导致了一个并发的竞争条件，传统意义来讲就是一个不是线程安全的程序。要保证线程安全，就要对共享的内存进行锁保护。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">func TestCounterThreadSafe(t *testing.T) &#123;</span><br><span class="line">    var mut sync.Mutex</span><br><span class="line">    counter := 0</span><br><span class="line">    for i := 0; i &lt; 5000; i++ &#123;</span><br><span class="line">        go func(i int) &#123;</span><br><span class="line">            // defer 释放锁</span><br><span class="line">            defer func() &#123;</span><br><span class="line">                mut.Unlock()</span><br><span class="line">            &#125;()</span><br><span class="line">            // 加锁</span><br><span class="line">            mut.Lock()</span><br><span class="line">            counter++</span><br><span class="line">        &#125;(i)</span><br><span class="line">    &#125;</span><br><span class="line">    time.Sleep(time.Second * 1)</span><br><span class="line">    t.Logf(&quot;counter = %d&quot;, counter)</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestCounterThreadSafe</span><br><span class="line">        TestCounterThreadSafe: share_memory_test.go:40: counter = 5000</span><br><span class="line">    --- PASS: TestCounterThreadSafe (1.01s)</span><br><span class="line">    */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这次就得到了预期结果。</p>
-<h3 id="WaitGroup"><a href="#WaitGroup" class="headerlink" title="WaitGroup"></a>WaitGroup</h3><p>等待所有协程完成，才能往下执行操作。</p>
-<p>上面代码中，怕代码执行太快，所以加了 <strong>sleep</strong>。</p>
-<p>但我们无法控制这个 <strong>sleep</strong> 需要睡眠时间。</p>
-<p>下面来用 <code>WaitGroup</code>：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">func TestCounterWaitGroup(t *testing.T) &#123;</span><br><span class="line">    var mut sync.Mutex</span><br><span class="line">    var wg sync.WaitGroup</span><br><span class="line">    counter := 0</span><br><span class="line">    for i := 0; i &lt; 5000; i++ &#123;</span><br><span class="line">        wg.Add(1) // 增加一个要等待的协程</span><br><span class="line">        go func(i int) &#123;</span><br><span class="line">            // defer 释放锁</span><br><span class="line">            defer func() &#123;</span><br><span class="line">                mut.Unlock()</span><br><span class="line">            &#125;()</span><br><span class="line">            // 加锁</span><br><span class="line">            mut.Lock()</span><br><span class="line">            counter++</span><br><span class="line">            wg.Done() // 一个协程完成了</span><br><span class="line">        &#125;(i)</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait() // 等待所有添加的协程完成 才继续向下运行</span><br><span class="line">    t.Logf(&quot;counter = %d&quot;, counter)</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestCounterWaitGroup</span><br><span class="line">        TestCounterWaitGroup: share_memory_test.go:66: counter = 5000</span><br><span class="line">    --- PASS: TestCounterWaitGroup (0.00s)</span><br><span class="line">    */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="CSP并发机制"><a href="#CSP并发机制" class="headerlink" title="CSP并发机制"></a>CSP并发机制</h2><p>有人可能会说不就是 <strong>Actor Model</strong> 嘛</p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/05/21/f5c13d22f5cdf.png"></p>
-<p><strong>CSP</strong> vs. <strong>Actor</strong></p>
-<ul>
-<li>  和 <strong>Actor</strong> 的直接通讯不同，<strong>CSP</strong>模式则是通过<strong>Channel</strong>进行通讯的，更松耦合一些。</li>
-<li>  <strong>Go</strong>中的<strong>channel</strong>是有容量限制并且独立于处理<strong>Groutine</strong>，而如<strong>Erlang</strong>，<strong>Actor</strong>模式中的<strong>mailbox</strong>容量是无限的，接收进程也总是被动地处理消息。</li>
-</ul>
-<p><strong>Channel</strong></p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/05/21/7b78643d8ddb1.png"></p>
-<p><strong>Go</strong>中<strong>Channel</strong>的基本机制：</p>
-<ul>
-<li>上图左边（非缓冲<strong>channel</strong>）：  通讯的两方必须同时在<strong>channel</strong>的两边，才能完成这次交互。任何一方不在，另一方就会被阻塞在那里等待，直到等到另一方才能完成这次交互。</li>
-<li>上图右边（缓冲<strong>channel</strong>）：  就是对这个<strong>channel</strong>设置容量，在未满的情况下，放消息的人就能放进去，如果满了，就会发生阻塞等待。  等待拿消息的人去拿，空出来容量。反之，拿消息一样。</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">func service() string &#123;</span><br><span class="line">    time.Sleep(time.Millisecond * 50) // 模拟阻塞</span><br><span class="line">    return &quot;Done&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func otherTask() &#123;</span><br><span class="line">    fmt.Println(&quot;working on something else&quot;)</span><br><span class="line">    time.Sleep(time.Millisecond * 100) // 模拟阻塞</span><br><span class="line">    fmt.Println(&quot;Task is done.&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func TestService(t *testing.T) &#123;</span><br><span class="line">    fmt.Println(service())</span><br><span class="line">    otherTask()</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestService</span><br><span class="line">    Done</span><br><span class="line">    working on something else</span><br><span class="line">    Task is done.</span><br><span class="line">    --- PASS: TestService (0.16s)</span><br><span class="line">    */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>由运行结果可知，完全是串行的，耗时为 0.16s</p>
-<p>对 <code>service</code>进行改造，在调用的时候启动另外一个协程去执行，而不是阻塞当前写的协程。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">func service() string &#123;</span><br><span class="line">    time.Sleep(time.Millisecond * 50) // 模拟阻塞</span><br><span class="line">    return &quot;Done&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func otherTask() &#123;</span><br><span class="line">    fmt.Println(&quot;working on something else&quot;)</span><br><span class="line">    time.Sleep(time.Millisecond * 100) // 模拟阻塞</span><br><span class="line">    fmt.Println(&quot;Task is done.&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func AsyncService() chan string &#123;</span><br><span class="line">    retCh := make(chan string) // 创建一个非缓冲string类型的channel</span><br><span class="line">    //retCh := make(chan string, 1) // 创建一个容量为1 string类型的缓冲channel</span><br><span class="line">    go func() &#123;</span><br><span class="line">        ret := service()</span><br><span class="line">        fmt.Println(&quot;returned result.&quot;)</span><br><span class="line">        retCh</span><br></pre></td></tr></table></figure></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-20T18:00:14.000Z" title="9/20/2020, 6:00:14 PM">2020-09-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T04:07:58.363Z" title="10/11/2021, 4:07:58 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">34 分钟读完 (大约5089个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/20/%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BAredis-cluster.html">如何搭建redis-cluster</a></h1><div class="content"><p>​ 假设在一台主从机器上配置了20G内存，但是业务需求是需要50G内存的时候，主从结构+哨兵可以实现高可用故障切换+冗余备份，但是不能解决数据容量的问题，用哨兵，每个<strong>redis</strong>实例存储的数据也都是完整的数据，浪费内存且有木桶效应。</p>
-<p>​ 为了最大化利用内存，可以采用<strong>cluster</strong>，就是分布式存储。即每台<strong>redis</strong>存储不同的内容。</p>
-<p><strong>Redis</strong>分布式方案一般有两种：</p>
-<ul>
-<li>  客户端分区方案：优点是分区逻辑可控，缺点是需要自己处理数据路由，实现高可用、故障转移等问题。比如在<strong>redis2.8</strong>之前通常的做法是获取某个<strong>key</strong>的<strong>hashcode</strong>，然后取余分布到不同节点，不过这种做法无法很好的支持动态伸缩性需求，一旦节点的增或者删操作，都会导致<strong>key</strong>无法在<strong>redis</strong>中命中。</li>
-<li>  代理方案：优点是简化客户端分布式逻辑和升级维护便利，缺点是加重架构部署复杂度和性能损耗。如<strong>twemproxy</strong>、<strong>codis</strong>。</li>
-</ul>
-<p>而<strong>redis</strong>官方提供了专有的集群方案：<strong>Redis Cluster</strong>，它非常优雅的解决了<strong>Redis</strong>集群方面的问题，部署方便简单。</p>
-<h2 id="Redis-Cluster"><a href="#Redis-Cluster" class="headerlink" title="Redis Cluster"></a>Redis Cluster</h2><p>​ <strong>Redis Cluster</strong>是<strong>Redis</strong>的分布式解决方案，在<strong>3.0</strong>版本正式推出，有效地解决了<strong>Redis</strong>分布式方面的需求。当遇到单机内存、并发、流量等瓶颈时，可以采用<strong>Cluster</strong>架构方案达到负载均衡的目的。</p>
-<p>​ 在<strong>Redis Cluster</strong>，它们任何两个节点之间都是相互连通的。客户端可以与任何一个节点相连接，然后就可以访问集群中的任何一个节点，对其进行存取和其它操作。</p>
-<p><strong>Redis Cluster</strong>提供的好处：</p>
-<ul>
-<li>  将数据自动切分到多个节点的能力</li>
-<li>  当集群中的一部分节点失效或者无法进行通讯时，仍然可以继续处理命令请求的能力，拥有自动故障转移的能力。</li>
-</ul>
-<p><strong>Redis Cluster</strong> 和 <strong>replication + sentinel</strong> 如何选择：</p>
-<p>如果数据量很少，主要是承载高并发高性能的场景，比如你的缓存一般就几个G，单机就够了。</p>
-<ul>
-<li>  <strong>Replication</strong>：一个<strong>master</strong>，多个<strong>slave</strong>，要几个<strong>slave</strong>跟你的要求的读吞吐量有关系，结合<strong>sentinel</strong>集群，去保证<strong>redis</strong>主从架构的高可用就行了。</li>
-<li>  <strong>Redis Cluster</strong>：主要是针对海量数据+高并发+高可用的场景，海量数据，如果数据量很大，建议用<strong>Redis Cluster</strong></li>
-</ul>
-<p>数据分布理论：</p>
-<p>分布式数据库首先要解决把整个数据集按照分区规则映射到多个节点的问题，即把数据集划分到多个节点上，每个节点负责整体数据的一个子集。</p>
-<p>常见的分区规则有哈希分区和顺序分区两种：</p>
-<ul>
-<li>  顺序分布：把一整块数据分散到很多机器中，一般都是平均分配的。</li>
-<li>  哈希分区：通过<strong>hash</strong>的函数，取余产生的数。保证这串数字充分的打散，均匀的分配到各台机器上。</li>
-</ul>
-<p>哈希分布和顺序分布只是场景上的适用。哈希分布不能顺序访问，比如你想访问1~100，哈希分布只能遍历全部数据，同时哈希分布因为做了<strong>hash</strong>后导致与业务数据无关了。</p>
-<p>分区方式</p>
-<p>描述</p>
-<p>代表产品</p>
-<p>哈希分区</p>
-<p>离散度好<br>数据分布业务无关<br>无法顺序访问</p>
-<p>RedisCluster<br>Cassanda<br>Dynamo</p>
-<p>顺序分区</p>
-<p>离散度易倾斜<br>数据分布业务相关<br>可顺序访问</p>
-<p>Bigtable<br>Hbase<br>Hypertable</p>
-<p>数据倾斜与数据迁移跟节点伸缩：</p>
-<p>顺序分布是会导致数据倾斜的，主要是访问的倾斜。每次点击会重点访问某台机器，这就导致最后数据都到这台机器上了，这就是顺序分布最大的缺点。但哈希分布的时候，假如要扩容机器的时候，称之为“节点伸缩”，这个时候，因为是哈希算法，会导致数据迁移。</p>
-<p>哈希分区方式：</p>
-<ul>
-<li>节点取余分区：<ul>
-<li>  使用特点的数据（包括redis的键或用户ID），再根据节点数量N，使用公式：hash(key)%N计算出一个0～（N-1）值，来决定数据映射到哪一个节点上。即哈希值对节点总数取余。</li>
-<li>  缺点：当节点数量N变化时（扩容或者收缩），数据和节点之间的映射关系需要重新计算，这样的话，按照新的规则映射，要么之前存储的数据找不到，要么之前数据被重新映射到新的节点（导致以前存储的数据发生数据迁移）。</li>
-<li>  实践：常用于数据库的分库分表规则，一般采用预分区的方式，提前根据数量规划好分区数，比如划分为512或1024张表，保证可支撑未来一段时间的数据量，再根据负载情况将表迁移到其它数据库中。</li>
-</ul>
+<li><p><strong>安装ElasticSearch</strong></p>
+<p> <code>yum install elasticsearch-2.4.6.rpm</code></p>
 </li>
-<li>一致性哈希：<ul>
-<li>一致性哈希分区（Distributed Hash Table）实现思路是为系统中每个节点分配一个token，范围一般在0～232，这些token构成一个哈希环。数据读写执行节点查找操作时，先根据key计算hash值，然后顺时针找到第一个大于等于该哈希值的token节点。  <img src="http://qiniu.gaobinzhan.com/2020/06/28/9a2f836285ddd.png">  上图就是一个一致性hash的原理解析。  假设有n1～n4这四台机器，我们对每一台机器分配一个唯一token，每次有数据（黄色代表数据），一致性哈希算法规则每次都顺时针漂移数据，也就是图中黄色的数据都指向n3。  这个时候我们需要增加一个节点n5，在n2和n3之间，数据还是会发生漂移（会偏移到大于等于的节点），但是这个时候你是否注意到，其实只有n2～n3这部分的数据被漂移，其它的数据都是不会变的，这种方式相比节点取余最大的好处在于加入和删除节点只影响哈希环中相邻的节点，对其它节点无影响。</li>
-<li>  缺点：每个节点的负载不相同，因为每个节点的hash是根据key计算出来的，换句话说就是假设key足够多，被hash算法打散得非常均匀，但是节点过少，导致每个节点处理的key个数不太一样，甚至相差很大，这就导致某些节点压力很大</li>
-<li>  实践：加减节点会造成哈希环中部分数据无法命中，需要手动处理或者忽略这部分数据，因此一致性哈希常用于缓存场景。</li>
-</ul>
+<li><p><strong>修改配置文件</strong></p>
+<p><code>vim /etc/elasticsearch/elasticsearch.yml</code></p>
+<p><code>cluster.name: my-application</code>这行取消注释 并且改为自己的应用名称<br><code>node.name: node-1</code>  这行也一样 改为自己的节点名称<br>为了方便操作 应用名称改为 <code>search</code>  节点名称为 <code>master</code><br><code>network.host: 192.168.0.1</code> 取消注释 改为 <code>0.0.0.0</code><br><code>http.port: 9200</code> 取消注释就行 可以自行修改端口号<br>切记 取消注释后 首字母前面不能有空格 不然启动会报错</p>
 </li>
-</ul>
-<p>虚拟槽分区：</p>
-<p>虚拟槽分区巧妙地使用了哈希空间，使用分散度良好的哈希函数把所有数据映射到一个固定范围的整数集合中，整数定义为槽（slot）。这个范围一般远远大于节点数，比如Redis Cluster槽范围是0～16383（也就是说有16383个槽）。槽是集群内数据管理和迁移的基本单位。采用大范围槽的主要目的是为了方便数据拆分和集群扩展。每个节点会负责一定数量的槽。</p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/06/28/1c7845ac0288e.png"></p>
-<p>如上图所示，当前集群有5个节点，每个节点平均大约负责3276个槽。由于采用高质量的哈希算法，每个槽所映射的数据通常比较均匀，将数据平均划分到5个节点进行数据分区。Redis Cluster就是采用虚拟槽分区，每当key访问过来，Redis Cluster会计算哈希值是否在这个区间里。它们彼此都知道对应的槽在哪台机器上，这样就能做到平均分配了。</p>
-<p>集群限制：批量key操作。</p>
-<h2 id="Docker-compose搭建Redis-Cluster"><a href="#Docker-compose搭建Redis-Cluster" class="headerlink" title="Docker-compose搭建Redis Cluster"></a>Docker-compose搭建Redis Cluster</h2><blockquote>
-<p>因为没有多台机器去部署redis实例，所以这里采用docker来搭建，在生产环境中肯定是多台机器去部署的。</p>
-</blockquote>
-<p>容器名称</p>
-<p>ip</p>
-<p>端口</p>
-<p>redis-cluster1</p>
-<p>192.168.3.101</p>
-<p>6380-&gt;6379<br>16380-&gt;16379</p>
-<p>redis-cluster2</p>
-<p>192.168.3.102</p>
-<p>6381-&gt;6379<br>16381-&gt;16379</p>
-<p>redis-cluster3</p>
-<p>192.168.3.103</p>
-<p>6382-&gt;6379<br>16382-&gt;16379</p>
-<p>redis-cluster4</p>
-<p>192.168.3.104</p>
-<p>6383-&gt;6379<br>16383-&gt;16379</p>
-<p>redis-cluster5</p>
-<p>192.168.3.105</p>
-<p>6384-&gt;6379<br>16384-&gt;16379</p>
-<p>Redis-cluster6</p>
-<p>192.168.3.106</p>
-<p>6385-&gt;6379<br>16385-&gt;16379</p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/06/30/2df540d0dcaa0.png"></p>
-<p>如上图把redis.conf复制进去，自行去下载，然后分别加入以下代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bind 0.0.0.0</span><br><span class="line">cluster-enabled yes</span><br><span class="line">cluster-config-file &quot;/redis/conf/nodes.conf&quot;</span><br><span class="line">cluster-node-timeout 5000</span><br><span class="line">protected-mode no</span><br><span class="line">port 6379</span><br><span class="line">daemonize no</span><br></pre></td></tr></table></figure>
-
-<p><code>docker-compose.yml</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">version: &quot;3.6&quot;</span><br><span class="line">services:</span><br><span class="line">  redis-cluster1:</span><br><span class="line">    image: redis</span><br><span class="line">    container_name: redis-cluster1</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;6380:6379&quot;</span><br><span class="line">      - &quot;16380:16379&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - /Users/gaobinzhan/Documents/Redis/cluster/cluster1:/redis</span><br><span class="line">    command: redis-server /redis/conf/redis.conf</span><br><span class="line">    networks:</span><br><span class="line">      redis-test:</span><br><span class="line">        ipv4_address: 192.168.3.101</span><br><span class="line">  redis-cluster2:</span><br><span class="line">    image: redis</span><br><span class="line">    container_name: redis-cluster2</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;6381:6379&quot;</span><br><span class="line">      - &quot;16381:16379&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - /Users/gaobinzhan/Documents/Redis/cluster/cluster2:/redis</span><br><span class="line">    command: redis-server /redis/conf/redis.conf</span><br><span class="line">    networks:</span><br><span class="line">      redis-test:</span><br><span class="line">        ipv4_address: 192.168.3.102</span><br><span class="line">  redis-cluster3:</span><br><span class="line">    image: redis</span><br><span class="line">    container_name: redis-cluster3</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;6382:6379&quot;</span><br><span class="line">      - &quot;16382:16379&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - /Users/gaobinzhan/Documents/Redis/cluster/cluster3:/redis</span><br><span class="line">    command: redis-server /redis/conf/redis.conf</span><br><span class="line">    networks:</span><br><span class="line">      redis-test:</span><br><span class="line">        ipv4_address: 192.168.3.103</span><br><span class="line">  redis-cluster4:</span><br><span class="line">    image: redis</span><br><span class="line">    container_name: redis-cluster4</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;6383:6379&quot;</span><br><span class="line">      - &quot;16383:16379&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - /Users/gaobinzhan/Documents/Redis/cluster/cluster4:/redis</span><br><span class="line">    command: redis-server /redis/conf/redis.conf</span><br><span class="line">    networks:</span><br><span class="line">      redis-test:</span><br><span class="line">        ipv4_address: 192.168.3.104</span><br><span class="line">  redis-cluster5:</span><br><span class="line">    image: redis</span><br><span class="line">    container_name: redis-cluster5</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;6384:6379&quot;</span><br><span class="line">      - &quot;16384:16379&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - /Users/gaobinzhan/Documents/Redis/cluster/cluster5:/redis</span><br><span class="line">    command: redis-server /redis/conf/redis.conf</span><br><span class="line">    networks:</span><br><span class="line">      redis-test:</span><br><span class="line">        ipv4_address: 192.168.3.105</span><br><span class="line">  redis-cluster6:</span><br><span class="line">    image: redis</span><br><span class="line">    container_name: redis-cluster6</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;6385:6379&quot;</span><br><span class="line">      - &quot;16385:16379&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - /Users/gaobinzhan/Documents/Redis/cluster/cluster6:/redis</span><br><span class="line">    command: redis-server /redis/conf/redis.conf</span><br><span class="line">    networks:</span><br><span class="line">      redis-test:</span><br><span class="line">        ipv4_address: 192.168.3.106</span><br><span class="line">networks:</span><br><span class="line">  redis-test:</span><br><span class="line">    driver: bridge</span><br><span class="line">    ipam:</span><br><span class="line">      config:</span><br><span class="line">        - subnet: &quot;192.168.3.0/24&quot;</span><br></pre></td></tr></table></figure>
-
-<p>然后进行<code>docker-compose up</code></p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/06/30/22ec0cfb791a0.png"></p>
-<p>此刻每个目录下面多了<strong>nodes.conf</strong> 现在文件内容只是单单保存了<strong>redis</strong>实例自身的节点数据。</p>
-<p>也可以随便连接一台<strong>redis</strong>，查看集群状态：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gaobinzhan-MBP:~ gaobinzhan$ redis-cli -p 6380</span><br><span class="line">127.0.0.1:6380&gt; info Cluster</span><br><span class="line"># Cluster</span><br><span class="line">cluster_enabled:1</span><br></pre></td></tr></table></figure>
-
-<p>此刻集群只是开启状态，往里面写入数据会报错：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6380&gt; set 1 2</span><br><span class="line">(error) CLUSTERDOWN Hash slot not served</span><br></pre></td></tr></table></figure>
-
-<p>是因为没有分配槽。</p>
-<p>在<strong>redis</strong>之前的版本，需要手动分配槽，非常不方便。现在的版本只需要简单执行下命令就可以了。</p>
-<p>随便进入一个容器当中 <code>docker exec -it redis-cluster1 sh</code></p>
-<p>然后执行<code>redis-cli --cluster create 192.168.3.101:6379 192.168.3.102:6379 192.168.3.103:6379 192.168.3.104:6379 192.168.3.105:6379 192.168.3.106:6379 --cluster-replicas 1</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">gaobinzhan-MBP:~ gaobinzhan$ docker exec -it redis-cluster1 sh</span><br><span class="line"># redis-cli --cluster create 192.168.3.101:6379 192.168.3.102:6379 192.168.3.103:6379 192.168.3.104:6379 192.168.3.105:6379 192.168.3.106:6379 --cluster-replicas 1</span><br><span class="line">&gt;&gt;&gt; Performing hash slots allocation on 6 nodes...</span><br><span class="line">Master[0] -&gt; Slots 0 - 5460</span><br><span class="line">Master[1] -&gt; Slots 5461 - 10922</span><br><span class="line">Master[2] -&gt; Slots 10923 - 16383</span><br><span class="line">Adding replica 192.168.3.105:6379 to 192.168.3.101:6379</span><br><span class="line">Adding replica 192.168.3.106:6379 to 192.168.3.102:6379</span><br><span class="line">Adding replica 192.168.3.104:6379 to 192.168.3.103:6379</span><br><span class="line">M: 2a373fe66cde81d1530584bb86e49694b000d0c2 192.168.3.101:6379</span><br><span class="line">   slots:[0-5460] (5461 slots) master</span><br><span class="line">M: 8de35d3b2439d05de839a2539f68e4833b90679d 192.168.3.102:6379</span><br><span class="line">   slots:[5461-10922] (5462 slots) master</span><br><span class="line">M: caca339b5511d3a14e381d5ffd9434458c7368bd 192.168.3.103:6379</span><br><span class="line">   slots:[10923-16383] (5461 slots) master</span><br><span class="line">S: 97eccf5edf7fb12d4a2e01b16dbf2d9c561896b3 192.168.3.104:6379</span><br><span class="line">   replicates caca339b5511d3a14e381d5ffd9434458c7368bd</span><br><span class="line">S: 64512db80b1a159ca823a25a7e9893154efd555c 192.168.3.105:6379</span><br><span class="line">   replicates 2a373fe66cde81d1530584bb86e49694b000d0c2</span><br><span class="line">S: 1722206f30f3b7c65706d30f4a1ee3b6e0cbca7c 192.168.3.106:6379</span><br><span class="line">   replicates 8de35d3b2439d05de839a2539f68e4833b90679d</span><br><span class="line">Can I set the above configuration? (type &#x27;yes&#x27; to accept): </span><br></pre></td></tr></table></figure>
-
-<p>此刻会提示你，是否接受此配置，输入<strong>yes</strong>即可。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">Can I set the above configuration? (type &#x27;yes&#x27; to accept): yes</span><br><span class="line">&gt;&gt;&gt; Nodes configuration updated</span><br><span class="line">&gt;&gt;&gt; Assign a different config epoch to each node</span><br><span class="line">&gt;&gt;&gt; Sending CLUSTER MEET messages to join the cluster</span><br><span class="line">Waiting for the cluster to join</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt; Performing Cluster Check (using node 192.168.3.101:6379)</span><br><span class="line">M: 2a373fe66cde81d1530584bb86e49694b000d0c2 192.168.3.101:6379</span><br><span class="line">   slots:[0-5460] (5461 slots) master</span><br><span class="line">   1 additional replica(s)</span><br><span class="line">S: 64512db80b1a159ca823a25a7e9893154efd555c 192.168.3.105:6379</span><br><span class="line">   slots: (0 slots) slave</span><br><span class="line">   replicates 2a373fe66cde81d1530584bb86e49694b000d0c2</span><br><span class="line">S: 1722206f30f3b7c65706d30f4a1ee3b6e0cbca7c 192.168.3.106:6379</span><br><span class="line">   slots: (0 slots) slave</span><br><span class="line">   replicates 8de35d3b2439d05de839a2539f68e4833b90679d</span><br><span class="line">M: 8de35d3b2439d05de839a2539f68e4833b90679d 192.168.3.102:6379</span><br><span class="line">   slots:[5461-10922] (5462 slots) master</span><br><span class="line">   1 additional replica(s)</span><br><span class="line">S: 97eccf5edf7fb12d4a2e01b16dbf2d9c561896b3 192.168.3.104:6379</span><br><span class="line">   slots: (0 slots) slave</span><br><span class="line">   replicates caca339b5511d3a14e381d5ffd9434458c7368bd</span><br><span class="line">M: caca339b5511d3a14e381d5ffd9434458c7368bd 192.168.3.103:6379</span><br><span class="line">   slots:[10923-16383] (5461 slots) master</span><br><span class="line">   1 additional replica(s)</span><br><span class="line">[OK] All nodes agree about slots configuration.</span><br><span class="line">&gt;&gt;&gt; Check for open slots...</span><br><span class="line">&gt;&gt;&gt; Check slots coverage...</span><br><span class="line">[OK] All 16384 slots covered.</span><br></pre></td></tr></table></figure>
-
-<p>此时<strong>redis-cluster</strong>已经搭建好了，<strong>nodes.conf</strong>文件也发生了变化，执行<strong>cluster info</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6380&gt; cluster info</span><br><span class="line">cluster_state:ok</span><br><span class="line">cluster_slots_assigned:16384</span><br><span class="line">cluster_slots_ok:16384</span><br><span class="line">cluster_slots_pfail:0</span><br><span class="line">cluster_slots_fail:0</span><br><span class="line">cluster_known_nodes:6</span><br><span class="line">cluster_size:3</span><br><span class="line">cluster_current_epoch:6</span><br><span class="line">cluster_my_epoch:1</span><br><span class="line">cluster_stats_messages_ping_sent:234</span><br><span class="line">cluster_stats_messages_pong_sent:242</span><br><span class="line">cluster_stats_messages_sent:476</span><br><span class="line">cluster_stats_messages_ping_received:237</span><br><span class="line">cluster_stats_messages_pong_received:234</span><br><span class="line">cluster_stats_messages_meet_received:5</span><br><span class="line">cluster_stats_messages_received:476</span><br></pre></td></tr></table></figure>
-
-<p>状态是<strong>ok</strong>的，来试着写写数据。进入<strong>redis</strong>实例<code>docker exec -it redis-cluster1 sh</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gaobinzhan-MBP:~ gaobinzhan$ docker exec -it redis-cluster1 sh</span><br><span class="line"># redis-cli</span><br><span class="line">127.0.0.1:6379&gt; set 1 2</span><br><span class="line">(error) MOVED 9842 192.168.3.102:6379</span><br></pre></td></tr></table></figure>
-
-<p>报错了，因为槽的问题，这个数据需要写入到102那台实例当中，这时可以用集群方式启动<code>redis-cli -c</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># redis-cli -c</span><br><span class="line">127.0.0.1:6379&gt; set 1 2</span><br><span class="line">-&gt; Redirected to slot [9842] located at 192.168.3.102:6379</span><br><span class="line">OK</span><br><span class="line">192.168.3.102:6379&gt; get 1</span><br><span class="line">&quot;2&quot;</span><br></pre></td></tr></table></figure>
-
-<p>会发现提示数据移动到102节点了，因为是集群方式所以可以获取的，切换到102节点：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># redis-cli -c -h 192.168.3.102</span><br><span class="line">192.168.3.102:6379&gt; get 1</span><br><span class="line">&quot;2&quot;</span><br></pre></td></tr></table></figure>
-
-<p>也可以正常的获取。</p>
-<h2 id="往期方式搭建集群"><a href="#往期方式搭建集群" class="headerlink" title="往期方式搭建集群"></a>往期方式搭建集群</h2><h3 id="准备节点"><a href="#准备节点" class="headerlink" title="准备节点"></a>准备节点</h3><p><strong>Redis</strong>集群一般由多个节点组成，节点数量至少为6个才能保证组成完整高可用的集群，前面的主从复制跟哨兵共同构成了高可用。每个节点需要开启配置 <code>cluster-enabled yes</code> ，让<strong>Redis</strong> 运行在集群模式下。</p>
-<ul>
-<li>  性能：这是Redis赖以生存的看家本领，增加集群功能后当然不能对性能产生太大影响，所以<strong>Redis</strong>采取了<strong>P2P</strong>而非<strong>Proxy</strong>方式、异步复制、客户端重定向等设计，而牺牲了部分的一致性、使用性。</li>
-<li>  水平扩展：集群的最重要能力当然是扩展，文档中称可以线性扩展到1000结点。 可用性：在<strong>Cluster</strong>推出之前，可用性要靠Sentinel保证。有了集群之后也自动具有了<strong>Sentinel</strong>的监控和自动<strong>Failover</strong>能力</li>
-</ul>
-<p>集群的相关配置：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#节点端口</span><br><span class="line">port 6379</span><br><span class="line">#开启集群模式</span><br><span class="line">cluster-enabled yes</span><br><span class="line">#节点超时时间，单位毫秒</span><br><span class="line">cluster-node-timeout 15000</span><br><span class="line">#集群内部配置文件</span><br><span class="line">cluster-config-file &quot;nodes-6379.conf&quot;</span><br></pre></td></tr></table></figure>
-
-<p>其他配置和单机模式一致即可，配置文件命名规则<code>redis-&#123;port&#125;.conf</code> ，准备好配置后启动所有节点，第一次启动时如果没有集群配置文件，它会自动创建一份，文件名称采用 cluster-config-file 参数项控制，建议采用<code>node-&#123;port&#125;.conf</code>格式定义，也就是说会有两份配置文件。</p>
-<p>当集群内节点信息发生变化，如添加节点、节点下线、故障转移等。节点会自动保存集群状态到配置文件中。需要注意的是， <strong>Redis</strong>自动维护集群配置文件，不要手动修改，防止节点重启时产生集群信息错乱。</p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/06/30/e8f9b47eabdc5.png"></p>
-<p>然后就跟上面一样准备准备节点就行了。</p>
-<h3 id="节点握手"><a href="#节点握手" class="headerlink" title="节点握手"></a>节点握手</h3><p>节点握手是指一批运行在集群模式下的节点通过<strong>Gossip</strong>协议彼此通信，达到感知对方的过程。节点握手是集群彼此通信的第一步，由客户端发起命令：<code>cluster meet&#123;ip&#125;&#123;port&#125;</code></p>
-<p>通过命令<code>cluster meet 127.0.0.1 6381</code>让节点6380和6381节点进行握手通信。<code>cluster meet</code>命令是一个异步命令，执行之后立刻返回。内部发起与目标节点进行握手通信 。</p>
-<ul>
-<li>  节点6380本地创建6381节点信息对象，并发送meet消息。</li>
-<li>  节点6381接受到meet消息后，保存6380节点信息并回复pong消息。</li>
-<li>  之后节点6380和6381彼此定期通过ping/pong消息进行正常的节点通信。</li>
-</ul>
-<p>通过<code>cluster nodes</code>命令确认6个节点都彼此感知并组成集群。</p>
-<p>注意：</p>
-<ul>
-<li>  每个<strong>Redis Cluster</strong>节点会占用两个TCP端口，一个监听客户端的请求，默认是<strong>6379</strong>，另外一个在前一个端口加上10000， 比如<strong>16379</strong>，来监听数据的请求，节点和节点之间会监听第二个端口，用一套二进制协议来通信。节点之间会通过套协议来进行失败检测，配置更新，<code>failover</code>认证等等。为了保证节点之间正常的访问，需要注意防火墙的配置。</li>
-<li>  节点建立握手之后集群还不能正常工作，这时集群处于下线状态，所有的数据读写都被禁止。</li>
-<li>  设置从节点作为一个完整的集群，需要主从节点，保证当它出现故障时可以自动进行故障转移。集群模式下，Reids 节点角色分为主节点和从节点。</li>
-<li>  首次启动的节点和被分配槽的节点都是主节点，从节点负责复制主节点槽信息和相关的数据。</li>
-<li>  使用 <code>cluster replicate &#123;nodeId&#125;</code>命令让一个节点成为从节点。其中命令执行必须在对应的从节点上执行，将当前节点设置为<code>node_id</code>指定的节点的从节点。</li>
-</ul>
-<h3 id="分配槽"><a href="#分配槽" class="headerlink" title="分配槽"></a>分配槽</h3><p>Redis 集群把所有的数据映射到16384个槽中。每个key会映射为一个固定的槽，只有当节点分配了槽，才能响应和这些槽关联的键命令。通过cluster addslots命令为节点分配槽利用bash特性批量设置槽（slots），命令如下：</p>
-<p><code>redis-cli -h 192.168.3.101 cluster addslots &#123;0..5461&#125;</code></p>
-<p><code>redis-cli -h 192.168.3.102 cluster addslots &#123;5462..10922&#125;</code></p>
-<p><code>redis-cli -h 192.168.3.103 cluster addslots &#123;10923..16383&#125;</code></p>
-<p>然后就可以进行操作了。</p>
-<p>集群的命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">CLUSTER nodes： 列出集群当前已知的所有节点（node）的相关信息。 </span><br><span class="line"></span><br><span class="line">CLUSTER meet  ： 将ip和port所指定的节点添加到集群当中。 </span><br><span class="line"></span><br><span class="line">CLUSTER addslots  [slot ...]： 将一个或多个槽（slot）指派（assign）给当前节点。 </span><br><span class="line"></span><br><span class="line">CLUSTER delslots  [slot ...]： 移除一个或多个槽对当前节点的指派。 </span><br><span class="line"></span><br><span class="line">CLUSTER slots： 列出槽位、节点信息。 </span><br><span class="line"></span><br><span class="line">CLUSTER slaves ： 列出指定节点下面的从节点信息。 </span><br><span class="line"></span><br><span class="line">CLUSTER replicate ： 将当前节点设置为指定节点的从节点。 </span><br><span class="line"></span><br><span class="line">CLUSTER saveconfig： 手动执行命令保存保存集群的配置文件，集群默认在配置修改的时候会自动保存配置文件。 </span><br><span class="line"></span><br><span class="line">CLUSTER keyslot ： 列出key被放置在哪个槽上。 </span><br><span class="line"></span><br><span class="line">CLUSTER flushslots： 移除指派给当前节点的所有槽，让当前节点变成一个没有指派任何槽的节点。 </span><br><span class="line"></span><br><span class="line">CLUSTER countkeysinslot ： 返回槽目前包含的键值对数量。 </span><br><span class="line"></span><br><span class="line">CLUSTER getkeysinslot  ： 返回count个槽中的键。 </span><br><span class="line"></span><br><span class="line">CLUSTER setslot  node  将槽指派给指定的节点，如果槽已经指派给另一个节点，那么先让另一个节点删除该槽，然后再进行指派。</span><br><span class="line"></span><br><span class="line">CLUSTER setslot  migrating  将本节点的槽迁移到指定的节点中。 </span><br><span class="line"></span><br><span class="line">CLUSTER setslot  importing  从 node_id 指定的节点中导入槽 slot 到本节点。 </span><br><span class="line"></span><br><span class="line">CLUSTER setslot  stable 取消对槽 slot 的导入（import）或者迁移（migrate）。 </span><br><span class="line"></span><br><span class="line">CLUSTER failover： 手动进行故障转移。 </span><br><span class="line"></span><br><span class="line">CLUSTER forget ： 从集群中移除指定的节点，这样就无法完成握手，过期时为60s，60s后两节点又会继续完成握手。 </span><br><span class="line"></span><br><span class="line">CLUSTER reset [HARDSOFT]： 重置集群信息，soft是清空其他节点的信息，但不修改自己的id，hard还会修改自己的id，不传该参数则使用soft方式。 </span><br><span class="line"></span><br><span class="line">CLUSTER count-failure-reports ： 列出某个节点的故障报告的长度。 </span><br><span class="line"></span><br><span class="line">CLUSTER SET-CONFIG-EPOCH： 设置节点epoch，只有在节点加入集群前才能设置。</span><br></pre></td></tr></table></figure>
-
-<p>注意：在apline系统中不支持{1..10}操作</p>
-<blockquote>
-<p>以上理论知识内容为网络整理。。。。</p>
-</blockquote>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-20T17:57:38.000Z" title="9/20/2020, 5:57:38 PM">2020-09-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T04:07:58.363Z" title="10/11/2021, 4:07:58 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">2 分钟读完 (大约345个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/20/swoole%E5%A4%84%E7%90%86tcp%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98%EF%BC%88%E9%9D%A2%E5%90%91%E8%BF%87%E7%A8%8B%EF%BC%89.html">Swoole处理Tcp粘包问题（面向过程）</a></h1><div class="content"><p>[TOC]</p>
-<h5 id="TCP通信特点"><a href="#TCP通信特点" class="headerlink" title="TCP通信特点"></a>TCP通信特点</h5><ul>
-<li>  TCP 是流式协议没有消息边界，客户端向服务器端发送一次数据，可能会被服务器端分成多次收到。客户端向服务器端发送多条数据。服务器端可能一次全部收到。</li>
-<li>  保证传输的可靠性，顺序。</li>
-<li>  TCP拥有拥塞控制，所以数据包可能会延后发送。</li>
-</ul>
-<h5 id="TCP粘包"><a href="#TCP粘包" class="headerlink" title="TCP粘包"></a>TCP粘包</h5><h6 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h6><p>TCP 粘包是指发送方发送的若干包数据 到 接收方接收时粘成一包，从接收缓冲区看，后一包数据的头紧接着前一包数据的尾。</p>
-<h6 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h6><p>发送方：发送方需要等缓冲区满才发送出去，造成粘包接收方：接收方不及时接收缓冲区的包，造成多个包接收下图为tcp协议在传输数据的过程：</p>
-<p><img src="http://qiniu.gaobinzhan.com/2019/12/15/6e9bc93b87dc4.jpg"></p>
-<h6 id="swoole处理粘包"><a href="#swoole处理粘包" class="headerlink" title="swoole处理粘包"></a>swoole处理粘包</h6><ul>
-<li>  EOF结束协议：EOF切割需要遍历整个数据包的内容，查找EOF，因此会消耗大量CPU资源。上手比较简单</li>
-<li>  固定包头+包体协议：长度检测协议，只需要计算一次长度，数据处理仅进行指针偏移，性能非常高</li>
-</ul>
-<h5 id="重现TCP粘包问题"><a href="#重现TCP粘包问题" class="headerlink" title="重现TCP粘包问题"></a>重现TCP粘包问题</h5><p>服务端</p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-20T17:52:10.000Z" title="9/20/2020, 5:52:10 PM">2020-09-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T04:07:58.363Z" title="10/11/2021, 4:07:58 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">8 分钟读完 (大约1223个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/20/go%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B.html">Go面向对象编程</a></h1><div class="content"><p><strong>Is Go an object-oriented language?</strong></p>
-<blockquote>
-<p><strong>Yes and no</strong>. Although Go has types and methods and allows an object</p>
-<p>oriented style of programming, there is <strong>no type hierarchy</strong>. <strong>The concept</strong></p>
-<p><strong>of “interface” in Go provides a different approach that we believe is</strong></p>
-<p><strong>easy to use and in some ways more general.</strong></p>
-<p>Also, the lack of a type hierarchy makes “objects” in Go feel much more</p>
-<p>lightweight than in languages such as C++ or Java.</p>
-</blockquote>
-<h2 id="行为的定义和实现"><a href="#行为的定义和实现" class="headerlink" title="行为的定义和实现"></a>行为的定义和实现</h2><p>结构体定义：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">type Employee struct &#123;</span><br><span class="line">    Id   string</span><br><span class="line">    Name string</span><br><span class="line">    Age  int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>实例创建及初始化：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">func TestCreateEmployee(t *testing.T) &#123;</span><br><span class="line">    e := Employee&#123;&quot;0&quot;, &quot;Bob&quot;, 20&#125;         // 分别把值放进去</span><br><span class="line">    e1 := Employee&#123;Name: &quot;Mike&quot;, Age: 30&#125; // 指定某个field的值</span><br><span class="line">    e2 := new(Employee)                   // new关键字 去创建指向实例的指针 这里返回的引用/指针 相当于 e:=Employee&#123;&#125;</span><br><span class="line">    e2.Id = &quot;2&quot;                           // 通过 example.filed 去赋值</span><br><span class="line">    e2.Name = &quot;Rose&quot;</span><br><span class="line">    e2.Age = 22</span><br><span class="line">    t.Log(e)</span><br><span class="line">    t.Log(e1)</span><br><span class="line">    t.Log(e1.Id)</span><br><span class="line">    t.Log(e2)</span><br><span class="line">    t.Logf(&quot;e is %T&quot;, e)</span><br><span class="line">    t.Logf(&quot;e2 is %T&quot;, e2)</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestCreateEmployee</span><br><span class="line">        TestCreateEmployee: encap_test.go:18: &#123;0 Bob 20&#125;</span><br><span class="line">        TestCreateEmployee: encap_test.go:19: &#123; Mike 30&#125;</span><br><span class="line">        TestCreateEmployee: encap_test.go:20:</span><br><span class="line">        TestCreateEmployee: encap_test.go:21: &amp;&#123;2 Rose 22&#125;</span><br><span class="line">        TestCreateEmployee: encap_test.go:22: e is test.Employee</span><br><span class="line">        TestCreateEmployee: encap_test.go:23: e2 is *test.Employee</span><br><span class="line">    --- PASS: TestCreateEmployee (0.00s)</span><br><span class="line">     */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>行为定义：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 第一种定义方式在实例对应方法被调用时，实例的成员会进行值复制</span><br><span class="line">func (e Employee) String() string &#123;</span><br><span class="line">    return fmt.Sprintf(&quot;ID:%s-Name:%s-Age:%d&quot;, e.Id, e.Name, e.Age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func TestStructOperations(t *testing.T) &#123;</span><br><span class="line">    e := Employee&#123;&quot;0&quot;, &quot;Bob&quot;, 20&#125;</span><br><span class="line">    t.Log(e.String())</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestStructOperations</span><br><span class="line">        TestStructOperations: encap_test.go:46: ID:0-Name:Bob-Age:20</span><br><span class="line">    --- PASS: TestStructOperations (0.00s)</span><br><span class="line">     */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 通常情况下为了避免内存拷贝我们使用第二种定义方式</span><br><span class="line">func (e *Employee) String() string &#123;</span><br><span class="line">    return fmt.Sprintf(&quot;ID:%s/Name:%s/Age:%d&quot;, e.Id, e.Name, e.Age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func TestStructOperations(t *testing.T) &#123;</span><br><span class="line">    e := Employee&#123;&quot;0&quot;, &quot;Bob&quot;, 20&#125;</span><br><span class="line">    t.Log(e.String())</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestStructOperations</span><br><span class="line">        TestStructOperations: encap_test.go:51: ID:0/Name:Bob/Age:20</span><br><span class="line">    --- PASS: TestStructOperations (0.00s)</span><br><span class="line">    */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>在Go语言中不管通过指针访问还是通过实例访问，都是一样的</p>
-<p>那么这两种定义没有区别吗？？</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">func (e *Employee) String() string &#123;</span><br><span class="line">    fmt.Printf(&quot;Address is %x \n&quot;, unsafe.Pointer(&amp;e.Name))</span><br><span class="line">    return fmt.Sprintf(&quot;ID:%s/Name:%s/Age:%d&quot;, e.Id, e.Name, e.Age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func TestStructOperations(t *testing.T) &#123;</span><br><span class="line">    e := Employee&#123;&quot;0&quot;, &quot;Bob&quot;, 20&#125;</span><br><span class="line">    fmt.Printf(&quot;Address is %x \n&quot;, unsafe.Pointer(&amp;e.Name))</span><br><span class="line">    t.Log(e.String())</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestStructOperations</span><br><span class="line">    Address is c000060370</span><br><span class="line">    Address is c000060370</span><br><span class="line">        TestStructOperations: encap_test.go:54: ID:0/Name:Bob/Age:20</span><br><span class="line">    --- PASS: TestStructOperations (0.00s)</span><br><span class="line">    */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以发现两个地址一致</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">func (e Employee) String() string &#123;</span><br><span class="line">    fmt.Printf(&quot;Address is %x \n&quot;, unsafe.Pointer(&amp;e.Name))</span><br><span class="line">    return fmt.Sprintf(&quot;ID:%s-Name:%s-Age:%d&quot;, e.Id, e.Name, e.Age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func TestStructOperations(t *testing.T) &#123;</span><br><span class="line">    e := Employee&#123;&quot;0&quot;, &quot;Bob&quot;, 20&#125;</span><br><span class="line">    fmt.Printf(&quot;Address is %x \n&quot;, unsafe.Pointer(&amp;e.Name))</span><br><span class="line">    t.Log(e.String())</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestStructOperations</span><br><span class="line">    Address is c000092370</span><br><span class="line">    Address is c0000923a0</span><br><span class="line">        TestStructOperations: encap_test.go:55: ID:0-Name:Bob-Age:20</span><br><span class="line">    --- PASS: TestStructOperations (0.00s)</span><br><span class="line">    */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这时候两个地址不一致，说明结构体的数据被复制了，会造成开销</p>
-<h2 id="Go语言的相关接口"><a href="#Go语言的相关接口" class="headerlink" title="Go语言的相关接口"></a>Go语言的相关接口</h2><p>Java的接口与依赖：</p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/05/17/234f907d27e94.png"></p>
-<p>Go的 Duck Type 式接口实现：</p>
-<ul>
-<li>  接口为非入侵性，实现不依赖与接口定义</li>
-<li>  所以接口的定义可以包含在接口使用者包内</li>
-</ul>
-<p><img src="http://qiniu.gaobinzhan.com/2020/05/17/b2c005524c89d.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">type Programmer interface &#123;</span><br><span class="line">    WriteHelloWorld() string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type GoProgrammer struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (g *GoProgrammer) WriteHelloWorld() string &#123;</span><br><span class="line">    return &quot;Hello World&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func TestClient(t *testing.T) &#123;</span><br><span class="line">    var p Programmer</span><br><span class="line">    p = new(GoProgrammer)</span><br><span class="line">    t.Log(p.WriteHelloWorld())</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestClient</span><br><span class="line">        TestClient: interface_test.go:19: Hello World</span><br><span class="line">    --- PASS: TestClient (0.00s)</span><br><span class="line">     */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>接口变量：</p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/05/17/87e5943515174.png"></p>
-<p>自定义类型：</p>
-<ul>
-<li>  type IntConvertionFn func(n int) int</li>
-<li>  type MyPoint int</li>
-</ul>
-<h2 id="扩展和复用"><a href="#扩展和复用" class="headerlink" title="扩展和复用"></a>扩展和复用</h2><p>复合：</p>
-<p>匿名类型嵌入：</p>
-<p>它不是<strong>继承</strong>，如果我们把“内部 struct”看作父类，把“外部 struct” 看作子类，会发现如下问题：</p>
-<ul>
-<li>  不支持子类替换</li>
-<li>子类并不是真正继承了父类的方法</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">type Pet struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (p *Pet) Speak() &#123;</span><br><span class="line">    fmt.Print(&quot;...&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (p *Pet) SpeakTo(string string) &#123;</span><br><span class="line">    p.Speak()</span><br><span class="line">    fmt.Println(&quot; &quot;, string)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Dog struct &#123;</span><br><span class="line">    p *Pet</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (d *Dog) Speak() &#123;</span><br><span class="line">    fmt.Print(&quot;Wang!&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (d *Dog) SpeakTo(string string) &#123;</span><br><span class="line">    d.p.SpeakTo(string)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func TestDog(t *testing.T) &#123;</span><br><span class="line">    dog := new(Dog)</span><br><span class="line">    dog.SpeakTo(&quot;Gao&quot;) // 没有打印 Wang! 需要改动 dog中SpeakTo方法</span><br><span class="line">    /** 运行结果：</span><br><span class="line">    === RUN   TestDog</span><br><span class="line">    ...  Gao</span><br><span class="line">    --- PASS: TestDog (0.00s)</span><br><span class="line">     */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="多态与空接口"><a href="#多态与空接口" class="headerlink" title="多态与空接口"></a>多态与空接口</h2><p>多态：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">type Code string // 自定义类型</span><br><span class="line"></span><br><span class="line">type Programmer interface &#123;</span><br><span class="line">    WriteHelloWorld() Code</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type GoProgrammer struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type PhpProgrammer struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (g *GoProgrammer) WriteHelloWorld() Code &#123;</span><br><span class="line">    return &quot;fmt.Println(\&quot;Hello World\&quot;)&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (p *PhpProgrammer) WriteHelloWorld() Code &#123;</span><br><span class="line">    return &quot;echo \&quot;Hello World\&quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func writeFirstProgram(p Programmer) &#123;</span><br><span class="line">    fmt.Printf(&quot;%T %v\n&quot;, p, p.WriteHelloWorld())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func TestPolymorphism(t *testing.T) &#123;</span><br><span class="line">    goProg := new(GoProgrammer)</span><br><span class="line">    phpProg := new(PhpProgrammer)</span><br><span class="line">    writeFirstProgram(goProg)</span><br><span class="line">    writeFirstProgram(phpProg)</span><br><span class="line">    /** 运行结果</span><br><span class="line">    === RUN   TestPolymorphism</span><br><span class="line">    *test.GoProgrammer fmt.Println(&quot;Hello World&quot;)</span><br><span class="line">    *test.PhpProgrammer echo &quot;Hello World&quot;</span><br><span class="line">    --- PASS: TestPolymorphism (0.00s)</span><br><span class="line">     */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>空接口与断言：</p>
-<ul>
-<li>  空接口可以表示任何类型</li>
-<li>通过断言来将空接口转换为制定类型  <code>v, ok := p.(int) // ok=true 时为转换成功</code></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">func DoSomething(p interface&#123;&#125;) &#123;</span><br><span class="line">    // 如果传入的参数能被断言成一个整型</span><br><span class="line">    if i, ok := p.(int); ok &#123;</span><br><span class="line">        fmt.Println(&quot;Integer&quot;, i)</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 如果传入的参数能被断言成一个字符型</span><br><span class="line">    if s, ok := p.(string); ok &#123;</span><br><span class="line">        fmt.Println(&quot;String&quot;, s)</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fmt.Println(&quot;Unknow Type&quot;)</span><br><span class="line"></span><br><span class="line">    // 也可以通过switch来判断</span><br><span class="line">    /*switch v := p.(type) &#123;</span><br><span class="line">    case int:</span><br><span class="line">        fmt.Println(&quot;Integer&quot;, v)</span><br><span class="line">    case string:</span><br><span class="line">        fmt.Println(&quot;String&quot;, v)</span><br><span class="line">    default:</span><br><span class="line">        fmt.Println(&quot;Unknow Type&quot;)</span><br><span class="line">    &#125;*/</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func TestEmptyInterfaceAssertion(t *testing.T) &#123;</span><br><span class="line">    DoSomething(10)</span><br><span class="line">    DoSomething(&quot;gaobinzhan&quot;)</span><br><span class="line">    /** 运行结果</span><br><span class="line">    === RUN   TestEmptyInterfaceAssertion</span><br><span class="line">    Integer 10</span><br><span class="line">    String gaobinzhan</span><br><span class="line">    --- PASS: TestEmptyInterfaceAssertion (0.00s)</span><br><span class="line">    */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Go接口最佳实践：</p>
-<p><img src="http://qiniu.gaobinzhan.com/2020/05/17/f8ba0c6a8e958.png"></p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-08-05T21:53:49.000Z" title="8/5/2020, 9:53:49 PM">2020-08-05</time>发表</span><span class="level-item"><time dateTime="2021-10-11T04:07:58.363Z" title="10/11/2021, 4:07:58 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">4 分钟读完 (大约581个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/08/05/sl-im-%E5%9F%BA%E4%BA%8E-swoft-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%8D%8F%E7%A8%8B%E6%A1%86%E6%9E%B6%E5%92%8C-layim-%E7%BD%91%E9%A1%B5%E8%81%8A%E5%A4%A9%E7%B3%BB%E7%BB%9F-%E5%BC%80%E5%8F%91%E5%87%BA-5.html">sl-im 基于 Swoft 微服务协程框架和 Layim 网页聊天系统 开发出来的聊天室</a></h1><div class="content"><p><img src="http://qiniu.gaobinzhan.com/2020/04/13/562596a1c87ac.png?imageView2/2/w/300"></p>
-<p><img src="http://img.shields.io/badge/php-%3E=7.1-brightgreen.svg?maxAge=2592000"><img src="http://img.shields.io/badge/swoole-%3E=4.3.3-brightgreen.svg?maxAge=2592000"><img src="http://img.shields.io/hexpm/l/plug.svg?maxAge=2592000"></p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>sl-im 是基于 Swoft 微服务协程框架和 Layim 网页聊天系统 所开发出来的聊天室。</p>
-<p>当前分支为2.x开发版本，如需部署，请下载releases</p>
-<h2 id="体验地址"><a href="#体验地址" class="headerlink" title="体验地址"></a>体验地址</h2><p>sl-im <a target="_blank" rel="noopener" href="https://im.gaobinzhan.com/">https://im.gaobinzhan.com</a></p>
-<h2 id="演示图"><a href="#演示图" class="headerlink" title="演示图"></a>演示图</h2><p><img src="http://qiniu.gaobinzhan.com/2020/04/13/a96b031c660ca.jpg"></p>
-<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><ul>
-<li>  登录注册（Http）</li>
-<li>  单点登录（Websocket）</li>
-<li>  私聊（Websocket）</li>
-<li>  群聊（Websocket）</li>
-<li>  在线人数（Websocket）</li>
-<li>  获取未读消息（Websocket）</li>
-<li>  好友在线状态（Websocket）</li>
-<li>  好友 查找 添加 同意 拒绝（Http+Websocket）</li>
-<li>  群 创建 查找 添加 同意 拒绝（Http+Websocket）</li>
-<li>  聊天记录存储</li>
-<li>  心跳检测</li>
-<li>  消息重发</li>
-<li>  断线重连</li>
-</ul>
-<h2 id="Requirement"><a href="#Requirement" class="headerlink" title="Requirement"></a>Requirement</h2><ul>
-<li>  PHP 7.1+</li>
-<li>  Swoole 4.3.4+</li>
-<li>  Composer</li>
-<li>  Swoft &gt;= 2.0.8</li>
-</ul>
-<h2 id="部署方式"><a href="#部署方式" class="headerlink" title="部署方式"></a>部署方式</h2><h3 id="Composer"><a href="#Composer" class="headerlink" title="Composer"></a>Composer</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer update</span><br></pre></td></tr></table></figure>
-
-<h3 id="bean"><a href="#bean" class="headerlink" title="bean"></a>bean</h3><p><code>app/bean.php</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x27;db&#x27; =&gt; [</span><br><span class="line">        &#x27;class&#x27;    =&gt; Database::class,</span><br><span class="line">        &#x27;dsn&#x27;      =&gt; &#x27;mysql:dbname=im;host=127.0.0.1:3306&#x27;,</span><br><span class="line">        &#x27;username&#x27; =&gt; &#x27;root&#x27;,</span><br><span class="line">        &#x27;password&#x27; =&gt; &#x27;gaobinzhan&#x27;,</span><br><span class="line">        &#x27;charset&#x27;  =&gt; &#x27;utf8mb4&#x27;,</span><br><span class="line">    ],</span><br><span class="line">&#x27;db.pool&#x27; =&gt; [</span><br><span class="line">        &#x27;class&#x27;     =&gt; \Swoft\Db\Pool::class,</span><br><span class="line">        &#x27;database&#x27;  =&gt; bean(&#x27;db&#x27;),</span><br><span class="line">        &#x27;minActive&#x27; =&gt; 5, // 自己调下连接池大小</span><br><span class="line">        &#x27;maxActive&#x27; =&gt; 10</span><br><span class="line">    ],</span><br></pre></td></tr></table></figure>
-
-<h3 id="数据表迁移"><a href="#数据表迁移" class="headerlink" title="数据表迁移"></a>数据表迁移</h3><p><code>php bin/swoft mig:up</code></p>
-<h3 id="env配置"><a href="#env配置" class="headerlink" title="env配置"></a>env配置</h3><p><code>vim .env</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># basic</span><br><span class="line">APP_DEBUG=0</span><br><span class="line">SWOFT_DEBUG=0</span><br><span class="line"></span><br><span class="line"># more ...</span><br><span class="line">APP_HOST=https://im.gaobinzhan.com/</span><br><span class="line">WS_URL=ws://im.gaobinzhan.com/im</span><br><span class="line"># 是否开启静态处理 这里我关了 让nginx去处理</span><br><span class="line">ENABLE_STATIC_HANDLER=false </span><br><span class="line"># swoole v4.4.0以下版本, 此处必须为绝对路径</span><br><span class="line">DOCUMENT_ROOT=/data/wwwroot/IM/public</span><br></pre></td></tr></table></figure>
-
-<h3 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a>nginx配置</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name im.gaobinzhan.com;</span><br><span class="line">    return 301 https://$server_name$request_uri;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server&#123;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    root /data/wwwroot/IM/public/;</span><br><span class="line">    add_header Strict-Transport-Security &quot;max-age=31536000&quot;;</span><br><span class="line">    server_name im.gaobinzhan.com;</span><br><span class="line">    access_log /data/wwwlog/im-gaobinzhan-com.access.log;</span><br><span class="line">    error_log /data/wwwlog/im-gaobinzhan-com.error.log;</span><br><span class="line">    client_max_body_size 100m;</span><br><span class="line">    ssl_certificate /etc/nginx/ssl/full_chain.pem;</span><br><span class="line">    ssl_certificate_key /etc/nginx/ssl/private.key;</span><br><span class="line">    ssl_session_timeout 5m;</span><br><span class="line">    ssl_protocols TLSv1.1 TLSv1.2 TLSv1.3;</span><br><span class="line">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://127.0.0.1:9091;</span><br><span class="line">        proxy_set_header Host $host:$server_port;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Real-PORT $remote_port;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    &#125;</span><br><span class="line">    location /im &#123;</span><br><span class="line">        proxy_pass http://127.0.0.1:9091;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_read_timeout   3600s;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    location ~ .*\.(jsicocssttfwoffwoff2pngjpgjpegsvggifhtm)$ &#123;</span><br><span class="line">        root /data/wwwroot/IM/public;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php bin/swoft ws:start</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php bin/swoft ws:start -d</span><br></pre></td></tr></table></figure>
-
-<p>怎么访问还用写吗？？？点个star吧 ✌️</p>
-<h2 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h2><ul>
-<li>  WeChat：gaobinzhan</li>
-<li>  QQ：975975398</li>
-</ul>
-<p>我的博客即将同步至腾讯云+社区，邀请大家一同入驻：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/support-plan?invite%5C_code=14q93ezyewy0r">https://cloud.tencent.com/developer/support-plan?invite\_code=14q93ezyewy0r</a></p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-10-27T15:31:57.000Z" title="10/27/2019, 3:31:57 PM">2019-10-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T04:07:58.363Z" title="10/11/2021, 4:07:58 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">2 分钟读完 (大约337个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/10/27/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6kafaka-php%E6%93%8D%E4%BD%9C%E4%BD%BF%E7%94%A8kafka.html">消息中间件Kafaka - PHP操作使用Kafka</a></h1><div class="content"><ul>
-<li>PHP使用Kafka<ul>
-<li>  安装libkafka</li>
-<li>  安装rdkafka</li>
-<li>  php操作kafka</li>
-</ul>
+<li><p><strong>运行ElasticSearch</strong></p>
+<p> <code>service elasticsearch start</code><br> 浏览器访问ip+端口号 如果出现界面证明 成功</p>
 </li>
-</ul>
-<blockquote>
-<p><strong>我们需要安装libkafka和rdkafka</strong></p>
+</ol>
+<h4 id="安装ik中文分词"><a href="#安装ik中文分词" class="headerlink" title="安装ik中文分词"></a>安装ik中文分词</h4><ol>
+<li><p><strong>ik分词地址</strong></p>
+<p> <a target="_blank" rel="noopener" href="https://github.com/medcl/elasticsearch-analysis-ik">ik</a></p>
+</li>
+<li><p><strong>安装git和maven</strong></p>
+<p> 如果有的话跳过此步</p>
+<p> 安装git<br> <code>yum install -y git</code></p>
+<p> 下载maven包<br> <code>wget https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz</code></p>
+<p> 解压到指定目录<br><code>tar -xzvf apache-maven-3.5.4-bin.tar.gz -C /usr/local</code></p>
+<p>进入指定目录<br><code>cd /usr/local/</code></p>
+<p>创建软连接<br><code>ln -s apache-maven-3.5.4 maven</code></p>
+<p>编辑文件 添加maven环境变量<br><code>vim /etc/profile</code></p>
+<p>在文件末尾添加以下代码<br><code>MAVEN_HOME=//usr/local/maven</code><br><code>export MAVEN_HOME</code><br><code>export PATH=$&#123;PATH&#125;:$&#123;MAVEN_HOME&#125;/bin</code></p>
+<p>运行命令<br><code>source /etc/profile</code></p>
+<p> <code>mvn -v</code><br>出现版本 安装maven成功</p>
+</li>
+<li><p><strong>安装ik分词</strong><br>克隆<br><code>git clone https://github.com/medcl/elasticsearch-analysis-ik.git</code></p>
+<p>根据elasticsearch版本号切换相对应的ik分词版本号 这里es是2.4.6 相对应是1.10.6</p>
+<p>克隆好之后进入该目录<br><code>cd elasticsearch-analysis-ik/</code></p>
+<p>切换版本<br><code>git checkout tags/v1.10.6</code></p>
+<p>执行<br><code>mvn package</code></p>
+<p>执行成功后会在 <code>target/releases/</code>  目录下生成一个插件包 进入该目录<br><code>cd target/releases/</code></p>
+<p>复制到es的插件目录下解压<br><code>cp elasticsearch-analysis-ik-1.10.6.zip /usr/share/elasticsearch/plugins/</code></p>
+<p>进入目录<br><code>cd /usr/share/elasticsearch/plugins/</code></p>
+<p>解压<br><code>unzip elasticsearch-analysis-ik-1.10.6.zip</code></p>
+<p>为了方便管理 新建个文件夹 把刚刚解压出来的文件移动进去<br><code>mkdir ik</code><br><code>mv ./* ik</code></p>
+<p>重启elasticsearch<br><code>service elasticsearch restart</code></p>
+<p>测试下<br><code>curl -XPOST &quot;http://ip:port/_analyze?analyzer=ik&amp;pretty&quot; -d &#39;这是一个商品的标题&#39;</code></p>
+</li>
+</ol>
+<hr>
+<h3 id="ElasticSearch和ik分词安装成功"><a href="#ElasticSearch和ik分词安装成功" class="headerlink" title="ElasticSearch和ik分词安装成功"></a>ElasticSearch和ik分词安装成功</h3></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:40:57.000Z" title="8/27/2019, 5:40:57 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kafka/">Kafka</a></span><span class="level-item">3 分钟读完 (大约502个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6kafka-php%E6%93%8D%E4%BD%9C%E4%BD%BF%E7%94%A8kafka.html">消息中间件Kafka - PHP操作使用Kafka</a></h1><div class="content"><h1 id="PHP使用Kafka"><a href="#PHP使用Kafka" class="headerlink" title="PHP使用Kafka"></a>PHP使用Kafka</h1><blockquote>
+<p><strong>我们需要安装<a target="_blank" rel="noopener" href="https://github.com/edenhill/librdkafka">libkafka</a>和<a target="_blank" rel="noopener" href="https://github.com/arnaud-lb/php-rdkafka">rdkafka</a></strong></p>
 </blockquote>
-<ol>
+<h2 id="安装libkafka"><a href="#安装libkafka" class="headerlink" title="安装libkafka"></a>安装libkafka</h2><ol>
 <li><p><strong>下载</strong></p>
-<p> 去GitHub上克隆下来</p>
+<p>去GitHub上克隆下来</p>
 <p> <code>git clone https://github.com/edenhill/librdkafka.git</code></p>
 </li>
 <li><p><strong>安装</strong></p>
-<p> <code>cd librdkafka/</code></p>
-<p> <code>./configure &amp;&amp; make &amp;&amp; make install</code></p>
-<p> 安装成功界面 没有报错就是安装成功</p>
-<p> <img src="http://blog.gaobinzhan.com/uploads/article/20190320/b15c81e5bde9960bfef7b84cbe3cad2d.png"></p>
 </li>
+</ol>
+<p>   <code>cd librdkafka/</code></p>
+<pre><code>`./configure &amp;&amp; make &amp;&amp; make install`
+</code></pre>
+<p>   安装成功界面 没有报错就是安装成功</p>
+<pre><code>![14c1ce5d9719d16db1f2de5e9eed9553.png](https://img-blog.csdnimg.cn/20190320100758703.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70)
+</code></pre>
+<h2 id="安装rdkafka"><a href="#安装rdkafka" class="headerlink" title="安装rdkafka"></a>安装rdkafka</h2><ol>
 <li><p><strong>下载</strong></p>
 <p> <code>git clone https://github.com/arnaud-lb/php-rdkafka</code></p>
 <p> <code>cd php-rdkafka/</code></p>
 </li>
 <li><p><strong>为php安装扩展</strong></p>
-<p> 在php-rdkafka这个目录下</p>
-<p> <code>phpize</code></p>
-<p> 然后会生成源代码安装的脚本</p>
-<p> 把php-config的位置改成自己php-config的位置</p>
-<p> <code>./configure --with-php-config=/usr/local/php/bin/php-config</code></p>
-<p> 编译安装</p>
-<p> <code>make &amp;&amp; make install</code></p>
-<p> 成功后会出现一个文件夹</p>
-<p> <img src="http://blog.gaobinzhan.com/uploads/article/20190320/fa71db3854245b8515d407e100416a84.png"></p>
-<p> 这个位置就是保存的我们刚刚安装的扩展</p>
-<p> 进入该目录</p>
-<p> <code>cd /usr/local/php/lib/php/extensions/no-debug-non-zts-20170718/</code></p>
-<p> 会发现出现个rdkafka.so文件<br> <img src="http://blog.gaobinzhan.com/uploads/article/20190320/f97be8b3452e9a45e7445c0a956cdc04.png"></p>
-<p> 修改php.ini文件加入 这里的路径就是写自己rdkafka.so文件的路径</p>
-<p> <code>extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20170718/rdkafka.so</code></p>
-<p> 重启php</p>
-<p> <code>php-m</code></p>
-<p> 出现rdkafka就是安装成功</p>
-<p> <img src="http://blog.gaobinzhan.com/uploads/article/20190320/58564b0be9d3f46a3fe2d663973bfca2.png"></p>
 </li>
 </ol>
-<blockquote>
+<pre><code>在php-rdkafka这个目录下
+
+`phpize`
+
+然后会生成源代码安装的脚本
+
+把php-config的位置改成自己php-config的位置
+
+` ./configure --with-php-config=/usr/local/php/bin/php-config`
+
+编译安装
+
+`make &amp;&amp; make install`
+
+成功后会出现一个文件夹
+
+![70c28ed68f37346a84abe96a2fe03aae.png](https://img-blog.csdnimg.cn/20190320100828577.png)
+
+这个位置就是保存的我们刚刚安装的扩展
+
+进入该目录
+
+`cd /usr/local/php/lib/php/extensions/no-debug-non-zts-20170718/`
+
+会发现出现个rdkafka.so文件
+
+![2bb11d41b5e08b42a3fad4fc181eb791.png](https://img-blog.csdnimg.cn/20190320100957658.png)
+
+修改php.ini文件加入  这里的路径就是写自己rdkafka.so文件的路径
+
+`extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20170718/rdkafka.so `
+重启php
+</code></pre>
+<p>   <code> php-m</code></p>
+<p>   出现rdkafka就是安装成功</p>
+<pre><code>![fe40f168197be21fb00db6d06428df24.png](https://img-blog.csdnimg.cn/20190320101008302.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70)
+</code></pre>
+<h2 id="php操作kafka"><a href="#php操作kafka" class="headerlink" title="php操作kafka"></a>php操作kafka</h2><blockquote>
 <p><strong>运行前先开启我们的zookeeper和kafka 上篇文章有如何开启</strong></p>
 </blockquote>
 <ol>
-<li><strong>运行producer</strong><br> kafka默认端口9092 <code>vim producer.php</code></li>
+<li><strong>运行producer</strong><br> kafka默认端口9092 <code>vim producer.php</code><pre><code> &lt;?php
+    $rk = new RdKafka\Producer();
+    $rk-&gt;setLogLevel(LOG_DEBUG);
+    $rk-&gt;addBrokers(&quot;ip:9092&quot;);       
+    $topic = $rk-&gt;newTopic(&quot;test&quot;);
+    $topic-&gt;produce(RD_KAFKA_PARTITION_UA, 0, &quot;要发送的消息&quot;);
+           
+           
+</code></pre>
+</li>
+<li><strong>运行consumer</strong><br><code>vim consumer.php</code><pre><code> &lt;?php
+    $rk = new RdKafka\Consumer();
+    $rk-&gt;setLogLevel(LOG_DEBUG);
+    $rk-&gt;addBrokers(&quot;ip&quot;);
+    $topic = $rk-&gt;newTopic(&quot;test&quot;);
+    $topic-&gt;consumeStart(0, RD_KAFKA_OFFSET_BEGINNING);
+    while(true)&#123;
+        sleep(1);
+        $msg = $topic-&gt;consume(0, 1000);
+        if ($msg) &#123;
+            echo $msg-&gt;payload, &quot;\n&quot;;
+        &#125;          
+    &#125;    
+    
+    
+</code></pre>
+开启两个窗口一个运行consumer 一个运行producer   <code>php consumer.php</code><br>  <code>php producer.php</code>会发现我们已经简单的会使用kafka了。</li>
 </ol>
-</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/page/3/">上一页</a></div><div class="pagination-next"><a href="/page/5/">下一页</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li><li><a class="pagination-link" href="/page/3/">3</a></li><li><a class="pagination-link is-current" href="/page/4/">4</a></li><li><a class="pagination-link" href="/page/5/">5</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/44792981?s=400&amp;u=273c6d745868dcacf7889e5da4499b751179f773&amp;v=4" alt="Stitch"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Stitch</p><p class="is-size-6 is-block">Alien monster</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Alien</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">43</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">2</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Stitch-June" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/Stitch-June"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/laravel/"><span class="level-start"><span class="level-item">laravel</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/uncategorized/"><span class="level-start"><span class="level-item">uncategorized</span></span><span class="level-end"><span class="level-item tag">42</span></span></a></li></ul></div></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/09/"><span class="level-start"><span class="level-item">九月 2020</span></span><span class="level-end"><span class="level-item tag">36</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/08/"><span class="level-start"><span class="level-item">八月 2020</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/10/"><span class="level-start"><span class="level-item">十月 2019</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-04-01T00:40:00.000Z">2021-04-01</time></p><p class="title"><a href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-03-31T01:09:00.000Z">2021-03-31</time></p><p class="title"><a href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-27T12:28:48.000Z">2020-09-27</time></p><p class="title"><a href="/2020/09/27/go%E5%B8%B8%E7%94%A8%E9%9B%86%E5%90%88.html">Go常用集合</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-27T12:15:12.000Z">2020-09-27</time></p><p class="title"><a href="/2020/09/27/redis%E4%B9%8B%E4%B8%BB%E4%BB%8E%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86.html">redis之主从问题处理</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-23T09:21:33.000Z">2020-09-23</time></p><p class="title"><a href="/2020/09/23/go%E5%B8%B8%E8%A7%81%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0.html">Go常见架构模式的实现</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Stitch&#039;s Blog</a><p class="is-size-7"><span>&copy; 2021 stitch</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:36:36.000Z" title="8/27/2019, 5:36:36 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">4 分钟读完 (大约625个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6kafka-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%AE%89%E8%A3%85.html">消息中间件Kafka - 介绍及安装</a></h1><div class="content"><h1 id="Kafka介绍"><a href="#Kafka介绍" class="headerlink" title="Kafka介绍"></a>Kafka介绍</h1><h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><ul>
+<li><strong>高吞吐量</strong>：非常普通的硬件Kafka也可以支持每秒数百万的消息</li>
+<li>支持通过Kafka服务器和消费机集群来区分消息</li>
+<li>支持Hadoop并行数据加载</li>
+</ul>
+<h4 id="关键概念"><a href="#关键概念" class="headerlink" title="关键概念"></a>关键概念</h4><ul>
+<li><strong>Broker</strong>：Kafka集群中的一台或多台服务器统称为broker。</li>
+<li><strong>Topic</strong>：Kafka处理的消息源（feeds of messages）的不同分类。</li>
+<li><strong>Partition</strong>：Topic物理上的分组，一个topic可以分为多个partition，每个partition是一个有序的队列。partition中的每条消息都会被分配一个有序的id（offset）。</li>
+<li><strong>Message</strong>：消息，是通信的基本单位，每个producer可以向一个topic（主题）发布一些消息。</li>
+<li><strong>Producers</strong>：消息和数据生产者，向Kafka的一个topic发布消息的过程叫做producers。</li>
+<li><strong>Consumers</strong>：消息和数据的消费者，订阅topics并处理其发布的消息的过程叫做consumers。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2019032010053140.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70" alt="9443d8a422fad65faca5bcfe843dc5f1.png"></p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><ol>
+<li><strong>下载</strong><br> 先安装jdk 然后jdk的安装方式在elasticsearch的安装文章中有，这里就不写了<br> <a target="_blank" rel="noopener" href="http://kafka.apache.org/">kafka官网</a> <code>wget https://www-us.apache.org/dist/kafka/2.1.1/kafka_2.11-2.1.1.tgz</code> 解压 <code>tar -xzvf kafka_2.11-2.1.1.tgz </code></li>
+</ol>
+<ol start="2">
+<li><p><strong>修改配置文件</strong></p>
+<p> <code>cd kafka_2.11-2.1.1/config</code></p>
+<p> <code>zookeeper.properties</code> 是zookeeper的配置文件，默认端口号2181，可不做修改</p>
+<p><code> server.properties</code> 是kafka配置文件，将 zookeeper.connect 这行 改为自己的zookeeper地址和端口号</p>
+<p>修改完成之后 返回kafka主目录</p>
+<p><code>cd ..</code></p>
+</li>
+<li><p><strong>运行zookeeper和kafka</strong></p>
+<p> 运行zookeeper</p>
+<p> <code>bin/zookeeper-server-start.sh config/zookeeper.properties </code></p>
+<p> 不要关闭此窗口 再开一个新窗口 重新进入kafka目录</p>
+<p> 运行kafka</p>
+<p> <code>bin/kafka-server-start.sh config/server.properties</code></p>
+</li>
+<li><p><strong>运行producer和consumer</strong></p>
+<p>跟上步操作一样 不要关闭窗口 重新开 重新进入kafka目录</p>
+<p>创建一个topic为test</p>
+<p>把ip和port改为自己zookeeper的</p>
+<p><code>bin/kafka-topics.sh --create --zookeeper ip:port --replication-factor 1 --partitions 1 --topic test</code></p>
+<p>运行producer</p>
+<p><code>bin/kafka-console-producer.sh --broker-list ip:port --topic test</code></p>
+<p>跟上步操作一样 不要关闭窗口 重新开 重新进入kafka目录</p>
+<p>运行consumer</p>
+<p><code>bin/kafka-console-consumer.sh --bootstrap-server ip:port --topic test --from-beginning</code></p>
+<p>然后在producer发送信息 会发现 consumer的窗口会出现你发送的消息</p>
+<p><img src="https://img-blog.csdnimg.cn/20190320100541632.png" alt="d4b0ffa28a974f98c733bb3e054b83ac.png"><br><img src="https://img-blog.csdnimg.cn/20190320100548426.png" alt="8d4e50024a47893502c701ecea979d27.png"></p>
+</li>
+</ol>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:35:51.000Z" title="8/27/2019, 5:35:51 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kafka/">Kafka</a></span><span class="level-item">6 分钟读完 (大约959个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF.html">消息队列 - 应用场景</a></h1><div class="content"><h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><blockquote>
+<p><strong>消息队列中间件时分布式系统中重要的组件，主要解决应用耦合，异步消息，流量削锋等问题。实现高性能，高可用，可伸缩和最终一致性架构。是大型分布式系统不可缺少的中间件。</strong></p>
+</blockquote>
+<h5 id="异步处理"><a href="#异步处理" class="headerlink" title="异步处理"></a>异步处理</h5><ul>
+<li><strong>场景说明</strong>：用户注册成功后，发送注册邮件，再发送注册短信。</li>
+<li><strong>串行方式</strong>：将注册信息写入数据库成功后，向用户发送邮件，再发送注册短信，将结果返回客户端。</li>
+<li><strong>并行方式</strong>：将注册信息写入数据库成功后，发送注册邮件的同时，发送注册短信，以上三个任务完成后，返回给客户端。</li>
+<li><strong>消息队列</strong>：将注册信息写入数据库成功后，注册信息写入消息队列，发送邮件和短信的消费者异步读取消息队列，写入消息队列即将返回给客户端。<br><img src="https://img-blog.csdnimg.cn/20190320100319650.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70" alt="19ce1bd87b7cc498e92733342f4d9f01.png"></li>
+</ul>
+<h5 id="应用解耦"><a href="#应用解耦" class="headerlink" title="应用解耦"></a>应用解耦</h5><ul>
+<li><strong>场景说明</strong>：用户下单后，订单系统需要通知库存系统。</li>
+<li><strong>传统方式</strong>：订单系统调用库存系统的接口。</li>
+<li><strong>消息队列</strong>-&gt;</li>
+<li>订单系统*：用户下单后，订单系统完成持久化处理，将消息写入消息队列，返回用户订单下单成功。</li>
+<li>库存系统*：订阅下单的消息，采用拉/推的方式，获取下单信息，库存系统根据下单信息，进行库存操作。<br><img src="https://img-blog.csdnimg.cn/20190320100345509.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70" alt="5828d130146f855b2730f9e404537d5f.png"></li>
+</ul>
+<h5 id="流量削锋"><a href="#流量削锋" class="headerlink" title="流量削锋"></a>流量削锋</h5><ul>
+<li><strong>场景说明</strong>：秒杀活动，一般会因为流量过大，导致流量暴增。</li>
+<li><strong>传统方式</strong>：服务端突然接受来自前端的大量订单请求</li>
+<li><strong>消息队列</strong>：在应用前端加入消息队列-&gt;</li>
+</ul>
+<ol>
+<li>用户的请求，服务器接收后，首先写入消息队列。假如消息队列长度超过最大数量，则直接抛弃用户请求或跳转到错误页面</li>
+<li>秒杀业务根据消息队列中的请求信息，再做后续处理<br><img src="https://img-blog.csdnimg.cn/20190320100355868.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70" alt="bf97f667722518fa1bb367b4ce3959fc.png"></li>
+</ol>
+<h5 id="日志处理"><a href="#日志处理" class="headerlink" title="日志处理"></a>日志处理</h5><ul>
+<li>解决大量日志传输的问题</li>
+<li>日志采集客户端，负责日志数据采集，写入消息队列</li>
+<li>消息队列，负责日志数据的接收，存储和转发</li>
+<li>日志处理应用：订阅并消费消息队列中的日志数据<br><img src="https://img-blog.csdnimg.cn/20190320100406323.png" alt="abb22f7464ce76ffb6ff86a2da88efb4.png"></li>
+</ul>
+<h5 id="消息通讯"><a href="#消息通讯" class="headerlink" title="消息通讯"></a>消息通讯</h5><ul>
+<li>点对点消息队列，或者聊天室<br><img src="https://img-blog.csdnimg.cn/2019032010042184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70" alt="440b22e6237a9a48f1599c6dea10fee8.png"></li>
+<li>客户端A和客户端B使用同一队列，进行消息通讯</li>
+<li>客户端A，客户端B，客服端N订阅同一主题，进行消息发布和接收<br><img src="https://img-blog.csdnimg.cn/20190320100435178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70" alt="7abde092c2b5ab7cecc9b23b4dd3bc2d.png"></li>
+</ul>
+<h4 id="主要产品"><a href="#主要产品" class="headerlink" title="主要产品"></a>主要产品</h4><blockquote>
+<p><strong>目前在生成环境，使用较多的消息队列有ActiveMQ，RabbitMQ，ZeroMQ，Kafka，MetaMQ，RocketMQ等</strong></p>
+</blockquote>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:33:27.000Z" title="8/27/2019, 5:33:27 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Laravel/">Laravel</a></span><span class="level-item">4 分钟读完 (大约571个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/laravel%E4%BD%BF%E7%94%A8repository%E6%A8%A1%E5%BC%8F.html">Laravel使用repository模式</a></h1><div class="content"><blockquote>
+<p><strong>什么是Repository模式？</strong>Repository 模式是架构模式，在设计架构时，才有参考价值； Repository 模式主要是封装数据查询和存储逻辑； Repository 模式实际用途：更换、升级 ORM 引擎，不影响业务逻辑； Repository 模式能提高测试效率，单元测试时，用 Mock 对象代替实际的数据库存取，可以成倍地提高测试用例运行速度。</p>
+<p>详细了解 <a target="_blank" rel="noopener" href="https://blog.csdn.net/ZuoAnYinXiang/article/details/80711936">https://blog.csdn.net/ZuoAnYinXiang/article/details/80711936</a></p>
+<p><strong>REPOSITORY模式是怎样工作的呢？</strong>Repository 是一个独立的层，介于领域层与数据映射层（数据访问层）之间。它的存在让领域层感觉不到数据访问层的存在，它提供一个类似集合的接口提供给领域层进行领域对象的访问。Repository 是仓库管理员，领域层需要什么东西只需告诉仓库管理员，由仓库管理员把东西拿给它，并不需要知道东西实际放在哪。</p>
+<p>详细了解 <a target="_blank" rel="noopener" href="http://www.jquerycn.cn/a/_17077">http://www.jquerycn.cn/a\_17077</a></p>
+</blockquote>
+<p>当controller不使用Repository模式 ，在controller的各个方法中存在花式的数据库操作(这是非常糟糕的)，如果需求变更，重写将变得非常困难。</p>
+<h2 id="Laravel如何部署"><a href="#Laravel如何部署" class="headerlink" title="Laravel如何部署"></a>Laravel如何部署</h2><p>Laravel 5 Repositories用于抽象数据层，使我们的应用程序更易于维护。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p><code>composer require prettus/l5-repository</code></p>
+<h3 id="laravel部署"><a href="#laravel部署" class="headerlink" title="laravel部署"></a>laravel部署</h3><p>laravel&gt;=5.5<br>在框架的<code>config/app.php</code>中的<code>providers</code>数组添加如下代码：‘</p>
+<p><code>Prettus\Repository\Providers\RepositoryServiceProvider::class,</code></p>
+<p>发布配置</p>
+<p><code>php artisan vendor:publish --provider &quot;Prettus\Repository\Providers\RepositoryServiceProvider&quot;</code></p>
+<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><p>要生成模型所需的所有内容，请运行以下命令：</p>
+<p><code>php artisan make:entity Post</code></p>
+<p>这将创建Controller，Validator，Model，Repository，Presenter和Transformer类。它还将创建一个新的服务提供程序，用于将Eloquent Repository与其相应的Repository Interface绑定。要加载它，只需将其添加到AppServiceProvider @ register方法：</p>
+<p><code>$this-&gt;app-&gt;register(RepositoryServiceProvider::class);</code></p>
+<h3 id="自定义使用方法"><a href="#自定义使用方法" class="headerlink" title="自定义使用方法"></a>自定义使用方法</h3><p>在你的控制器中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">namespace App\Http\Controllers;</span><br><span class="line"></span><br><span class="line">use App\PostRepository;</span><br><span class="line"></span><br><span class="line">class PostsController extends Controller &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @var PostRepository</span><br><span class="line">     */</span><br><span class="line">    protected $repository;</span><br><span class="line"></span><br><span class="line">    public function __construct(PostRepository $repository)&#123;</span><br><span class="line">        $this-&gt;repository = $repository;</span><br><span class="line">    &#125;</span><br><span class="line">    public function index()&#123;</span><br><span class="line">        return $this-&gt;repository-&gt;all();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更多操作：GitHub : <a target="_blank" rel="noopener" href="https://github.com/andersao/l5-repository/tree/3.0-develop">https://github.com/andersao/l5-repository/tree/3.0-develop</a></p>
+</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/page/3/">上一页</a></div><div class="pagination-next is-invisible is-hidden-mobile"><a href="/page/5/">下一页</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li><li><a class="pagination-link" href="/page/3/">3</a></li><li><a class="pagination-link is-current" href="/page/4/">4</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/44792981?s=400&amp;u=273c6d745868dcacf7889e5da4499b751179f773&amp;v=4" alt="Stitch"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Stitch</p><p class="is-size-6 is-block">Alien monster</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Alien</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">39</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Stitch-June" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/Stitch-June"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Go/"><span class="level-start"><span class="level-item">Go</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/Kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Laravel/"><span class="level-start"><span class="level-item">Laravel</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Php/"><span class="level-start"><span class="level-item">Php</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/Swoole/"><span class="level-start"><span class="level-item">Swoole</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/uncategorized/"><span class="level-start"><span class="level-item">uncategorized</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li></ul></div></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/09/"><span class="level-start"><span class="level-item">九月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/06/"><span class="level-start"><span class="level-item">六月 2020</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/05/"><span class="level-start"><span class="level-item">五月 2020</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/04/"><span class="level-start"><span class="level-item">四月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/03/"><span class="level-start"><span class="level-item">三月 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/12/"><span class="level-start"><span class="level-item">十二月 2019</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/10/"><span class="level-start"><span class="level-item">十月 2019</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/08/"><span class="level-start"><span class="level-item">八月 2019</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-04-01T00:48:13.000Z">2021-04-01</time></p><p class="title"><a href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-03-31T01:12:26.000Z">2021-03-31</time></p><p class="title"><a href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-23T06:52:22.000Z">2020-09-23</time></p><p class="title"><a href="/2020/09/23/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BD%BF%E7%94%A8.html">ElasticSearch全文检索引擎-使用</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-20T19:06:20.000Z">2020-09-20</time></p><p class="title"><a href="/2020/09/20/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BB%8B%E7%BB%8D.html">ElasticSearch全文检索引擎-介绍</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-20T18:52:44.000Z">2020-09-20</time></p><p class="title"><a href="/2020/09/20/go%E5%9F%BA%E6%9C%AC%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84.html">Go基本程序结构</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Stitch&#039;s Blog</a><p class="is-size-7"><span>&copy; 2021 stitch</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
             article: {
                 highlight: {
                     clipboard: true,

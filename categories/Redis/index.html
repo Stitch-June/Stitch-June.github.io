@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>分类: Redis - Stitch&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Stitch&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Stitch&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Stitch&#039;s Blog"><meta property="og:url" content="https://stitch.cn/"><meta property="og:site_name" content="Stitch&#039;s Blog"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://stitch.cn/img/og_image.png"><meta property="article:author" content="stitch"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stitch.cn"},"headline":"Stitch's Blog","image":["https://stitch.cn/img/og_image.png"],"author":{"@type":"Person","name":"stitch"},"publisher":{"@type":"Organization","name":"Stitch's Blog","logo":{"@type":"ImageObject","url":{"text":"Stitch's Blog"}}},"description":""}</script><link rel="alternate" href="/atom.xml" title="Stitch&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Stitch&#039;s Blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><div class="card-content"><nav class="breadcrumb" aria-label="breadcrumbs"><ul><li><a href="/categories">分类</a></li><li class="is-active"><a href="#" aria-current="page">Redis</a></li></ul></nav></div></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-04-01T00:48:13.000Z" title="4/1/2021, 12:48:13 AM">2021-04-01</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">6 分钟读完 (大约973个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></h1><div class="content"><p>链表提供了高效的节点重排能力，以及顺序性的节点访问方式，并且可以通过增删节点来灵活的调整链表的长度。</p>
+<p>作为一种常用数据结构，链表内置在很多高级的编程语言里面，因为<code>Redis</code>使用的<code>c</code>语言并没有内置这种数据结构，所以<code>Redis</code>构建了自己的链表实现。</p>
+<p>链表在<code>Redis</code>中的应用非常广泛，比如列表键的底层实现之一就是链表。当一个列表键包含了数量比较多的元素，又或者列表中包含的元素都是比较长的字符串的时，<code>Redis</code>就会使用链表作为列表键的实现。</p>
+<p>举个例子，以下展示的<code>integers</code>列表键包含了<code>1-1024</code>共一千零二十四个整数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">redis&gt; LLEN integers</span><br><span class="line">(integer) 1024</span><br><span class="line">redis&gt; LRANGE integers 0 10</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;2&quot;</span><br><span class="line">3) &quot;3&quot;</span><br><span class="line">4) &quot;4&quot;</span><br><span class="line">5) &quot;5&quot;</span><br><span class="line">6) &quot;6&quot;</span><br><span class="line">7) &quot;7&quot;</span><br><span class="line">8) &quot;8&quot;</span><br><span class="line">9) &quot;9&quot;</span><br><span class="line">10) &quot;10&quot;</span><br><span class="line">11) &quot;11&quot;</span><br></pre></td></tr></table></figure>
+
+<p><code>integers</code>列表键的底层实现就是一个链表，链表中的每个节点都保存了一个整数值。<br>除了链表键之外，发布与订阅、慢查询、监视器等功能也用到了链表，<code>Redis</code>服务器本身还是要链表保存多个客户端信息的状态信息，以及使用链表来构建客户端输出缓冲区<code>（output buffer）</code>。</p>
+<h2 id="链表和链表节点的实现"><a href="#链表和链表节点的实现" class="headerlink" title="链表和链表节点的实现"></a>链表和链表节点的实现</h2><p>每个链接节点使用一个<code>adlist.h/listNode</code>结构来表示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> &#123;</span></span><br><span class="line">		<span class="comment">// 前置节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">prev</span>;</span></span><br><span class="line">    <span class="comment">// 后置节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">next</span>;</span></span><br><span class="line">    <span class="comment">// 节点的值</span></span><br><span class="line">    <span class="keyword">void</span> *value;</span><br><span class="line">&#125; listNode;</span><br></pre></td></tr></table></figure>
+
+<p>多个<code>listNode</code>可以通过<code>prev</code>和<code>next</code>指针组成双端列表，如下图：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/a8921ac3ca23f31e04f086022ed3bfe3.png"></p>
+<p>虽然仅仅使用多个<code>listNode</code>结构就可以组成链表，但使用<code>adlist.h/list</code>来持有链表的话，操作起来会更方便：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span> &#123;</span></span><br><span class="line">		<span class="comment">// 表头节点</span></span><br><span class="line">    listNode *head;</span><br><span class="line">    <span class="comment">// 表尾节点</span></span><br><span class="line">    listNode *tail;</span><br><span class="line">    <span class="comment">// 节点值复制函数</span></span><br><span class="line">    <span class="keyword">void</span> *(*dup)(<span class="keyword">void</span> *ptr);</span><br><span class="line">    <span class="comment">// 节点值释放函数</span></span><br><span class="line">    <span class="keyword">void</span> (*<span class="built_in">free</span>)(<span class="keyword">void</span> *ptr);</span><br><span class="line">    <span class="comment">// 节点值对比函数</span></span><br><span class="line">    <span class="keyword">int</span> (*match)(<span class="keyword">void</span> *ptr, <span class="keyword">void</span> *key);</span><br><span class="line">    <span class="comment">// 链表所包含的节点数量</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> len;</span><br><span class="line">&#125; <span class="built_in">list</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>list</code>结构为链表提供了表头指针<code>head</code>、表尾指针<code>tail</code>，以及链表长度计数器<code>len</code>，而<code>dup</code>、<code>free</code>和<code>match</code>成员则是用于实现多态链表所需要的类型特定函数：</p>
+<ul>
+<li><code>dup</code>函数用于复制链表节点所保存的值；</li>
+<li><code>free</code>函数用于释放链表节点所保存的值；</li>
+<li><code>match</code>函数则用于对比链表节点所保存的值和另一个输入值是否相等；</li>
+</ul>
+<p>下图是由一个<code>list</code>结构和三个<code>listNode</code>结构组成的链表。</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/761de7a0b30f3181f4619388fb836872.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>Redis</code>的链表实现的特性可以总结如下：</p>
+<ul>
+<li>双端：链表节点带有<code>prev</code>和<code>next</code>指针，获取某个节点的前置节点和后置节点的复杂度都是O(1)。</li>
+<li>无环：表头节点的<code>prev</code>指针和表尾节点的<code>next</code>指针都指向<code>NULL</code>，对链表的访问以<code>NULL</code>为终点。</li>
+<li>带表头指针和表尾指针：通过<code>list</code>结构的<code>head</code>指针和<code>tail</code>指针，程序获取链表的表头节点和表尾节点的复杂度为O(1)。</li>
+<li>带链表长度计数器：程序使用<code>list</code>结构的<code>len</code>属性来对<code>list</code>持有的链表节点进行计数，程序获取链表中节点数量的的复杂度为O(1)。</li>
+<li>多态：链表节点使用<code>void*</code>指针来保存节点值，并且可以通过<code>list</code>结构的<code>dup</code>，<code>free</code>，<code>match</code>三个属性为节点值设置类型特定函数，所以链表可以用于保存各种不同类型的值。</li>
+</ul>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-03-31T01:12:26.000Z" title="3/31/2021, 1:12:26 AM">2021-03-31</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">22 分钟读完 (大约3350个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></h1><div class="content"><h1 id="Redis-简单动态字符串SDS"><a href="#Redis-简单动态字符串SDS" class="headerlink" title="Redis-简单动态字符串SDS"></a>Redis-简单动态字符串SDS</h1><blockquote>
+<p>好久没写博客了，今天水一篇文章。</p>
+</blockquote>
+<p><code>Redis</code>没有使用<code>c</code>语言传统的字符串去表示。而是构建了一种名为简单动态字符串<code>（simple dynamic string, SDS）</code>的抽象类型，并将<code>sds</code>用作<code>redis</code>的默认字符串表示。</p>
+<p>举个例子<code>set msg &quot;hello world&quot;</code>：</p>
+<ul>
+<li>键值对的键是一个字符串对象，对象的底层实现是一个保存着字符串”msg“的<code>sds</code>。</li>
+<li>键值对的值也是一个字符串对象，对象的底层实现是一个保存着字符串“hello world”的<code>sds</code>。</li>
+</ul>
+<p>又比如<code>rpush fruits &quot;apple&quot; &quot;banana&quot;</code>：</p>
+<ul>
+<li>键值对的键是一个字符串对象，对象的底层实现是一个保存着字符串”msg“的<code>sds</code>。</li>
+<li>键值对的值是一个列表对象，列表对象包含了两个字符串对象，一个<code>sds</code>保存着<code>apple</code>，另一个保存着<code>banana</code>。</li>
+</ul>
+<h2 id="SDS的定义"><a href="#SDS的定义" class="headerlink" title="SDS的定义"></a>SDS的定义</h2><p>每个<code>sds.h/sdshdr</code>结构表示一个<code>SDS</code>值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">struct sdshdr &#123;</span><br><span class="line">	// 记录buf数组中已使用字节数量 等于sds所保存字符串的长度</span><br><span class="line">	int len;</span><br><span class="line">	</span><br><span class="line">	// 记录buf数组中未使用的字节数量</span><br><span class="line">	int free;</span><br><span class="line">	</span><br><span class="line">	// 字节数组 用于保存字符串</span><br><span class="line">	char buf[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/img_convert/7b477567b02ae8d8c107e898ad599c89.png"></p>
+<ul>
+<li><code>free</code>属性值为0，表示这个<code>sds</code>没有分配任何使用空间。</li>
+<li><code>len</code>属性值为5，表示这个<code>sds</code>保存了一个五字节长的字符串。</li>
+<li><code>buf</code>属性是一个<code>char</code>类型的数组，数组的前5个字节分别保存了为<code>R</code>，<code>e</code>，<code>d</code>，<code>i</code>，<code>s</code>五个字符，而最后一个字节则保存了空字符<code>\0</code>。</li>
+</ul>
+<p><code>sds</code>遵循<code>c</code>语言字符串以空字符结尾的惯例，保存空字符的1字节空间不计算在<code>sds</code>的<code>len</code>属性里面。并且为空字符分配额外的1字节空间及添加空字符到字符串末尾等操作都是有<code>sds</code>函数自动完成，所以这个空字符对于<code>sds</code>的使用者是完全透明的。</p>
+<h2 id="SDS与C字符串的区别"><a href="#SDS与C字符串的区别" class="headerlink" title="SDS与C字符串的区别"></a>SDS与C字符串的区别</h2><p><code>c</code>语言字符串使用长度为<code>N+1</code>的字符数组表示长度为<code>N</code>的字符串，并且字符数组的最后一个元素为空字符<code>\0</code>。</p>
+<p>这种简单的字符串不能满足<code>redis</code>对字符串在安全性、效率性以及功能方面的要求。</p>
+<h3 id="常数复杂度获取字符串长度"><a href="#常数复杂度获取字符串长度" class="headerlink" title="常数复杂度获取字符串长度"></a>常数复杂度获取字符串长度</h3><p><code>c</code>字符串并不记录自身的长度信息，所以获取一个<code>c</code>字符串的长度，程序需要遍历整个字符串，对遇到的每个字符进行计数，直到遇到代表字符串结尾的空字符为止，时间复杂度为<code>O(N)</code>。</p>
+<p><code>sds</code>在<code>len</code>属性记录了<code>sds</code>本身的长度，所以获取一个<code>sds</code>的长度复杂度为<code>O(1)</code>。</p>
+<p>设置和更新<code>sds</code>的长度工作是由<code>sds</code>的<code>api</code>在执行时自动完成的，使用<code>sds</code>无须进行任何手动修改长度的工作。</p>
+<p>通过使用<code>sds</code>而不是<code>c</code>字符串，<code>redis</code>将获取字符串长度所需的时间复杂度从<code>O(N)</code>降低到了<code>O(1)</code>，这确保了获取字符串长度的工作不会成为<code>redis</code>的性能瓶颈。</p>
+<h3 id="杜绝缓冲区溢出"><a href="#杜绝缓冲区溢出" class="headerlink" title="杜绝缓冲区溢出"></a>杜绝缓冲区溢出</h3><p><code>c</code>字符串不记录自身长度将会带来另一个问题：容易造成缓冲区溢出<code>（buffer overflow）</code>。</p>
+<p><code>strcat</code>函数可以将<code>src</code>字符串的内容拼接到<code>dest</code>字符串末尾：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">char *strcat(char *dest, const char *src);</span><br></pre></td></tr></table></figure>
+
+<p>因为<code>c</code>字符串不记录自身的长度，所以<code>stract</code>假定用户在执行这个函数时，已经为<code>dest</code>分配了足够多的内存，可以容纳<code>src</code>字符串中的所有内容，而一旦这个假定不成立，就会产生缓冲区溢出。</p>
+<p>举个例子，假设程序有两个在内存中紧邻着的<code>c</code>字符串<code>s1</code>和<code>s2</code>，其中<code>s1</code>保存了字符串<code>redis</code>，而<code>s2</code>则保存了字符串<code>MongoDb</code>。如图：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/35ed2590ab0ff3f84c7e9a76af721ff1.png"></p>
+<p>如果一个程序决定通过执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strcat(s1, &quot; Cluster&quot;);</span><br></pre></td></tr></table></figure>
+<p>将<code>s1</code>的内容修改为<code>Redis Cluster</code>，但粗心的却忘记了在执行<code>strcat</code>之前为<code>s1</code>分配足够的空间，那么函数执行之后，<code>s1</code>的数据将溢出到<code>s2</code>所在的空间中，导致<code>s2</code>保存的内容被意外的修改。如图：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/d82f962e7fb1cddd27a75bb40476eb3e.png"></p>
+<p>与<code>c</code>字符串不同，<code>sds</code>的空间分配策略完全杜绝了发生缓冲区溢出的可能性：当<code>sds</code>的<code>api</code>需要对<code>sds</code>进行修改时，<code>api</code>会先检查<code>sds</code>的空间是否满足修改所需的要求，如果不满足，会自动将<code>sds</code>的空间扩展至执行修改所需要的大小，然后才执行实际的修改操作。所以使用<code>sds</code>不需要手动修改<code>sds</code>的空间大小，也不会出现缓冲区溢出问题。</p>
+<p>举个例子：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/fa3b02cba049a8d6c6b5abd2ae52bbaf.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sdscat(s, &quot; Cluster&quot;)</span><br></pre></td></tr></table></figure>
+
+<p><code>sdscat</code>将在执行拼接操作之前检查<code>s</code>的长度是否足够，不够将扩展空间，才去执行拼接操作，拼接完成后的<code>sds</code>如图：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/c35a40305186a9c6827c4b34e1517aae.png"></p>
+<p><code>sdscat</code>不仅为这个<code>sds</code>进行拼接操作，还分配了<code>13</code>字节的未使用空间，并且拼接之后的字符串正好也是<code>13</code>字节，这不是<code>bug</code>，而是与<code>sds</code>的分配空间策略有关，下面会说明。</p>
+<h3 id="减少修改字符串时带来的内存重分配次数"><a href="#减少修改字符串时带来的内存重分配次数" class="headerlink" title="减少修改字符串时带来的内存重分配次数"></a>减少修改字符串时带来的内存重分配次数</h3><p>因为<code>c</code>字符串的长度和底层数组的长度直接存在着关联关系，所以<code>c</code>语言字符串每次增长或者缩短都要进行一次内存重新分配操作；</p>
+<ul>
+<li>如果程序执行增长字符串操作，执行操作前，程序需要先通过内存重新分配来扩展底层空间大小，忘记这步操作将会产生缓冲区溢出。</li>
+<li>如果程序执行缩短字符串操作，执行操作后，程序需要通过内存重新分配来释放字符串不使用的空间，忘记这步操作会产生内存泄露。</li>
+</ul>
+<p>对于<code>redis</code>，经常被用于速度要求严苛、数据被频繁修改的场景，如果每次修改字符串长度都要执行一次内存分配，光是执行内存重新分配的时间就会占去修改字符串所用时间的一大部分，如果这种修改频繁发生，可能会对性能造成影响。</p>
+<p>为了避免<code>c</code>字符串的这种缺陷，<code>sds</code>通过未使用空间解决了字符串长度和底层数组长度之间的关联。通过未使用空间，<code>sds</code>实现了空间预分配和惰性空间释放两种优化策略。</p>
+<p><strong>空间预分配</strong>：</p>
+<p>空间预分配用于优化<code>sds</code>的字符串增长操作：当<code>sds</code>的<code>api</code>对一个<code>sds</code>进行修改，并且需要对<code>sds</code>进行空间扩展的时候，程序不仅会为<code>sds</code>分配修改所必须要的空间，还会为<code>sds</code>分配额外的未使用空间。</p>
+<p>其中，额外分配未使用空间数量由以下公式决定：</p>
+<ul>
+<li>如果对<code>sds</code>进行修改后，<code>sds</code>的长度将小于<code>1mb</code>，那么程序会分配和<code>len</code>属性同样大小的未使用空间，这时<code>sds</code>的<code>len</code>属性和<code>free</code>的值相同。举个例子，进行修改后<code>len</code>为<code>10</code>，那么<code>free</code>也为<code>10</code>，<code>sds</code>的<code>buf</code>数组的实际长度为<code>10 + 10 + 1 = 21</code>。</li>
+<li>如果对<code>sds</code>进行修改后，<code>sds</code>的长度将大于<code>1mb</code>，那么程序会分配<code>1mb</code>的使用空间。举个例子，进行修改后<code>len</code>为<code>10mb</code>，那么<code>free</code>为<code>1mb</code>，<code>sds</code>的<code>buf</code>数组的实际长度为<code>10mb + 1mb + 1byte</code>。</li>
+</ul>
+<p><strong>懒惰空间释放</strong></p>
+<p>懒惰空间释放用于优化<code>sds</code>的字符串缩短操作：当<code>sds</code>的<code>api</code>需要缩短<code>sds</code>保存的字符串时，程序并不会立即使用内存重分配来回收缩短后多出来的自己，而是使用<code>free</code>属性将这些字节的数量记录起来，并等待将来使用。</p>
+<p>举个例子，<code>sdstrim</code>函数接受一个<code>sds</code>和一个<code>c</code>字符串作为参数，从<code>sds</code>左右两端分别移出所以在<code>c</code>字符串中出现的字符。</p>
+<p>如图：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/9abe3fc87583879b80b4604a84d5380b.png"></p>
+<p>执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sdstrim(s, &quot;XY&quot;); // 移除 sds 字符串中所有 ‘X’和‘Y’</span><br></pre></td></tr></table></figure>
+
+<p>会将<code>sds</code>修改成如下图：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/fa7ba0e9098a451673f11a086a547bc4.png"></p>
+<p>注意执行<code>sdstrim</code>之后的<code>sds</code>并没有释放出来多余的<code>8</code>字节空间，而是将这<code>8</code>字节空间作为未使用空间保留在了<code>sds</code>里面，如果将来要<code>sds</code>进行增长操作，这些未使用空间就会用上。</p>
+<p>举个例子，现在对<code>s</code>执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sdscat(s, &quot; Redis&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>那么完成这次<code>sdscat</code>操作将不需要执行内存重新分配，因为<code>sds</code>预留的<code>8</code>字节空间足以拼接<code>6</code>个字节的<code> Redis</code>，通过惰性空间释放策略，<code>sds</code>避免了缩短字符串所需的内存重分配操作，并为将来可能有的增长操作提供了优化，如图：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/2f217e31f74b65414000235d15acdc9d.png"></p>
+<p>与此同时，<code>sds</code>也提供了相应的<code>api</code>，让我们可以在有需要时，真正的释放<code>sds</code>的未使用空间，所以不必担心惰性空间释放策略会造成内存浪费。</p>
+<h3 id="二进制安全"><a href="#二进制安全" class="headerlink" title="二进制安全"></a>二进制安全</h3><p><code>c</code>字符串中的字符必须符合某种编码<code>（比如 ASCII）</code>，并且除了字符串的末尾之外，字符串里面不能包含空字符串，否则最先被程序读入的空字符将被误认为是字符串结尾，这些限制使得<code>c</code>字符串只能保存文本数据，不能保存图片、音频这样的二进制数据。</p>
+<p>举个例子，如果有一种使用空字符串分割多个单词的特殊数据格式，那么这种格式就不能使用<code>c</code>字符串来保存，因为<code>c</code>字符串所用的函数之后识别出其中的<code>Redis</code>，而忽略之后的<code>Cluster</code>。如图：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/0ab372a1826b08e287ec198aaa5c0250.png"></p>
+<p>而<code>sds</code>的<code>buf</code>属性被成为字节数组的原因——<code>redis</code>不是用这个数组来保存字符，而是用它来保存一系列二进制数据。</p>
+<p>例如，使用<code>sds</code>来保存之前提到的数据格式就没有问题，因为<code>sds</code>使用<code>len</code>属性的值而不是空字符来判断字符串是否结束，如图：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/0b84c7ab4ab9c952ef645f19f3b3b000.png"></p>
+<h3 id="兼容部分c字符串函数"><a href="#兼容部分c字符串函数" class="headerlink" title="兼容部分c字符串函数"></a>兼容部分c字符串函数</h3><p>虽然<code>sds</code>的<code>api</code>都是二进制安全，但它们一样遵循<code>c</code>字符串以空字符串结尾的惯例：这些<code>api</code>总会将<code>sds</code>保存的数据的末尾设置为空字符，并且总会在为<code>buf</code>数组分配空间时多分配一个字节来容纳这个字符串，这是为了让那些保存文本数据的<code>sds</code>可以重用一部分<code>&lt;string.h&gt;</code>库定义的函数。</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/fc6d176ee7d6f43da38d1e77b013dde0.png"></p>
+<p>举个例子，如果有一个保存文本数据的<code>sds</code>，如上图，那么我们就可以重用<code>&lt;string.h&gt;/strasecmp</code>函数，使用它来对比<code>sds</code>保存的字符串另一个<code>c</code>字符串：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strcasecmp(sds-&gt;buf, &quot;hello world&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>遵循<code>c</code>字符串以空字符结尾的惯例，<code>sds</code>可以在有需要时重用<code>&lt;string.h&gt;</code>函数库，避免不必要的代码重复。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th align="center">C字符串</th>
+<th align="center">SDS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">获取字符串长度的复杂度为O(N)</td>
+<td align="center">获取字符串长度的复杂度为O(1)</td>
+</tr>
+<tr>
+<td align="center">API是不安全的，可能会造成缓冲区溢出</td>
+<td align="center">API是安全的，不会造成缓冲区溢出</td>
+</tr>
+<tr>
+<td align="center">修改字符串长度N次必然需要执行N次内存重分配</td>
+<td align="center">修改字符串长度N次最多需要执行N次内存重分配</td>
+</tr>
+<tr>
+<td align="center">只能保存文本数据</td>
+<td align="center">可以保存文本数据或者二进制数据</td>
+</tr>
+<tr>
+<td align="center">可以使用<code>&lt;string.h&gt;</code>库中的函数</td>
+<td align="center">可以使用一部分<code>&lt;string.h&gt;</code>库中的函数</td>
+</tr>
+</tbody></table>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-30T22:34:23.000Z" title="6/30/2020, 10:34:23 PM">2020-06-30</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">35 分钟读完 (大约5204个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/30/%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BAredis-cluster.html">如何搭建redis-cluster</a></h1><div class="content"><p>​        假设在一台主从机器上配置了20G内存，但是业务需求是需要50G内存的时候，主从结构+哨兵可以实现高可用故障切换+冗余备份，但是不能解决数据容量的问题，用哨兵，每个<strong>redis</strong>实例存储的数据也都是完整的数据，浪费内存且有木桶效应。</p>
+<p>​        为了最大化利用内存，可以采用<strong>cluster</strong>，就是分布式存储。即每台<strong>redis</strong>存储不同的内容。</p>
+<p><strong>Redis</strong>分布式方案一般有两种：</p>
+<ul>
+<li>客户端分区方案：优点是分区逻辑可控，缺点是需要自己处理数据路由，实现高可用、故障转移等问题。比如在<strong>redis2.8</strong>之前通常的做法是获取某个<strong>key</strong>的<strong>hashcode</strong>，然后取余分布到不同节点，不过这种做法无法很好的支持动态伸缩性需求，一旦节点的增或者删操作，都会导致<strong>key</strong>无法在<strong>redis</strong>中命中。</li>
+<li>代理方案：优点是简化客户端分布式逻辑和升级维护便利，缺点是加重架构部署复杂度和性能损耗。如<strong>twemproxy</strong>、<strong>codis</strong>。</li>
+</ul>
+<p>而<strong>redis</strong>官方提供了专有的集群方案：<strong>Redis Cluster</strong>，它非常优雅的解决了<strong>Redis</strong>集群方面的问题，部署方便简单。</p>
+<h2 id="Redis-Cluster"><a href="#Redis-Cluster" class="headerlink" title="Redis Cluster"></a>Redis Cluster</h2><p>​        <strong>Redis Cluster</strong>是<strong>Redis</strong>的分布式解决方案，在<strong>3.0</strong>版本正式推出，有效地解决了<strong>Redis</strong>分布式方面的需求。当遇到单机内存、并发、流量等瓶颈时，可以采用<strong>Cluster</strong>架构方案达到负载均衡的目的。</p>
+<p>​        在<strong>Redis Cluster</strong>，它们任何两个节点之间都是相互连通的。客户端可以与任何一个节点相连接，然后就可以访问集群中的任何一个节点，对其进行存取和其它操作。</p>
+<p><strong>Redis Cluster</strong>提供的好处：</p>
+<ul>
+<li>将数据自动切分到多个节点的能力</li>
+<li>当集群中的一部分节点失效或者无法进行通讯时，仍然可以继续处理命令请求的能力，拥有自动故障转移的能力。</li>
+</ul>
+<p><strong>Redis Cluster</strong> 和 <strong>replication + sentinel</strong> 如何选择：</p>
+<p>如果数据量很少，主要是承载高并发高性能的场景，比如你的缓存一般就几个G，单机就够了。</p>
+<ul>
+<li><strong>Replication</strong>：一个<strong>master</strong>，多个<strong>slave</strong>，要几个<strong>slave</strong>跟你的要求的读吞吐量有关系，结合<strong>sentinel</strong>集群，去保证<strong>redis</strong>主从架构的高可用就行了。</li>
+<li><strong>Redis Cluster</strong>：主要是针对海量数据+高并发+高可用的场景，海量数据，如果数据量很大，建议用<strong>Redis Cluster</strong></li>
+</ul>
+<p>数据分布理论：</p>
+<p>分布式数据库首先要解决把整个数据集按照分区规则映射到多个节点的问题，即把数据集划分到多个节点上，每个节点负责整体数据的一个子集。</p>
+<p>常见的分区规则有哈希分区和顺序分区两种：</p>
+<ul>
+<li>顺序分布：把一整块数据分散到很多机器中，一般都是平均分配的。</li>
+<li>哈希分区：通过<strong>hash</strong>的函数，取余产生的数。保证这串数字充分的打散，均匀的分配到各台机器上。</li>
+</ul>
+<p>哈希分布和顺序分布只是场景上的适用。哈希分布不能顺序访问，比如你想访问1~100，哈希分布只能遍历全部数据，同时哈希分布因为做了<strong>hash</strong>后导致与业务数据无关了。</p>
+<table>
+<thead>
+<tr>
+<th align="center">分区方式</th>
+<th align="center">描述</th>
+<th align="center">代表产品</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">哈希分区</td>
+<td align="center">离散度好<br/>数据分布业务无关<br/>无法顺序访问</td>
+<td align="center">RedisCluster<br/>Cassanda<br/>Dynamo</td>
+</tr>
+<tr>
+<td align="center">顺序分区</td>
+<td align="center">离散度易倾斜<br/>数据分布业务相关<br/>可顺序访问</td>
+<td align="center">Bigtable<br/>Hbase<br/>Hypertable</td>
+</tr>
+</tbody></table>
+<p>数据倾斜与数据迁移跟节点伸缩：</p>
+<p>顺序分布是会导致数据倾斜的，主要是访问的倾斜。每次点击会重点访问某台机器，这就导致最后数据都到这台机器上了，这就是顺序分布最大的缺点。但哈希分布的时候，假如要扩容机器的时候，称之为“节点伸缩”，这个时候，因为是哈希算法，会导致数据迁移。</p>
+<p>哈希分区方式：</p>
+<ul>
+<li><p>节点取余分区：</p>
+<ul>
+<li>使用特点的数据（包括redis的键或用户ID），再根据节点数量N，使用公式：hash(key)%N计算出一个0～（N-1）值，来决定数据映射到哪一个节点上。即哈希值对节点总数取余。</li>
+<li>缺点：当节点数量N变化时（扩容或者收缩），数据和节点之间的映射关系需要重新计算，这样的话，按照新的规则映射，要么之前存储的数据找不到，要么之前数据被重新映射到新的节点（导致以前存储的数据发生数据迁移）。</li>
+<li>实践：常用于数据库的分库分表规则，一般采用预分区的方式，提前根据数量规划好分区数，比如划分为512或1024张表，保证可支撑未来一段时间的数据量，再根据负载情况将表迁移到其它数据库中。</li>
+</ul>
+</li>
+<li><p>一致性哈希：</p>
+<ul>
+<li><p>一致性哈希分区（Distributed Hash Table）实现思路是为系统中每个节点分配一个token，范围一般在0～232，这些token构成一个哈希环。数据读写执行节点查找操作时，先根据key计算hash值，然后顺时针找到第一个大于等于该哈希值的token节点。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzI4LzlhMmY4MzYyODVkZGQucG5n?x-oss-process=image/format,png" alt="一致性哈希"></p>
+<p>上图就是一个一致性hash的原理解析。</p>
+<p>假设有n1～n4这四台机器，我们对每一台机器分配一个唯一token，每次有数据（黄色代表数据），一致性哈希算法规则每次都顺时针漂移数据，也就是图中黄色的数据都指向n3。</p>
+<p>这个时候我们需要增加一个节点n5，在n2和n3之间，数据还是会发生漂移（会偏移到大于等于的节点），但是这个时候你是否注意到，其实只有n2～n3这部分的数据被漂移，其它的数据都是不会变的，这种方式相比节点取余最大的好处在于加入和删除节点只影响哈希环中相邻的节点，对其它节点无影响。</p>
+</li>
+<li><p>缺点：每个节点的负载不相同，因为每个节点的hash是根据key计算出来的，换句话说就是假设key足够多，被hash算法打散得非常均匀，但是节点过少，导致每个节点处理的key个数不太一样，甚至相差很大，这就导致某些节点压力很大</p>
+</li>
+<li><p>实践：加减节点会造成哈希环中部分数据无法命中，需要手动处理或者忽略这部分数据，因此一致性哈希常用于缓存场景。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>虚拟槽分区：</p>
+<p>虚拟槽分区巧妙地使用了哈希空间，使用分散度良好的哈希函数把所有数据映射到一个固定范围的整数集合中，整数定义为槽（slot）。这个范围一般远远大于节点数，比如Redis Cluster槽范围是0～16383（也就是说有16383个槽）。槽是集群内数据管理和迁移的基本单位。采用大范围槽的主要目的是为了方便数据拆分和集群扩展。每个节点会负责一定数量的槽。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzI4LzFjNzg0NWFjMDI4OGUucG5n?x-oss-process=image/format,png" alt="虚拟槽分区"></p>
+<p>如上图所示，当前集群有5个节点，每个节点平均大约负责3276个槽。由于采用高质量的哈希算法，每个槽所映射的数据通常比较均匀，将数据平均划分到5个节点进行数据分区。Redis Cluster就是采用虚拟槽分区，每当key访问过来，Redis Cluster会计算哈希值是否在这个区间里。它们彼此都知道对应的槽在哪台机器上，这样就能做到平均分配了。</p>
+<p>集群限制：批量key操作。</p>
+<h2 id="Docker-compose搭建Redis-Cluster"><a href="#Docker-compose搭建Redis-Cluster" class="headerlink" title="Docker-compose搭建Redis Cluster"></a>Docker-compose搭建Redis Cluster</h2><blockquote>
+<p>因为没有多台机器去部署redis实例，所以这里采用docker来搭建，在生产环境中肯定是多台机器去部署的。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">容器名称</th>
+<th align="center">ip</th>
+<th align="center">端口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">redis-cluster1</td>
+<td align="center">192.168.3.101</td>
+<td align="center">6380-&gt;6379<br/>16380-&gt;16379</td>
+</tr>
+<tr>
+<td align="center">redis-cluster2</td>
+<td align="center">192.168.3.102</td>
+<td align="center">6381-&gt;6379<br/>16381-&gt;16379</td>
+</tr>
+<tr>
+<td align="center">redis-cluster3</td>
+<td align="center">192.168.3.103</td>
+<td align="center">6382-&gt;6379<br/>16382-&gt;16379</td>
+</tr>
+<tr>
+<td align="center">redis-cluster4</td>
+<td align="center">192.168.3.104</td>
+<td align="center">6383-&gt;6379<br/>16383-&gt;16379</td>
+</tr>
+<tr>
+<td align="center">redis-cluster5</td>
+<td align="center">192.168.3.105</td>
+<td align="center">6384-&gt;6379<br/>16384-&gt;16379</td>
+</tr>
+<tr>
+<td align="center">Redis-cluster6</td>
+<td align="center">192.168.3.106</td>
+<td align="center">6385-&gt;6379<br/>16385-&gt;16379</td>
+</tr>
+</tbody></table>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzMwLzJkZjU0MGQwZGNhYTAucG5n?x-oss-process=image/format,png" alt="redis-cluster文件目录"></p>
+<p>如上图把redis.conf复制进去，自行去下载，然后分别加入以下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">bind</span> 0.0.0.0</span><br><span class="line">cluster-enabled yes</span><br><span class="line">cluster-config-file <span class="string">&quot;/redis/conf/nodes.conf&quot;</span></span><br><span class="line">cluster-node-timeout 5000</span><br><span class="line">protected-mode no</span><br><span class="line">port 6379</span><br><span class="line">daemonize no</span><br></pre></td></tr></table></figure>
+
+<p><code>docker-compose.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.6&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">redis-cluster1:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis-cluster1</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6380:6379&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;16380:16379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/cluster/cluster1:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">/redis/conf/redis.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.101</span></span><br><span class="line">  <span class="attr">redis-cluster2:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis-cluster2</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6381:6379&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;16381:16379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/cluster/cluster2:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">/redis/conf/redis.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.102</span></span><br><span class="line">  <span class="attr">redis-cluster3:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis-cluster3</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6382:6379&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;16382:16379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/cluster/cluster3:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">/redis/conf/redis.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.103</span></span><br><span class="line">  <span class="attr">redis-cluster4:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis-cluster4</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6383:6379&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;16383:16379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/cluster/cluster4:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">/redis/conf/redis.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.104</span></span><br><span class="line">  <span class="attr">redis-cluster5:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis-cluster5</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6384:6379&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;16384:16379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/cluster/cluster5:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">/redis/conf/redis.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.105</span></span><br><span class="line">  <span class="attr">redis-cluster6:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">redis-cluster6</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6385:6379&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;16385:16379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/cluster/cluster6:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">/redis/conf/redis.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.106</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">redis-test:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br><span class="line">    <span class="attr">ipam:</span></span><br><span class="line">      <span class="attr">config:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">subnet:</span> <span class="string">&quot;192.168.3.0/24&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后进行<code>docker-compose up</code></p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzMwLzIyZWMwY2ZiNzkxYTAucG5n?x-oss-process=image/format,png" alt="redis-cluster"></p>
+<p>此刻每个目录下面多了<strong>nodes.conf</strong> 现在文件内容只是单单保存了<strong>redis</strong>实例自身的节点数据。</p>
+<p>也可以随便连接一台<strong>redis</strong>，查看集群状态：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gaobinzhan-MBP:~ gaobinzhan$ redis-cli -p 6380</span><br><span class="line">127.0.0.1:6380&gt; info Cluster</span><br><span class="line"><span class="comment"># Cluster</span></span><br><span class="line">cluster_enabled:1</span><br></pre></td></tr></table></figure>
+
+<p>此刻集群只是开启状态，往里面写入数据会报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6380&gt; <span class="built_in">set</span> 1 2</span><br><span class="line">(error) CLUSTERDOWN Hash slot not served</span><br></pre></td></tr></table></figure>
+
+<p>是因为没有分配槽。</p>
+<p>在<strong>redis</strong>之前的版本，需要手动分配槽，非常不方便。现在的版本只需要简单执行下命令就可以了。</p>
+<p>随便进入一个容器当中 <code>docker exec -it redis-cluster1 sh</code> </p>
+<p>然后执行<code>redis-cli --cluster create 192.168.3.101:6379 192.168.3.102:6379 192.168.3.103:6379 192.168.3.104:6379 192.168.3.105:6379 192.168.3.106:6379 --cluster-replicas 1</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">gaobinzhan-MBP:~ gaobinzhan$ docker <span class="built_in">exec</span> -it redis-cluster1 sh</span><br><span class="line"><span class="comment"># redis-cli --cluster create 192.168.3.101:6379 192.168.3.102:6379 192.168.3.103:6379 192.168.3.104:6379 192.168.3.105:6379 192.168.3.106:6379 --cluster-replicas 1</span></span><br><span class="line">&gt;&gt;&gt; Performing <span class="built_in">hash</span> slots allocation on 6 nodes...</span><br><span class="line">Master[0] -&gt; Slots 0 - 5460</span><br><span class="line">Master[1] -&gt; Slots 5461 - 10922</span><br><span class="line">Master[2] -&gt; Slots 10923 - 16383</span><br><span class="line">Adding replica 192.168.3.105:6379 to 192.168.3.101:6379</span><br><span class="line">Adding replica 192.168.3.106:6379 to 192.168.3.102:6379</span><br><span class="line">Adding replica 192.168.3.104:6379 to 192.168.3.103:6379</span><br><span class="line">M: 2a373fe66cde81d1530584bb86e49694b000d0c2 192.168.3.101:6379</span><br><span class="line">   slots:[0-5460] (5461 slots) master</span><br><span class="line">M: 8de35d3b2439d05de839a2539f68e4833b90679d 192.168.3.102:6379</span><br><span class="line">   slots:[5461-10922] (5462 slots) master</span><br><span class="line">M: caca339b5511d3a14e381d5ffd9434458c7368bd 192.168.3.103:6379</span><br><span class="line">   slots:[10923-16383] (5461 slots) master</span><br><span class="line">S: 97eccf5edf7fb12d4a2e01b16dbf2d9c561896b3 192.168.3.104:6379</span><br><span class="line">   replicates caca339b5511d3a14e381d5ffd9434458c7368bd</span><br><span class="line">S: 64512db80b1a159ca823a25a7e9893154efd555c 192.168.3.105:6379</span><br><span class="line">   replicates 2a373fe66cde81d1530584bb86e49694b000d0c2</span><br><span class="line">S: 1722206f30f3b7c65706d30f4a1ee3b6e0cbca7c 192.168.3.106:6379</span><br><span class="line">   replicates 8de35d3b2439d05de839a2539f68e4833b90679d</span><br><span class="line">Can I <span class="built_in">set</span> the above configuration? (<span class="built_in">type</span> <span class="string">&#x27;yes&#x27;</span> to accept): </span><br></pre></td></tr></table></figure>
+
+<p>此刻会提示你，是否接受此配置，输入<strong>yes</strong>即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">Can I <span class="built_in">set</span> the above configuration? (<span class="built_in">type</span> <span class="string">&#x27;yes&#x27;</span> to accept): yes</span><br><span class="line">&gt;&gt;&gt; Nodes configuration updated</span><br><span class="line">&gt;&gt;&gt; Assign a different config epoch to each node</span><br><span class="line">&gt;&gt;&gt; Sending CLUSTER MEET messages to join the cluster</span><br><span class="line">Waiting <span class="keyword">for</span> the cluster to join</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt; Performing Cluster Check (using node 192.168.3.101:6379)</span><br><span class="line">M: 2a373fe66cde81d1530584bb86e49694b000d0c2 192.168.3.101:6379</span><br><span class="line">   slots:[0-5460] (5461 slots) master</span><br><span class="line">   1 additional replica(s)</span><br><span class="line">S: 64512db80b1a159ca823a25a7e9893154efd555c 192.168.3.105:6379</span><br><span class="line">   slots: (0 slots) slave</span><br><span class="line">   replicates 2a373fe66cde81d1530584bb86e49694b000d0c2</span><br><span class="line">S: 1722206f30f3b7c65706d30f4a1ee3b6e0cbca7c 192.168.3.106:6379</span><br><span class="line">   slots: (0 slots) slave</span><br><span class="line">   replicates 8de35d3b2439d05de839a2539f68e4833b90679d</span><br><span class="line">M: 8de35d3b2439d05de839a2539f68e4833b90679d 192.168.3.102:6379</span><br><span class="line">   slots:[5461-10922] (5462 slots) master</span><br><span class="line">   1 additional replica(s)</span><br><span class="line">S: 97eccf5edf7fb12d4a2e01b16dbf2d9c561896b3 192.168.3.104:6379</span><br><span class="line">   slots: (0 slots) slave</span><br><span class="line">   replicates caca339b5511d3a14e381d5ffd9434458c7368bd</span><br><span class="line">M: caca339b5511d3a14e381d5ffd9434458c7368bd 192.168.3.103:6379</span><br><span class="line">   slots:[10923-16383] (5461 slots) master</span><br><span class="line">   1 additional replica(s)</span><br><span class="line">[OK] All nodes agree about slots configuration.</span><br><span class="line">&gt;&gt;&gt; Check <span class="keyword">for</span> open slots...</span><br><span class="line">&gt;&gt;&gt; Check slots coverage...</span><br><span class="line">[OK] All 16384 slots covered.</span><br></pre></td></tr></table></figure>
+
+<p>此时<strong>redis-cluster</strong>已经搭建好了，<strong>nodes.conf</strong>文件也发生了变化，执行<strong>cluster info</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6380&gt; cluster info</span><br><span class="line">cluster_state:ok</span><br><span class="line">cluster_slots_assigned:16384</span><br><span class="line">cluster_slots_ok:16384</span><br><span class="line">cluster_slots_pfail:0</span><br><span class="line">cluster_slots_fail:0</span><br><span class="line">cluster_known_nodes:6</span><br><span class="line">cluster_size:3</span><br><span class="line">cluster_current_epoch:6</span><br><span class="line">cluster_my_epoch:1</span><br><span class="line">cluster_stats_messages_ping_sent:234</span><br><span class="line">cluster_stats_messages_pong_sent:242</span><br><span class="line">cluster_stats_messages_sent:476</span><br><span class="line">cluster_stats_messages_ping_received:237</span><br><span class="line">cluster_stats_messages_pong_received:234</span><br><span class="line">cluster_stats_messages_meet_received:5</span><br><span class="line">cluster_stats_messages_received:476</span><br></pre></td></tr></table></figure>
+
+<p>状态是<strong>ok</strong>的，来试着写写数据。进入<strong>redis</strong>实例<code>docker exec -it redis-cluster1 sh</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gaobinzhan-MBP:~ gaobinzhan$ docker <span class="built_in">exec</span> -it redis-cluster1 sh</span><br><span class="line"><span class="comment"># redis-cli</span></span><br><span class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> 1 2</span><br><span class="line">(error) MOVED 9842 192.168.3.102:6379</span><br></pre></td></tr></table></figure>
+
+<p>报错了，因为槽的问题，这个数据需要写入到102那台实例当中，这时可以用集群方式启动<code>redis-cli -c</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># redis-cli -c</span></span><br><span class="line">127.0.0.1:6379&gt; <span class="built_in">set</span> 1 2</span><br><span class="line">-&gt; Redirected to slot [9842] located at 192.168.3.102:6379</span><br><span class="line">OK</span><br><span class="line">192.168.3.102:6379&gt; get 1</span><br><span class="line"><span class="string">&quot;2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>会发现提示数据移动到102节点了，因为是集群方式所以可以获取的，切换到102节点：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># redis-cli -c -h 192.168.3.102</span></span><br><span class="line">192.168.3.102:6379&gt; get 1</span><br><span class="line"><span class="string">&quot;2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以正常的获取。</p>
+<h2 id="往期方式搭建集群"><a href="#往期方式搭建集群" class="headerlink" title="往期方式搭建集群"></a>往期方式搭建集群</h2><ul>
+<li>准备节点</li>
+<li>节点握手</li>
+<li>分配槽</li>
+</ul>
+<h3 id="准备节点"><a href="#准备节点" class="headerlink" title="准备节点"></a>准备节点</h3><p><strong>Redis</strong>集群一般由多个节点组成，节点数量至少为6个才能保证组成完整高可用的集群，前面的主从复制跟哨兵共同构成了高可用。每个节点需要开启配置 <code>cluster-enabled yes</code> ，让<strong>Redis</strong> 运行在集群模式下。</p>
+<ul>
+<li>性能：这是Redis赖以生存的看家本领，增加集群功能后当然不能对性能产生太大影响，所以<strong>Redis</strong>采取了<strong>P2P</strong>而非<strong>Proxy</strong>方式、异步复制、客户端重定向等设计，而牺牲了部分的一致性、使用性。</li>
+<li>水平扩展：集群的最重要能力当然是扩展，文档中称可以线性扩展到1000结点。 可用性：在<strong>Cluster</strong>推出之前，可用性要靠Sentinel保证。有了集群之后也自动具有了<strong>Sentinel</strong>的监控和自动<strong>Failover</strong>能力</li>
+</ul>
+<p>集群的相关配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#节点端口</span></span><br><span class="line">port 6379</span><br><span class="line"><span class="comment">#开启集群模式</span></span><br><span class="line">cluster-enabled yes</span><br><span class="line"><span class="comment">#节点超时时间，单位毫秒</span></span><br><span class="line">cluster-node-timeout 15000</span><br><span class="line"><span class="comment">#集群内部配置文件</span></span><br><span class="line">cluster-config-file <span class="string">&quot;nodes-6379.conf&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>其他配置和单机模式一致即可，配置文件命名规则<code>redis-&#123;port&#125;.conf</code> ，准备好配置后启动所有节点，第一次启动时如果没有集群配置文件，它会自动创建一份，文件名称采用 cluster-config-file 参数项控制，建议采用<code>node-&#123;port&#125;.conf</code>格式定义，也就是说会有两份配置文件。</p>
+<p>当集群内节点信息发生变化，如添加节点、节点下线、故障转移等。节点会自动保存集群状态到配置文件中。需要注意的是， <strong>Redis</strong>自动维护集群配置文件，不要手动修改，防止节点重启时产生集群信息错乱。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzMwL2U4ZjliNDdlYWJkYzUucG5n?x-oss-process=image/format,png" alt="redis-cluster启动"></p>
+<p>然后就跟上面一样准备准备节点就行了。</p>
+<h3 id="节点握手"><a href="#节点握手" class="headerlink" title="节点握手"></a>节点握手</h3><p>节点握手是指一批运行在集群模式下的节点通过<strong>Gossip</strong>协议彼此通信，达到感知对方的过程。节点握手是集群彼此通信的第一步，由客户端发起命令：<code>cluster meet&#123;ip&#125;&#123;port&#125;</code></p>
+<p>通过命令<code>cluster meet 127.0.0.1 6381</code>让节点6380和6381节点进行握手通信。<code>cluster meet</code>命令是一个异步命令，执行之后立刻返回。内部发起与目标节点进行握手通信 。</p>
+<ul>
+<li>节点6380本地创建6381节点信息对象，并发送meet消息。</li>
+<li>节点6381接受到meet消息后，保存6380节点信息并回复pong消息。</li>
+<li>之后节点6380和6381彼此定期通过ping/pong消息进行正常的节点通信。</li>
+</ul>
+<p>通过<code>cluster nodes</code>命令确认6个节点都彼此感知并组成集群。</p>
+<p>注意：</p>
+<ul>
+<li>每个<strong>Redis Cluster</strong>节点会占用两个TCP端口，一个监听客户端的请求，默认是<strong>6379</strong>，另外一个在前一个端口加上10000， 比如<strong>16379</strong>，来监听数据的请求，节点和节点之间会监听第二个端口，用一套二进制协议来通信。节点之间会通过套协议来进行失败检测，配置更新，<code>failover</code>认证等等。为了保证节点之间正常的访问，需要注意防火墙的配置。</li>
+<li>节点建立握手之后集群还不能正常工作，这时集群处于下线状态，所有的数据读写都被禁止。</li>
+<li>设置从节点作为一个完整的集群，需要主从节点，保证当它出现故障时可以自动进行故障转移。集群模式下，Reids 节点角色分为主节点和从节点。</li>
+<li>首次启动的节点和被分配槽的节点都是主节点，从节点负责复制主节点槽信息和相关的数据。</li>
+<li>使用 <code>cluster replicate &#123;nodeId&#125;</code>命令让一个节点成为从节点。其中命令执行必须在对应的从节点上执行，将当前节点设置为<code>node_id</code>指定的节点的从节点。</li>
+</ul>
+<h3 id="分配槽"><a href="#分配槽" class="headerlink" title="分配槽"></a>分配槽</h3><p>Redis 集群把所有的数据映射到16384个槽中。每个key会映射为一个固定的槽，只有当节点分配了槽，才能响应和这些槽关联的键命令。通过cluster addslots命令为节点分配槽利用bash特性批量设置槽（slots），命令如下： </p>
+<p> <code>redis-cli -h 192.168.3.101 cluster addslots &#123;0..5461&#125; </code></p>
+<p><code>redis-cli -h 192.168.3.102 cluster addslots &#123;5462..10922&#125;</code></p>
+<p><code>redis-cli -h 192.168.3.103 cluster addslots &#123;10923..16383&#125;</code></p>
+<p>然后就可以进行操作了。</p>
+<p>集群的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">CLUSTER nodes： 列出集群当前已知的所有节点（node）的相关信息。 </span><br><span class="line"></span><br><span class="line">CLUSTER meet &lt;ip&gt; &lt;port&gt;： 将ip和port所指定的节点添加到集群当中。 </span><br><span class="line"></span><br><span class="line">CLUSTER addslots &lt;slot&gt; [slot ...]： 将一个或多个槽（slot）指派（assign）给当前节点。 </span><br><span class="line"></span><br><span class="line">CLUSTER delslots &lt;slot&gt; [slot ...]： 移除一个或多个槽对当前节点的指派。 </span><br><span class="line"></span><br><span class="line">CLUSTER slots： 列出槽位、节点信息。 </span><br><span class="line"></span><br><span class="line">CLUSTER slaves &lt;node_id&gt;： 列出指定节点下面的从节点信息。 </span><br><span class="line"></span><br><span class="line">CLUSTER replicate &lt;node_id&gt;： 将当前节点设置为指定节点的从节点。 </span><br><span class="line"></span><br><span class="line">CLUSTER saveconfig： 手动执行命令保存保存集群的配置文件，集群默认在配置修改的时候会自动保存配置文件。 </span><br><span class="line"></span><br><span class="line">CLUSTER keyslot &lt;key&gt;： 列出key被放置在哪个槽上。 </span><br><span class="line"></span><br><span class="line">CLUSTER flushslots： 移除指派给当前节点的所有槽，让当前节点变成一个没有指派任何槽的节点。 </span><br><span class="line"></span><br><span class="line">CLUSTER countkeysinslot &lt;slot&gt;： 返回槽目前包含的键值对数量。 </span><br><span class="line"></span><br><span class="line">CLUSTER getkeysinslot &lt;slot&gt; &lt;count&gt;： 返回count个槽中的键。 </span><br><span class="line"></span><br><span class="line">CLUSTER setslot &lt;slot&gt; node &lt;node_id&gt; 将槽指派给指定的节点，如果槽已经指派给另一个节点，那么先让另一个节点删除该槽，然后再进行指派。</span><br><span class="line"></span><br><span class="line">CLUSTER setslot &lt;slot&gt; migrating &lt;node_id&gt; 将本节点的槽迁移到指定的节点中。 </span><br><span class="line"></span><br><span class="line">CLUSTER setslot &lt;slot&gt; importing &lt;node_id&gt; 从 node_id 指定的节点中导入槽 slot 到本节点。 </span><br><span class="line"></span><br><span class="line">CLUSTER setslot &lt;slot&gt; stable 取消对槽 slot 的导入（import）或者迁移（migrate）。 </span><br><span class="line"></span><br><span class="line">CLUSTER failover： 手动进行故障转移。 </span><br><span class="line"></span><br><span class="line">CLUSTER forget &lt;node_id&gt;： 从集群中移除指定的节点，这样就无法完成握手，过期时为60s，60s后两节点又会继续完成握手。 </span><br><span class="line"></span><br><span class="line">CLUSTER reset [HARD|SOFT]： 重置集群信息，soft是清空其他节点的信息，但不修改自己的id，hard还会修改自己的id，不传该参数则使用soft方式。 </span><br><span class="line"></span><br><span class="line">CLUSTER count-failure-reports &lt;node_id&gt;： 列出某个节点的故障报告的长度。 </span><br><span class="line"></span><br><span class="line">CLUSTER SET-CONFIG-EPOCH： 设置节点epoch，只有在节点加入集群前才能设置。</span><br></pre></td></tr></table></figure>
+
+<p>注意：在apline系统中不支持{1..10}操作 </p>
+<blockquote>
+<p>以上理论知识内容为网络整理。。。。</p>
+</blockquote>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-22T14:09:55.000Z" title="6/22/2020, 2:09:55 PM">2020-06-22</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">19 分钟读完 (大约2811个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/22/redis%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E5%8F%8A%E5%AE%9E%E7%8E%B0.html">redis哨兵故障转移及实现</a></h1><div class="content"><blockquote>
+<p>在上篇文章中docker-compose搭建redis-sentinel(成功的搭建了1主2从3哨兵。</p>
+</blockquote>
+<h2 id="Sentinel命令"><a href="#Sentinel命令" class="headerlink" title="Sentinel命令"></a>Sentinel命令</h2><p><strong>sentinel</strong>是一个特殊的<strong>redis</strong>节点，它有自己专属的<strong>api</strong>：</p>
+<ul>
+<li><code>sentinel masters</code> 显示被监控的所有<strong>master</strong>以及它们的状态。</li>
+<li><code>sentinel master &lt;master name&gt;</code> 显示指定<strong>master</strong>的信息和状态。</li>
+<li><code>sentinel slaves &lt;master name&gt;</code> 显示指定<strong>master</strong>的所有<strong>slave</strong>及它们的状态。</li>
+<li><code>sentinel sentinels &lt;master name&gt;</code>  显示指定<strong>master</strong>的<strong>sentinel</strong>节点集合（不包含当前节点）。</li>
+<li><code>sentinel get-master-addr-by-name &lt;master name&gt;</code> 返回指定<strong>master</strong>的<strong>ip</strong>和<strong>port</strong>，如果正在进行<strong>failover</strong>或者<strong>failover</strong>已经完成，将会显示被提升为<strong>master</strong>的<strong>slave</strong>的<strong>ip</strong>和<strong>port</strong>。</li>
+<li><code>sentinel failover &lt;master name&gt; </code>强制<strong>sentinel</strong>执行<strong>failover</strong>，并且不需要得到其它<strong>sentinel</strong>的同意。但是<strong>failover</strong>后会将最新的配置发送给其它<strong>sentinel</strong>。</li>
+</ul>
+<p><code>sentinel masters</code></p>
+<p>展示所有被监控的主节点状态及相关信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:26380&gt; sentinel masters</span><br><span class="line">1)  1) <span class="string">&quot;name&quot;</span></span><br><span class="line">    2) <span class="string">&quot;mymaster&quot;</span></span><br><span class="line">    3) <span class="string">&quot;ip&quot;</span></span><br><span class="line">    4) <span class="string">&quot;192.168.3.2&quot;</span></span><br><span class="line">    5) <span class="string">&quot;port&quot;</span></span><br><span class="line">    6) <span class="string">&quot;6379&quot;</span></span><br><span class="line">…………………………………………………………</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>sentinel master &lt;master name&gt; </code></p>
+<p>展示指定**&lt;master name&gt;**状态以及相关的信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:26380&gt; sentinel master mymaster</span><br><span class="line"> 1) <span class="string">&quot;name&quot;</span></span><br><span class="line"> 2) <span class="string">&quot;mymaster&quot;</span></span><br><span class="line"> 3) <span class="string">&quot;ip&quot;</span></span><br><span class="line"> 4) <span class="string">&quot;192.168.3.2&quot;</span></span><br><span class="line"> 5) <span class="string">&quot;port&quot;</span></span><br><span class="line"> 6) <span class="string">&quot;6379&quot;</span></span><br><span class="line"> ………………………………</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>sentinel slaves &lt;master name&gt;</code></p>
+<p>展示指定 **&lt;master name&gt;**的从节点状态以及相关的统计信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:26380&gt; sentinel slaves mymaster</span><br><span class="line">1)  1) <span class="string">&quot;name&quot;</span></span><br><span class="line">    2) <span class="string">&quot;192.168.3.4:6379&quot;</span></span><br><span class="line">    3) <span class="string">&quot;ip&quot;</span></span><br><span class="line">    4) <span class="string">&quot;192.168.3.4&quot;</span></span><br><span class="line">    5) <span class="string">&quot;port&quot;</span></span><br><span class="line">    6) <span class="string">&quot;6379&quot;</span></span><br><span class="line">…………………………………………</span><br><span class="line">2)  1) <span class="string">&quot;name&quot;</span></span><br><span class="line">    2) <span class="string">&quot;192.168.3.3:6379&quot;</span></span><br><span class="line">    3) <span class="string">&quot;ip&quot;</span></span><br><span class="line">    4) <span class="string">&quot;192.168.3.3&quot;</span></span><br><span class="line">    5) <span class="string">&quot;port&quot;</span></span><br><span class="line">    6) <span class="string">&quot;6379&quot;</span></span><br><span class="line">…………………………………………</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>sentinel sentinels &lt;master name&gt; </code></p>
+<p>展示指定 <strong>&lt;master name&gt;</strong> 的<strong>sentinel</strong>节点集合（不包含当前<strong>sentinel</strong>节点）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:26380&gt; sentinel sentinels mymaster</span><br><span class="line">1)  1) <span class="string">&quot;name&quot;</span></span><br><span class="line">    2) <span class="string">&quot;570de1d8085ec8bd7974431c01c589847c857edf&quot;</span></span><br><span class="line">    3) <span class="string">&quot;ip&quot;</span></span><br><span class="line">    4) <span class="string">&quot;192.168.3.13&quot;</span></span><br><span class="line">    5) <span class="string">&quot;port&quot;</span></span><br><span class="line">    6) <span class="string">&quot;26379&quot;</span></span><br><span class="line">………………………………………………</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>sentinel get-master-addr-by-name &lt;master name&gt; </code></p>
+<p>获取主节点信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:26380&gt; sentinel get-master-addr-by-name mymaster</span><br><span class="line">1) <span class="string">&quot;192.168.3.2&quot;</span></span><br><span class="line">2) <span class="string">&quot;6379&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>sentinel failover &lt;master name&gt;</code></p>
+<p>对**&lt;master name&gt;**进行强制故障转移：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:26380&gt; sentinel failover mymaster</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:26380&gt; info sentinel</span><br><span class="line"><span class="comment"># Sentinel</span></span><br><span class="line">sentinel_masters:1</span><br><span class="line">sentinel_tilt:0</span><br><span class="line">sentinel_running_scripts:0</span><br><span class="line">sentinel_scripts_queue_length:0</span><br><span class="line">sentinel_simulate_failure_flags:0</span><br><span class="line">master0:name=mymaster,status=ok,address=192.168.3.3:6379,slaves=2,sentinels=3</span><br></pre></td></tr></table></figure>
+
+
+
+<p>修改配置：</p>
+<ul>
+<li>添加新的监听：<code>sentinel monitor test 127.0.0.1 6379 2</code></li>
+<li>放弃对某个<strong>master</strong>监听：<code>sentinel REMOVE test</code></li>
+<li>设置配置选项：<code>sentinel set failover-timeout mymaster 180000</code></li>
+</ul>
+<p><strong>Master</strong>可能会因为某些情况宕机了，如果客户端是固定一个地址去访问，肯定是不合理的，所以客户端请求是请求哨兵，从哨兵获取主机地址的信息，或者是从机的信息。可以实现一个例子：</p>
+<ul>
+<li>随机选择一个哨兵连接，获取主机及从机信息。</li>
+<li>模拟客户端定时访问，实现简单轮询效果，轮询从节点。</li>
+<li>连接失败重试访问</li>
+</ul>
+<h2 id="Sentinel故障转移"><a href="#Sentinel故障转移" class="headerlink" title="Sentinel故障转移"></a>Sentinel故障转移</h2><p>执行<code>docker-composer up</code>之后<code>sentinel.conf</code>发生了变化，每个配置文件变化如下：</p>
+<p><code>sentinel\conf\sentinel.conf</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">user default on nopass ~* +@all</span><br><span class="line">sentinel known-replica mymaster 192.168.3.3 6379</span><br><span class="line">sentinel known-replica mymaster 192.168.3.4 6379</span><br><span class="line">sentinel known-sentinel mymaster 192.168.3.12 26379 497f733919cb5d41651b4a2b5648c4adffae0a73</span><br><span class="line">sentinel known-sentinel mymaster 192.168.3.13 26379 0d0ee41bcb5d765e9ff78ed59de66be049a23a82</span><br><span class="line">sentinel current-epoch 0</span><br></pre></td></tr></table></figure>
+
+<p><code>sentine2\conf\sentinel.conf</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">user default on nopass ~* +@all</span><br><span class="line">sentinel known-replica mymaster 192.168.3.3 6379</span><br><span class="line">sentinel known-replica mymaster 192.168.3.4 6379</span><br><span class="line">sentinel known-sentinel mymaster 192.168.3.13 26379 0d0ee41bcb5d765e9ff78ed59de66be049a23a82</span><br><span class="line">sentinel known-sentinel mymaster 192.168.3.11 26379 f5f2a73dc0e60514e4f28c6f40517f48fa409eed</span><br><span class="line">sentinel current-epoch 0</span><br></pre></td></tr></table></figure>
+
+<p><code>sentine3\conf\sentinel.conf</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">user default on nopass ~* +@all</span><br><span class="line">sentinel known-replica mymaster 192.168.3.3 6379</span><br><span class="line">sentinel known-replica mymaster 192.168.3.4 6379</span><br><span class="line">sentinel known-sentinel mymaster 192.168.3.12 26379 497f733919cb5d41651b4a2b5648c4adffae0a73</span><br><span class="line">sentinel known-sentinel mymaster 192.168.3.11 26379 f5f2a73dc0e60514e4f28c6f40517f48fa409eed</span><br><span class="line">sentinel current-epoch 0</span><br></pre></td></tr></table></figure>
+
+<p>从变化中可以看出每台<strong>Sentinel</strong>分别记录了<strong>slave</strong>的节点信息和其它<strong>Sentinel</strong>节点信息。</p>
+<p>在宿主机中随便进入一台<strong>Sentinel</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:26380&gt; sentinel masters</span><br><span class="line">1)  1) <span class="string">&quot;name&quot;</span></span><br><span class="line">    2) <span class="string">&quot;mymaster&quot;</span></span><br><span class="line">    3) <span class="string">&quot;ip&quot;</span></span><br><span class="line">    4) <span class="string">&quot;192.168.3.2&quot;</span></span><br><span class="line">    5) <span class="string">&quot;port&quot;</span></span><br><span class="line">    6) <span class="string">&quot;6379&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以观察到监听的所有<strong>master</strong>，将<strong>192.168.3.2</strong>这台<strong>master</strong>进行宕机</p>
+<p><code>docker stop redis-master</code></p>
+<p>宕机完之后等待<strong>Sentinel</strong>检测周期过了之后再对<code>sentinel.conf</code>和<code>redis.conf</code>进行观察。</p>
+<p>3台<strong>Sentinel</strong>的<code>sentinel monitor mymaster 192.168.3.2 6379 2</code>变成了<code>sentinel monitor mymaster 192.168.3.4 6379 2</code></p>
+<p>其次master对应的slave节点信息也进行更改。</p>
+<p>而<strong>192.168.3.3</strong>的<code>redis.conf</code>中<code>replicaof 192.168.3.2 6379</code>也变成了<code>replicaof 192.168.3.4 6379</code>。</p>
+<p><strong>192.168.3.2</strong>的<code>redis.conf</code>中<code>replicaof 192.168.3.2 6379</code>这行配置被删除掉了。</p>
+<p>再次启动<strong>192.168.3.2</strong>的<strong>redis</strong>节点，而这台节点的<code>redis.conf</code>中增加了一行<code>replicaof 192.168.3.4 6379</code>。</p>
+<p>其实就是将我们的操作自动化了。</p>
+<h2 id="Sentinel实现原理"><a href="#Sentinel实现原理" class="headerlink" title="Sentinel实现原理"></a>Sentinel实现原理</h2><p><strong>Sentinel</strong>的实现原理，主要分为三个步骤：</p>
+<ul>
+<li>检测问题：三个定时任务，这三个内部的执行任务可以保证出现问题马上让<strong>Sentinel</strong>知道。</li>
+<li>发现问题：主观下线和客观下线，当有一台<strong>Sentinel</strong>机器发现问题时，它就会对它主观下线。但是当多个<strong>Sentinel</strong>都发现问题的时候，才会出现客观下线。</li>
+<li>找到解决问题的<strong>Sentinel</strong>：进行领导者选举，如何在<strong>Sentinel</strong>内部多台节点做领导者选择。</li>
+<li>解决问题：就是要进行故障转移。</li>
+</ul>
+<h3 id="三个定时任务"><a href="#三个定时任务" class="headerlink" title="三个定时任务"></a>三个定时任务</h3><ul>
+<li><p>每10s每个<strong>Sentinel</strong>对<strong>Master</strong>和<strong>Slave</strong>执行一次<code>Info Replication</code>。</p>
+<p><strong>Redis Sentinel</strong>可以对<strong>Redis</strong>节点做失败判断和故障转移，来<code>Info Replication</code>发现<strong>Slave</strong>节点，来确定主从关系。</p>
+</li>
+<li><p>每2s每个<strong>Sentinel</strong>通过<strong>Master</strong>节点的<strong>channel</strong>交换信息（pub/sub）。</p>
+<p>类似于发布订阅，<strong>Sentinel</strong>会对主从关系进行判断，通过<code>__sentinel__:hello</code>频道交互。了解主从关系可以帮助更好的自动化操作<strong>Redis</strong>。然后<strong>Sentinel</strong>会告知系统消息给其它<strong>Sentinel</strong>节点，最终达到共识，同时<strong>Sentinel</strong>节点能够互相感知到对方。</p>
+</li>
+<li><p>每1s每个<strong>Sentinel</strong>对其它<strong>Sentinel</strong>和<strong>Redis</strong>执行<code>ping</code>。</p>
+<p>对每个节点和其它<strong>Sentinel</strong>进行心跳检测，它是失败判断的依据。</p>
+</li>
+</ul>
+<h3 id="主观下线和客观下线"><a href="#主观下线和客观下线" class="headerlink" title="主观下线和客观下线"></a>主观下线和客观下线</h3><p>回顾上一篇文章中<strong>Sentinel</strong>的配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sentinel monitor mymaster 192.168.3.2 6379 2</span><br><span class="line">sentinel down-after-millseconds mymaster 30000</span><br></pre></td></tr></table></figure>
+
+<p>主观下线：每个<strong>Sentinel</strong>节点对<strong>Redis</strong>失败的“偏见”。之所以是偏见，只是因为某一台机器30s内没有得到回复。</p>
+<p>客观下线：这个时候需要所以<strong>Sentinel</strong>节点都发现它30s内无回复，才会达到共识。</p>
+<h3 id="领导者选举方式"><a href="#领导者选举方式" class="headerlink" title="领导者选举方式"></a>领导者选举方式</h3><ul>
+<li>每个做主观下线的Sentinel节点，会像其它的<strong>Sentinel</strong>节点发送命令，要求将它设置成为领导者。</li>
+<li>收到命令的<strong>Sentinel</strong>节点，如果没有同意通过其它节点发送的命令，那么就会同意请求，否则就会拒绝。</li>
+<li>如果<strong>Sentinel</strong>节点发现自己的票数超过半数，同时也超过了<code>sentinel monitor mymaster 192.168.3.2 6379 2</code>超过2个的时候，就会成为领导者。</li>
+<li>进行故障转移操作。</li>
+</ul>
+<h3 id="如何选择“合适”的Slave节点"><a href="#如何选择“合适”的Slave节点" class="headerlink" title="如何选择“合适”的Slave节点"></a>如何选择“合适”的Slave节点</h3><p>​        <strong>Redis</strong>内部其实是有一个优先级配置的，在配置文件中<code>replica-priority</code>，这个参数是<strong>slave</strong>节点的优先级配置，如果存在则返回，如果不存在则继续。当上面这个优先级不满足的时候，<strong>Redis</strong>还会选择复制偏移量最大的<strong>Slave</strong>节点，如果存在则返回，如果不存在则继续。之所以选择偏移量最大，这是因为偏移量越小，和<strong>Master</strong>的数据越不接近，现在<strong>Master</strong>挂掉了，说明这个偏移量小的机器数据可能存在问题，这就是为什么选择偏移量最大的<strong>Slave</strong>的原因。如果发现偏移量都一样，这个时候 <strong>Redis</strong> 会默认选择 <strong>runid</strong> 最小的节点。</p>
+<p>生产环境部署技巧：</p>
+<ul>
+<li><p><strong>Sentinel</strong>节点不应该部署在一台物理机器上。</p>
+<p>这里特意强调物理机是因为一台物理机做成了若干虚拟机或者现今比较流行的容器，它们虽然有不同的<strong>IP</strong>地址，但实际上它们都是同一台物理机，同一台物理机意味着如果这台机器有什么硬件故障，所有的虚拟机都会受到影响，为了实现<strong>Sentinel</strong>节点集合真正的高可用，请勿将<strong>Sentinel</strong>节点部署在同一台物理机器上。</p>
+</li>
+<li><p>部署至少三个且奇数个的<strong>Sentinel</strong>节点。通过增加<strong>Sentinel</strong>节点的个数提高对于故障判定的准确性，因为领导者选举需要至少一半加1个节点。</p>
+</li>
+</ul>
+<h2 id="Sentinel常见问题"><a href="#Sentinel常见问题" class="headerlink" title="Sentinel常见问题"></a>Sentinel常见问题</h2><p>哨兵集群在发现<strong>master node</strong>挂掉后会进行故障转移，也就是启动其中一个<strong>slave node</strong>为<strong>master node</strong>。在这过程中，可能会导致数据丢失的情况。</p>
+<ul>
+<li><p>异步复制导致数据丢失</p>
+<p>因为<strong>master-&gt;slave</strong>的复制是异步，所以有可能部分还没来得及复制到<strong>slave</strong>就宕机了，此时这些部分数据就丢失了。</p>
+</li>
+<li><p>集群脑裂导致数据丢失</p>
+<p>脑裂，也就是说。某个<strong>master</strong>所在机器突然脱离了正常的网络，跟其它<strong>slave</strong>机器不能连接，但是实际上<strong>master</strong>还运行着。</p>
+</li>
+</ul>
+<p>造成的问题：</p>
+<p>​        此时哨兵可能就会认为<strong>master</strong>宕机了，然后开始选举，将其它<strong>slave</strong>切换成<strong>master</strong>。这时候集群里就会有2个<strong>master</strong>，也就是所谓的脑裂。此时虽然某个<strong>slave</strong>被切换成<strong>master</strong>，但是可能<strong>client</strong>还没来得及切换成新的<strong>master</strong>，还继续写向旧的<strong>master</strong>的数据可能就丢失了。因此旧<strong>master</strong>再次被恢复的时候，会被作为一个<strong>slave</strong>挂到新的<strong>master</strong>上去，自己的数据会被清空，重新从新的<strong>master</strong>复制数据。</p>
+<p>怎么解决：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">min-slaves-to-write 1</span><br><span class="line">min-slaves-max-lag 10</span><br></pre></td></tr></table></figure>
+
+<p>要求至少有一个<strong>slave</strong>，数据复制和同步的延迟不能超过10s。</p>
+<p>如果说一旦所有的<strong>slave</strong>，数据复制和同步的延迟都超过了10s，这个时候，<strong>master</strong>就不会再接收任何请求了。</p>
+<p>上面两个配置可以减少异步复制和脑裂导致的数据丢失。</p>
+<p>异步复制导致的数据丢失：</p>
+<p>​        在异步复制的过程当中，通过<code>min-slaves-max-lag</code>这个配置，就可以确保的说，一旦<strong>slave</strong>复制数据和<strong>ack</strong>延迟时间太长，就认为可能<strong>master</strong>宕机后损失的数据太多了，那么就拒绝写请求，这样就可以把<strong>master</strong>宕机时由于部分数据未同步到<strong>slave</strong>导致的数据丢失降低到可控范围内。</p>
+<p>集群脑裂导致的数据丢失：</p>
+<p>​        集群脑裂因为<strong>client</strong>还没来得及切换成新的<strong>master</strong>，还继续写向旧的master的数据可能就丢失了通过<code>min-slaves-to-write</code>确保必须是有多少个从节点连接，并且延迟时间小于<code>min-slaves-max-lag</code>多少秒。</p>
+<p>客户端需要怎么做：</p>
+<p>​        对于<strong>client</strong>来讲，就需要做些处理，比如先将数据缓存到内存当中，然后过一段时间处理，或者连接失败，接收到错误切换新的<strong>master</strong>处理。 </p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-20T01:10:48.000Z" title="6/20/2020, 1:10:48 AM">2020-06-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">13 分钟读完 (大约1885个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/20/docker-compose%E6%90%AD%E5%BB%BAredis-sentinel.html">docker-compose搭建redis-sentinel</a></h1><div class="content"><h2 id="主从复制的问题"><a href="#主从复制的问题" class="headerlink" title="主从复制的问题"></a>主从复制的问题</h2><p>​    对于上篇文章redis持久化rdb及aof中，<strong>redis</strong>服务器重启时的数据恢复，在新版本中是不符合我画的那个流程图的。</p>
+<p>​    <strong>redis</strong>启动的时候会去判断是否开启<strong>aof</strong>，如果开启了，不存在<strong>aof</strong>文件的话，会去判断是否存在<strong>rdb</strong>，但在新的版本中，如果开启<strong>aof</strong>，不存在<strong>aof</strong>文件的时候，<strong>redis</strong>会主动创建<strong>aof</strong>文件并且加载<strong>aof</strong>，这就会导致数据丢失。解决方案如下：</p>
+<ul>
+<li>关闭<strong>aof</strong></li>
+<li>启动<strong>redis</strong>去加载<strong>rdb</strong>文件</li>
+<li>动态开启<strong>aof</strong>最终达到数据一致性</li>
+</ul>
+<p>​    当主机<strong>master</strong>宕机以后，需要人工解决切换，比如使用<code>slaveof no one</code>。实际上主从复制并没有实现高可用。</p>
+<p>高可用侧重备份机器，利用集群中系统的冗余，当系统中某台机器发生损坏的时候，其它后备的机器可以迅速的接替它来启动服务。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzE5LzVmYWU1MTNhY2RiYWEucG5n?x-oss-process=image/format,png" alt="redis主从复制问题"></p>
+<p>如何解决：</p>
+<p>如果我们有一个监控程序能够监控各个机器的状态并及时调整，手动操作变为自动操作，<strong>Sentinel</strong>的出现就是为了解决这个问题。</p>
+<h2 id="哨兵机制的原理"><a href="#哨兵机制的原理" class="headerlink" title="哨兵机制的原理"></a>哨兵机制的原理</h2><p>​    <strong>Reids Sentinel</strong>一个分布式架构，其中包含若干个<strong>Sentinel</strong>节点和<strong>Redis</strong>数据节点，每个<strong>Sentinel</strong>节点会对数据节点和其余<strong>Sentinel</strong>节点进行监控，当它发现节点不可达的时候，会对节点做下线标识。</p>
+<p>​    如果被标识的是主节点，它还会和其它<strong>Sentinel</strong>节点进行协商，当大多数<strong>Sentinel</strong>节点都认为主节点不可达时，它们会选举出一个<strong>Sentinel</strong>节点来完成自动故障转移的工作，同时会将这个变化实时通知给<strong>Redis</strong>应用方。整个过程完全是自动的，不需要人工来介入，所以这套方案很有效地解决了<strong>Redis</strong>高可用的问题。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzE5L2NmMGY0MDY4ZDQyNzcucG5n?x-oss-process=image/format,png" alt="redis哨兵"></p>
+<p>基本的故障转移流程：</p>
+<ul>
+<li>主节点出现故障，此时两个从节点与主节点失去连接，主从复制失败。</li>
+<li>每个<strong>Sentinel</strong>节点通过定期监控发现主节点出现了故障</li>
+<li>多个<strong>Sentinel</strong>节点对主节点的故障达成一致会选举出其中一个节点作为领导者负责故障转移。</li>
+<li><strong>Sentinel</strong>领导者节点执行了故障转移，整个过程基本是跟我们手动调整一致的，只不过是自动化完成的。</li>
+<li>故障转移后整个<strong>Redis Sentinel</strong>的结构，重新选举了新的主节点。</li>
+</ul>
+<p>Redis Sentinel具有的功能：</p>
+<ul>
+<li><strong>监控</strong>：<strong>Sentinel</strong>节点会定期检查Redis数据节点、其余Sentinel节点是否可达。</li>
+<li><strong>通知</strong>：<strong>Sentinel</strong>节点会将故障转移的结果通知给应用方。</li>
+<li><strong>主节点故障转移</strong>：实现从节点晋升为主节点并维护后续正确的主从关系。</li>
+<li><strong>配置提供者</strong>：在<strong>Redis Sentinel</strong>结构中，客户端在初始化的时候连接的是<strong>Sentinel</strong>节点集合，从中获取主节点信息。</li>
+</ul>
+<p>同时<strong>Redis Sentinel</strong>包含了若干个<strong>Sentinel</strong>节点，这样做也带了两个好处：</p>
+<ul>
+<li>对于节点的故障判断是由多个<strong>Sentinel</strong>节点共同完成，这样可以有效地防止误判。</li>
+<li><strong>Sentinel</strong>节点集合是由若干个<strong>Sentinel</strong>节点组成的，这样即使个别<strong>Sentinel</strong>节点不可用，整个<strong>Sentinel</strong>节点集合依然是健壮的。</li>
+</ul>
+<p>但是<strong>Sentinel</strong>节点本身就是独立的<strong>Reids</strong>节点，只不过它们有一些特殊，不存储数据，只支持部分命令。</p>
+<h2 id="docker-compose-实现-redis-sentinel"><a href="#docker-compose-实现-redis-sentinel" class="headerlink" title="docker-compose 实现 redis-sentinel"></a>docker-compose 实现 redis-sentinel</h2><table>
+<thead>
+<tr>
+<th align="center">容器名称</th>
+<th align="center">容器IP</th>
+<th align="center">映射端口号</th>
+<th align="center">服务运行模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Redis-master</td>
+<td align="center">192.168.3.2</td>
+<td align="center">6380-&gt;6379</td>
+<td align="center">Master</td>
+</tr>
+<tr>
+<td align="center">Redis-slave1</td>
+<td align="center">192.168.3.3</td>
+<td align="center">6381-&gt;6379</td>
+<td align="center">Slave</td>
+</tr>
+<tr>
+<td align="center">Redis-slave2</td>
+<td align="center">192.168.3.4</td>
+<td align="center">6382-&gt;6379</td>
+<td align="center">Slave</td>
+</tr>
+<tr>
+<td align="center">Redis-sentinel1</td>
+<td align="center">192.168.3.11</td>
+<td align="center">26380-&gt;26379</td>
+<td align="center">Sentinel</td>
+</tr>
+<tr>
+<td align="center">Redis-sentinel2</td>
+<td align="center">192.168.3.12</td>
+<td align="center">26381-&gt;26379</td>
+<td align="center">Sentinel</td>
+</tr>
+<tr>
+<td align="center">Redis-sentinel3</td>
+<td align="center">192.168.3.13</td>
+<td align="center">26382-&gt;26379</td>
+<td align="center">Sentinel</td>
+</tr>
+</tbody></table>
+<p>在这里我用的镜像是redis官方的6.0.5。去网上把配置文件下载下来(<code>redis.conf</code>、<code>sentinel.conf</code>)</p>
+<p>然后开始进行：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzIwLzQ0OTU5ZjMzOTY0OWUucG5n?x-oss-process=image/format,png" alt="redis文件目录"></p>
+<p>创建目录，并且把配置文件拷贝进去。</p>
+<p><strong>sentinel</strong>目录下的所有配置文件进行简单的修改：</p>
+<p>搜索<code>sentinel monitor</code> 改为 <code>sentinel monitor mymaster 192.168.3.2 6379 2</code></p>
+<p><strong>server</strong>目录下进行修改：</p>
+<p><code>bind 127.0.0.1</code>改为<code>bind 0.0.0.0</code></p>
+<p><code>replicaof &lt;masterip&gt; &lt;masterport&gt;</code>改为<code>replicaof 192.168.3.2 6379</code>(除master目录)</p>
+<p>创建<code>docker-compose.yml</code>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.6&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">redis-master:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">&quot;redis-master&quot;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6380:6379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/server/master:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">/redis/conf/redis.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.2</span></span><br><span class="line">  <span class="attr">redis-slave1:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">&quot;redis-slave1&quot;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6381:6379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/server/slave1:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">/redis/conf/redis.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.3</span></span><br><span class="line">  <span class="attr">redis-slave2:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">&quot;redis-slave2&quot;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6382:6379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/server/slave2:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-server</span> <span class="string">/redis/conf/redis.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.4</span></span><br><span class="line">  <span class="attr">redis-sentinel1:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">&quot;redis-sentinel1&quot;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;26380:26379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/sentinel/sentinel1:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-sentinel</span> <span class="string">/redis/conf/sentinel.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.11</span></span><br><span class="line">  <span class="attr">redis-sentinel2:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">&quot;redis-sentinel2&quot;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;26381:26379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/sentinel/sentinel2:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-sentinel</span> <span class="string">/redis/conf/sentinel.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.12</span></span><br><span class="line">  <span class="attr">redis-sentinel3:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">&quot;redis-sentinel3&quot;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;26382:26379&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/Users/gaobinzhan/Documents/Redis/sentinel/sentinel3:/redis</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">redis-sentinel</span> <span class="string">/redis/conf/sentinel.conf</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">redis-test:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">192.168</span><span class="number">.3</span><span class="number">.13</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">redis-test:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br><span class="line">    <span class="attr">ipam:</span></span><br><span class="line">      <span class="attr">config:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">subnet:</span> <span class="string">&quot;192.168.3.0/24&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>进行<code>docker-compose up</code>，执行完毕后：</p>
+<p>redis-cli工具运行<code>redis-cli -p 26380</code>输入<code>info</code>：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzIwLzZmMWIyYzM2ZDNlMzkucG5n?x-oss-process=image/format,png" alt="image-20200620005154269"></p>
+<p>出现以上信息即搭建成功。。</p>
+<p><strong>Sentinel</strong>的核心配置：</p>
+<p><code>sentinel monitor mymaster 192.168.3.2 6379 2</code></p>
+<p>监控的主节点的名字、IP 和端口，最后一个2的意思是有几台 <strong>Sentinel</strong>发现有问题，就会发生故障转移，例如 配置为2，代表至少有2个 <strong>Sentinel</strong> 节点认为主节点不可达，那么这个不可达的判定才是客观的。对于设置的越小，那么达到下线的条件越宽松，反之越严格。一般建议将其设置为 <strong>Sentinel</strong> 节点的一半加1。最后的参数不可大于<strong>Sentinel</strong>节点数。</p>
+<p><code>sentinel down-after-millseconds mymaster 30000</code></p>
+<p>这个是超时的时间（单位为毫米）。打个比方，当你去<strong>ping</strong>一个机器的时候，多长时间后仍<strong>ping</strong>不通，那么就认为它是有问题。</p>
+<p><code>sentinel parallel-syncs my master 1</code></p>
+<p>当<strong>Sentinel</strong>节点集合对主节点故障判断达成一致时，<strong>Sentinel</strong>领导者节点会被做故障转移操作，选出新的主节点，原来的从节点会向新的主节点发起复制操作，<code>paraller-syncs</code>就是用来限制在一次故障转移之后，每次向新的主节点发起复制操作的从节点个数，指出<strong>Sentinel</strong>属于并发还是串行。1代表每次只能复制一个，可以减轻<strong>Master</strong>的压力。</p>
+<p><code>sentinel auth-pass &lt;master-name&gt; &lt;password&gt;</code></p>
+<p>如果 <strong>Sentinel</strong> 监控的主节点配置了密码，<code>sentinel auth-pass</code> 配置通过添加主节点的密码，防止 <strong>Sentinel</strong> 节点对主节点无法监控。</p>
+<p><code>sentinel failover-timeout mymaster 180000</code></p>
+<p>表示故障转移的时间。</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-07T19:27:12.000Z" title="6/7/2020, 7:27:12 PM">2020-06-07</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">36 分钟读完 (大约5329个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/07/redis%E6%8C%81%E4%B9%85%E5%8C%96rdb%E5%8F%8Aaof.html">redis持久化rdb及aof</a></h1><div class="content"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>​        持久化的功能：<strong>Redis</strong>是内存数据库，数据都是存储在内存中，为了避免进程退出导致数据的永久丢失，需要定期将<strong>Redis</strong>中的数据以某种形式（数据或命令）从内存保存到硬盘中。当下次<strong>Redis</strong>重启时，利用持久化文件实现数据恢复。除此之外，为了进行灾难备份，可以将持久化文件拷贝到一个远程位置。<strong>Redis</strong>持久化分为<strong>RDB</strong>和<strong>AOF</strong>，前者将当前数据保存到硬盘，后者则是将每次执行的写命令保存的硬盘。</p>
+<h2 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h2><p>​        <strong>RDB</strong>是一种快照存储持久方式，具体就是将<strong>Redis</strong>某一时刻的内存数据保存到硬盘的文件当中，默认保存的文件名为<strong>dump.rdb</strong>，而在Redis服务器启动时，会重新加载<strong>dump.rdb</strong>文件的数据到内存当中恢复数据。触发<strong>RDB</strong>持久化过程分为手动触发和自动触发。</p>
+<h3 id="触发机制"><a href="#触发机制" class="headerlink" title="触发机制"></a>触发机制</h3><p>手动触发分别对应<code>save</code>和<code>bgsave</code>命令：</p>
+<p><code>save</code>命令：阻塞当前<strong>Redis</strong>服务器，直到<strong>RDB</strong>过程完成为止，对于内存比较大的实例会造成长时间阻塞，线上环境不建议使用。</p>
+<p><code>bgsave</code>命令：<strong>Redis</strong>进程执行<strong>fork</strong>操作创建子进程，<strong>RDB</strong>持久化过程由子进程负责，完成后自动结束。阻塞只发生在<strong>fork</strong>阶段，一般时间很短。</p>
+<p>显示<code>bgsave</code>命令是针对<code>save</code>阻塞问题做的优化。因此<strong>Redis</strong>内部所有的涉及<strong>RDB</strong>的操作都采用<code>bgsave</code>的方式。</p>
+<p>除了执行命令手动触发之外，<strong>Redis</strong>内部还存在自动触发<strong>RDB</strong>的持久化机制，例如以下场景：</p>
+<ul>
+<li>使用<code>save</code>相关配置，如<code>save m n</code>。表示<strong>m</strong>秒内数据集存在<strong>n</strong>次修改时，自动触发<code>bgsave</code>。</li>
+<li>如果从节点执行全量复制操作，主节点自动执行<code>bgsave</code>生成<strong>RDB</strong>文件并发送给从节点。</li>
+<li>执行<code>debug reload</code>命令重载<strong>Redis</strong>时，也会自动触发<code>save</code>操作。</li>
+<li>默认情况下执行<code>shutdown</code>命令时，如果没有开启<strong>AOF</strong>持久化功能则自动执行<code>bgsave</code>。</li>
+</ul>
+<h3 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h3><p><code>bgsave</code>是主流的触发<strong>RDB</strong>持久化方式：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzA2LzgzZGQyNjFiNTcxNzgucG5n?x-oss-process=image/format,png" alt="redis-bgsave命令"></p>
+<ul>
+<li>执行<code>bgsave</code>命令，<strong>Redis</strong>父进程判断当前是否存在正在执行的子进程，如<strong>RDB/AOF</strong>子进程，如果存在<code>bgsave</code>命令直接返回。</li>
+<li>父进程执行<strong>fork</strong>操作创建子进程，<strong>fork</strong>操作过程中父进程会阻塞，通过<code>info stats</code>命令查看<code>latest_fork_usec</code>选项，可以获得最近一个<strong>fork</strong>操作的耗时，单位为微妙。</li>
+<li>父进程<strong>fork</strong>完成后，<code>bgsave</code>命令返回<strong>Background saving started</strong>信息并不再阻塞父进程，可以继续响应其它命令。</li>
+<li>子进程创建<strong>RDB</strong>文件，根据父进程内存生成临时快照文件，完成后原有文件进行原子替换。执行<code>lastsave</code>命令可以获取最后一次生成<strong>RDB</strong>的时间，对应<code>info</code>统计的<code>rdb_last_save_time</code>选项。</li>
+<li>进程发送信号给父进程表示完成，父进程更新统计信息，具体见<code>info Persistence</code>下的<code>rdb_*</code>相关选项。</li>
+</ul>
+<h3 id="服务器配置自动触发"><a href="#服务器配置自动触发" class="headerlink" title="服务器配置自动触发"></a>服务器配置自动触发</h3><p>​        除了通过客户端发送命令外，还有一种方式，就是在<strong>Redis</strong>配置文件中的<code>save</code>指定到达触发<strong>RDB</strong>持久化的条件，比如【多少秒内至少达到多少写操作】就开启<strong>RDB</strong>数据同步。</p>
+<p>例如我们可以在配置文件<strong>redis.conf</strong>指定如下的选项：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 900s内至少达到1条写命令</span></span><br><span class="line">save 900 1</span><br><span class="line"><span class="comment"># 300s内至少达到10条写命令</span></span><br><span class="line">save 300 10</span><br><span class="line"><span class="comment"># 60s内至少达到1000条写命令</span></span><br><span class="line">save 60 1000</span><br></pre></td></tr></table></figure>
+
+<p>这种通过服务器配置文件触发<strong>RDB</strong>的方式，与<code>bgsave</code>命令类似，达到触发条件时，会<strong>fork</strong>一个子进程进行数据同步，不过最好不要通过这种方式来触发<strong>RDB</strong>持久化，因为设置触发的时间太短，则容易频繁写入<strong>rdb</strong>文件，影响服务器性能，时间设置太长会造成数据丢失。</p>
+<h3 id="RDB文件的处理"><a href="#RDB文件的处理" class="headerlink" title="RDB文件的处理"></a>RDB文件的处理</h3><p>保存：</p>
+<ul>
+<li><strong>RDB</strong>文件保存在<strong>dir</strong>配置指定的目录下，文件名通过<strong>dbfilename</strong>配置指定。可通过执行<code>config set dir &#123;newDir&#125;</code>和<code>config set dbfilename &#123;newFileName&#125;</code>运行期动态执行，当下次运行时RDB文件会保存到新目录。</li>
+</ul>
+<p>压缩：</p>
+<ul>
+<li><strong>Redis</strong>默认采用<strong>LZF</strong>算法对生存的<strong>RDB</strong>文件做压缩处理，压缩后的文件远远小于内存大小，默认开启，可以通过参数<code>config set rdbcompression &#123;yes|no&#125;</code>动态修改。</li>
+<li>虽然压缩<strong>RDB</strong>会消耗<strong>CPU</strong>，但可大幅度降低文件的体积，方便保存到硬盘或通过网络发送给从节点，因此线上建议开启。</li>
+</ul>
+<h3 id="RDB方式的优缺点"><a href="#RDB方式的优缺点" class="headerlink" title="RDB方式的优缺点"></a>RDB方式的优缺点</h3><p>优点：</p>
+<ul>
+<li><strong>RDB</strong>是一个非常紧凑的文件，它保存了<strong>Redis</strong>在某个时间点上的数据集。这种文件非常适合用于备份；比如说，你可以在最近的24小时内，每小时备份一次<strong>RDB</strong>文件，并且在每个月的每一天，也备份一个<strong>RDB</strong>文件。这样的话，即使遇上问题，也可以随时将数据集还原到不同的版本。</li>
+<li><strong>RDB</strong>可以最大化<strong>Redis</strong>的性能；父进程在保存<strong>RDB</strong>文件时唯一要做的就是<strong>fork</strong>出一个子进程，然后这个子进程就会处理接下来的所有保存工作，父进程无需执行任何磁盘<strong>I/O</strong>操作。</li>
+<li><strong>RDB</strong>在恢复大数据集时的速度要比<strong>AOF</strong>的恢复速度快。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li><strong>RDB</strong>方式数据没办法做到实时持久化/秒级持久化。如果服务器宕机的话，采用<strong>RDB</strong>的方式会造成某个时段内数据的丢失，比如我们设置10分钟同步一次或者5分钟达到1000次写入就同步一次，那么如果还没达到触发条件服务器就死机了，那么这个时间段的数据会丢失。</li>
+<li>使用<code>bgsave</code>命令在<strong>fork</strong>子进程时，如果数据量太大，fork的过程也会发生阻塞，另外，<strong>fork</strong>子进程会消耗内存。针对<strong>RDB</strong>不适合做实时持久化的问题，<strong>Redis</strong>提供了<strong>AOF</strong>持久化方式来解决。</li>
+</ul>
+<h2 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h2><p>​        <strong>AOF</strong>（append only file）持久化；与<strong>RDB</strong>存储某个时刻的快照不同，<strong>AOF</strong>持久化方式会记录客户端对服务器的每一次写操作命令到日志当中，并将这些操作以<strong>Redis</strong>协议追加保存到以后缀为<strong>aof</strong>文件末尾。</p>
+<h3 id="使用AOF"><a href="#使用AOF" class="headerlink" title="使用AOF"></a>使用AOF</h3><p>​        开启AOF功能需要设置配置；<code>appendonly yes</code>，默认不开启。<strong>AOF</strong>文件名通过<code>appendfilename</code>配置设置，默认文件名是<strong>appendonly.aof</strong>。保存路径同RDB持久化方式一致，通过dir配置指定。</p>
+<h3 id="持久化配置"><a href="#持久化配置" class="headerlink" title="持久化配置"></a>持久化配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">appendonly yes <span class="comment">#启用aof持久化方式</span></span><br><span class="line">appendfsync always <span class="comment">#每次收到命令就立即强制写入磁盘，最慢的大概只有几百的TPS，但是保证完全的持久化，不推荐使用</span></span><br><span class="line">appendfsync everysec <span class="comment">#每秒钟强制写入磁盘一次，在性能和持久化方面做了很好的折中，推荐</span></span><br><span class="line">appendfsync no <span class="comment">#完全依赖os，性能最好，持久化没保证，Redis不会主动调用fsync去将AOF日志内容同步到磁盘，所以这一切完全依赖于操作系统的调试了。对于大多数Linux操作系统，是每30s进行一次fsync，将缓冲区中的数据写的磁盘上。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="执行流程-1"><a href="#执行流程-1" class="headerlink" title="执行流程"></a>执行流程</h3><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzA3LzQyYmQ4MzE2MDc4ZTgucG5n?x-oss-process=image/format,png" alt="redis-aof"></p>
+<ul>
+<li>所以的写入命令会追加到<strong>aof_buf</strong>（缓冲区）中。</li>
+<li><strong>AOF</strong>缓冲区根据对应的策略向硬盘做同步操作。</li>
+<li>随着<strong>AOF</strong>文件越来越大，需要定期对<strong>AOF</strong>文件进行重写，达到压缩的目的。</li>
+<li>当<strong>Redis</strong>服务器重启时，可以加载<strong>AOF</strong>文件进行数据恢复。</li>
+</ul>
+<blockquote>
+<p>在同步期间可能会发生阻塞问题</p>
+</blockquote>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzA3LzI5ZmIyYTEzNzJhYWEucG5n?x-oss-process=image/format,png" alt="redis-aof追加阻塞"></p>
+<ul>
+<li>若果<strong>AOF</strong>文件<strong>fsync</strong>同步时间大于<strong>2s</strong>，<strong>Redis</strong>主进程就会阻塞。</li>
+<li>若果<strong>AOF</strong>文件<strong>fsync</strong>同步时间小于<strong>2s</strong>，<strong>Redis</strong>主进程就会返回。</li>
+</ul>
+<p>其实这样做是为了保证文件安全性的一种策略。</p>
+<p><strong>AOF</strong>追加阻塞会产生的问题：</p>
+<ul>
+<li><strong>fsync</strong>大于<strong>2s</strong>时候，会阻塞<strong>redis</strong>主进程，我们都知道<strong>redis</strong>主进程是用来执行<strong>redis</strong>命令的，是不能阻塞的。</li>
+<li>虽然每秒<strong>everysec</strong>刷盘策略，但是实际上不是丢失<strong>1s</strong>数据，实际有可能丢失<strong>2s</strong>数据。</li>
+</ul>
+<h3 id="重写机制"><a href="#重写机制" class="headerlink" title="重写机制"></a>重写机制</h3><ul>
+<li><p><strong>AOF</strong>将客户端的每一个写操作都追加到<strong>aof</strong>文件末尾，随着命令不断写入<strong>AOF</strong>，文件会越来越大，为了解决这个问题，<strong>Redis</strong>引入<strong>AOF</strong>重写机制压缩文件体积。</p>
+</li>
+<li><p><strong>AOF</strong>文件重写是吧Redis进程内的数据转化为写命令同步到新AOF<strong>文件的过程</strong>。</p>
+<p>比如：多条命令可以合并为一个，<code>lpush list a、lpush list b</code>可以转化为<code>lpush list a b</code>。</p>
+</li>
+<li><p><strong>AOF</strong>重写降低了文件占用空间，除此之外，另一个目的是：更小的<strong>AOF</strong>文件可以更快地被加载。</p>
+</li>
+</ul>
+<p>触发机制：</p>
+<p><strong>AOF</strong>重写过程可以手动触发和自动触发：</p>
+<ul>
+<li>手动触发：直接调用<code>bgrewriteaof</code>命令。</li>
+<li>自动触发：根据<code>auto-aof-rewrite-min-size</code>和<code>auto-aof-rewrite-percentage</code>参数确定自动触发。<ul>
+<li><code>auto-aof-rewrite-min-size</code>表示运行<strong>AOF</strong>重写时文件最小体积，默认为<strong>64MB</strong>。</li>
+<li><code>auto-aof-rewrite-percentage</code>代表当前<strong>AOF</strong>文件空间（aof_current_size）和上一次重写后AOF文件空间（aof_base_size）的比值。</li>
+</ul>
+</li>
+<li>示例：<ul>
+<li><code>auto-aof-rewrite-percentage：100</code></li>
+<li><code>auto-aof-rewrite-min-size：64mb</code></li>
+</ul>
+</li>
+<li>默认配置时当<strong>AOF</strong>文件大小是上次<strong>rewrite</strong>后大小的一倍且文件大于<strong>64mb</strong>时触发。</li>
+</ul>
+<p>当触发AOF重写时，内部流程：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzA3Lzc1NDhmZGY1YTljZmQucG5n?x-oss-process=image/format,png"></p>
+<p>执行<strong>AOF</strong>重写请求。如果当前进程正在执行<strong>AOF</strong>重写，请求不执行并返回如下响应：<strong>ERR Background append only file rewriting already in progress</strong></p>
+<ul>
+<li>父进程执行<strong>fork</strong>创建子进程，开销等同于<strong>bgsave</strong>过程。<ul>
+<li>主进程<strong>fork</strong>操作完成后，继续响应其它命令。所以修改命令依然写入<strong>AOF</strong>缓冲区并根据<code>appendfsync</code>策略同步到硬盘，保证原有<strong>AOF</strong>机制正确性。</li>
+<li>由于<strong>fork</strong>操作运用写时复制技术，子进程只能共享<strong>fork</strong>操作时的内存数据。由于父进程依然响应命令，Redis使用<strong>AOF</strong>重写缓冲区保存这部分新数据，防止新<strong>AOF</strong>文件生成期间丢失这部分数据。</li>
+</ul>
+</li>
+<li>子进程根据内存快照，按照命令合并规则写入新的<strong>AOF</strong>文件，每次批量写入硬盘数据量由配置<code>aof-rewrite-incremental-fsync</code>控制，默认为<strong>32MB</strong>，防止单词刷盘数据过多造成硬盘阻塞。<ul>
+<li>新<strong>AOF</strong>文件写入完成后，子进程发送信号给父进程，父进程更新统计信息，具体见<code>info persistence</code>的**aof_***相关统计。</li>
+<li>父进程把<strong>AOF</strong>重写缓冲区的数据写入到新的AOF文件。</li>
+<li>使用新<strong>AOF</strong>文件替换老文件，完成<strong>AOF</strong>重写。</li>
+</ul>
+</li>
+</ul>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>​        在写入<strong>AOF</strong>日志文件时，如果<strong>Redis</strong>服务器宕机，则<strong>aof</strong>日志文件会出现格式错误，在重启<strong>Redis</strong>服务器时，<strong>Redis</strong>服务器会拒绝载入这个<strong>aof</strong>文件，可以通过命令修复<strong>aof</strong>并恢复数据。</p>
+<p><code>redid-check-aof -fix appendonly.aof</code></p>
+<h3 id="AOF的优缺点"><a href="#AOF的优缺点" class="headerlink" title="AOF的优缺点"></a>AOF的优缺点</h3><p>优点：</p>
+<ul>
+<li><strong>AOF</strong>可以设置完全不同步、每秒同步、每次操作同步，默认时每秒同步。因为<strong>AOF</strong>时操作指令的追加，所以可以频繁的大量的同步。</li>
+<li><strong>AOF</strong>文件是一个值追加日志的文件，即使服务宕机为写入完整的命令，也可以通过<strong>redis-check-aof</strong>工具修复这些问题。</li>
+<li>如果<strong>AOF</strong>文件过大，<strong>Redis</strong>会在后台自动地重写<strong>AOF</strong>文件。重写后会使<strong>AOF</strong>文件压缩到最小所需的指令集。</li>
+<li><strong>AOF</strong>文件是有序保存数据看的所有写入操作，易读，易分析。即使如果不小心误操作数据看，也很容易找出业务错误指令，恢复到某个数据节点。例如不小<code>FLUSHALL</code>，可以非常容易恢复到执行命令之前。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>相同数据量下，<strong>AOF</strong>的文件通常体积会比RDB大。因为<strong>AOF</strong>是存指令的，而RDB是所有指令的结果快照。但<strong>AOF</strong>在日志重写后会压缩一些空间。</li>
+<li>在大量写入和载入的时候，<strong>AOF</strong>的效率会比<strong>RDB</strong>低，因为大量写入，<strong>AOF</strong>会执行更多的保存命令，载入的时候也需要大量的重执行命令来得到最后的结果。<strong>RDB</strong>对此更有优势。</li>
+</ul>
+<h3 id="AOF常用配置"><a href="#AOF常用配置" class="headerlink" title="AOF常用配置"></a>AOF常用配置</h3><p><code>appendonly no</code>：是否开启<strong>AOF</strong> </p>
+<p><code>appendfilename &quot;appendonly.aof&quot;</code>：<strong>AOF</strong>文件名 </p>
+<p><code>dir ./</code>：<strong>RDB</strong>文件和<strong>AOF</strong>文件所在目录 </p>
+<p><code>appendfsync everysec</code>：fsync持久化策略 </p>
+<p><code>no-appendfsync-on-rewrite no</code>：<strong>AOF</strong>重写期间是否禁止<strong>fsync</strong>；如果开启该选项，可以减轻文件重写时<strong>CPU</strong>和硬盘的负载（尤其是硬盘），但是可能会丢失<strong>AOF</strong>重写期间的数据；需要在负载和安全性之间进行平衡</p>
+<p><code>auto-aof-rewrite-percentage 100</code>：文件重写触发条件之一 </p>
+<p><code>auto-aof-rewrite-min-size 64mb</code>：文件重写触发提交之一 </p>
+<p><code>aof-load-truncated yes</code>：如果<strong>AOF</strong>文件结尾损坏，<strong>Redis</strong>启动时是否仍载入<strong>AOF</strong>文件</p>
+<h2 id="重启加载的选择"><a href="#重启加载的选择" class="headerlink" title="重启加载的选择"></a>重启加载的选择</h2><p><strong>AOF</strong>和<strong>RDB</strong>文件都可以用于服务器重启时的数据恢复。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzA3Lzg4MzZlMjgwZjVhMTIucG5n?x-oss-process=image/format,png" alt="redis重写加载"></p>
+<h2 id="持久化的选择"><a href="#持久化的选择" class="headerlink" title="持久化的选择"></a>持久化的选择</h2><p>​        在实际生产环境中，根据数据量、应用对数据的安全要求、预算限制等不同情况，会有各种各样的持久化策略；如完全不使用任何持久化、使用<strong>RDB</strong>或<strong>AOF</strong>的一种，或同时开启<strong>RDB</strong>和AOF<strong>持久化等</strong>。</p>
+<p>​        此外，持久化的选择必须与Redis的主从策略一起考虑，因为主从复制与持久化同样具有数据备份的功能，而且主机<strong>master</strong>和从机<strong>slave</strong>可以独立的选择持久化方案。 </p>
+<p>面分场景来讨论持久化策略的选择，下面的讨论也只是作为参考，实际方案可能更复杂更具多样性。</p>
+<ul>
+<li>如果<strong>Redis</strong>中的数据完全丢弃也没有关系（如<strong>Redis</strong>完全用作<strong>DB</strong>层数据的<strong>cache</strong>），那么无论是单机，还是主从架构，都可以不进行任何持久化。</li>
+<li>在单机环境下（对于个人开发者，这种情况可能比较常见），如果可以接受十几分钟或更多的数据丢失，选择<strong>RDB</strong>对<strong>Redis</strong>的性能更加有利；如果只能接受秒级别的数据丢失，应该选择<strong>AOF</strong>。</li>
+<li>但在多数情况下，我们都会配置主从环境，<strong>slave</strong>的存在既可以实现数据的热备，也可以进行读写分离分担<strong>Redis</strong>读请求，以及在<strong>master</strong>宕掉后继续提供服务。在这种情况下的做法是： <ul>
+<li><strong>master</strong>：完全关闭持久化（包括<strong>RDB</strong>和<strong>AOF</strong>），这样可以让master的性能达到最好；</li>
+<li>slave：关闭<strong>RDB</strong>，开启<strong>AOF</strong>（如果对数据安全要求不高，开启<strong>RDB</strong>关闭<strong>AOF</strong>也可以），并定时对持久化文件进行备份（如备份到其他文件夹，并标记好备份的时间）；然后关闭<strong>AOF</strong>的自动重写，然后添加定时任务，在每天<strong>Redis</strong>闲时（如凌晨12点）调用<code>bgrewriteaof</code>。 </li>
+<li>这里需要解释一下，为什么开启了主从复制，可以实现数据的热备份，还需要设置持久化呢？因为在一些特殊情况下，主从复制仍然不足以保证数据的安全，例如：<ul>
+<li><strong>master</strong>和<strong>slave</strong>进程同时停止：考虑这样一种场景，如果<strong>master</strong>和<strong>slave</strong>在同一个机房，则一次停电事故就可能导致<strong>master</strong>和<strong>slave</strong>机器同时关机，<strong>Redis</strong>进程停止；如果没有持久化，则面临的是数据的完全丢失。</li>
+<li><strong>master</strong>误重启：考虑这样一种场景，<strong>master</strong>服务因为故障宕掉了，如果系统中有自动拉起机制（即检测到服务停止后重启该服务）将<strong>master</strong>自动重启，由于没有持久化文件，那么<strong>master</strong>重启后数据是空的，<strong>slave</strong>同步数据也变成了空的；如果<strong>master</strong>和<strong>slave</strong>都没有持久化，同样会面临数据的完全丢失。需要注意的是，即便是使用了哨兵进行自动的主从切换，也有可能在哨兵轮询到<strong>master</strong>之前，便被自动拉起机制重启了。因此，应尽量避免“自动拉起机制”和“不做持久化”同时出现。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>异地灾备：上述讨论的几种持久化策略，针对的都是一般的系统故障，如进程异常退出、宕机、断电等，这些故障不会损坏硬盘。但是对于一些可能导致硬盘损坏的灾难情况，如火灾地震，就需要进行异地灾备。 <ul>
+<li>例如对于单机的情形，可以定时将<strong>RDB</strong>文件或重写后的<strong>AOF</strong>文件，通过<strong>scp</strong>拷贝到远程机器，如阿里云；对于主从的情形，可以定时在<strong>master</strong>上执行<code>bgsave</code>，然后将<strong>RDB</strong>文件拷贝到远程机器，或者在<strong>slave</strong>上执行<code>bgrewriteaof</code>重写<strong>AOF</strong>文件后，将<strong>AOF</strong>文件拷贝到远程机器上。 </li>
+<li>一般来说，由于<strong>RDB</strong>文件文件小、恢复快，因此灾难恢复常用<strong>RDB</strong>文件；异地备份的频率根据数据安全性的需要及其它条件来确定，但最好不要低于一 天一次。</li>
+</ul>
+</li>
+</ul>
+<h2 id="持久化配置方案"><a href="#持久化配置方案" class="headerlink" title="持久化配置方案"></a>持久化配置方案</h2><ul>
+<li><p>企业级的持久化的配置策略 </p>
+<ul>
+<li><code>save 60 10000</code>：如果你希望尽可能确保说，<strong>RDB</strong>最多丢1分钟的数据，那么尽量就是每隔1分钟都生成一个快照，低峰期，数据量很少，也没必要 10000-&gt;生成RDB，1000-&gt;RDB，这个根据你自己的应用和业务的数据量，自己去决定 </li>
+<li><strong>AOF</strong>一定要打开。</li>
+<li><code>auto-aof-rewrite-percentage 100</code>: 就是当前<strong>AOF</strong>大小膨胀到超过上次**100%**，上次的两倍 </li>
+<li><code>auto-aof-rewrite-min-size 64mb</code>: 根据你的数据量来定，<strong>16mb</strong>，<strong>32mb</strong> </li>
+</ul>
+</li>
+<li><p>数据备份方案 <strong>RDB</strong>非常适合做冷备，每次生成之后，就不会再有修改了</p>
+<ul>
+<li>写<strong>crontab</strong>定时调度脚本去做数据备份</li>
+<li>每小时都<strong>copy</strong>一份<strong>rdb</strong>的备份，到一个目录中去，仅仅保留最近<strong>48</strong>小时的备份</li>
+<li>每天都保留一份当日的<strong>rdb</strong>的备份，到一个目录中去，仅仅保留最近<strong>1</strong>个月的备份 </li>
+<li>每次<strong>copy</strong>备份的时候，都把太旧的备份给删了 </li>
+<li>每天晚上将当前服务器上所有的数据备份，发送一份到远程的云服务上去【crontab】</li>
+</ul>
+</li>
+</ul>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-05T15:05:29.000Z" title="6/5/2020, 3:05:29 PM">2020-06-05</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">20 分钟读完 (大约2953个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/05/redis%E4%B9%8B%E4%B8%BB%E4%BB%8E%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86.html">redis之主从问题处理</a></h1><div class="content"><h2 id="主从复制的常用相关配置"><a href="#主从复制的常用相关配置" class="headerlink" title="主从复制的常用相关配置"></a>主从复制的常用相关配置</h2><ul>
+<li><p>Slaveof</p>
+<p><code>slaveof &lt;masterip&gt; &lt;masterport&gt;</code></p>
+<p><strong>slave</strong>实例需要配置该项，指向<strong>master</strong>的(ip,port)</p>
+</li>
+<li><p>masterauth</p>
+<p><code>masterauth &lt;master-password&gt;</code></p>
+<p>如果<strong>master</strong>实例启用了密码保护，则该配置项需要填<strong>master</strong>的启动密码；</p>
+<p>如果未启用，需要将该配置项注视掉。</p>
+</li>
+<li><p>slave-serve-stale-data</p>
+<p>指定<strong>slave</strong>与<strong>master</strong>连接中断时的动作。默认为<strong>yes</strong>，表明<strong>slave</strong>会继续应答来自<strong>client</strong>的请求，但这些数据可能已经过期（因为连接中断导致无法从<strong>master</strong>同步）。若配置为<strong>no</strong>，则<strong>slave</strong>除正常应答“<strong>INFO</strong>”和“<strong>SLAVEOF</strong>”命令外，其余来自客户端的请求命令均会得到“<strong>SYNC with master in progress</strong>“的应答，直到该<strong>slave</strong>与<strong>master</strong>连接重建成功或该<strong>slave</strong>被提升为<strong>master</strong>。</p>
+</li>
+<li><p>slave-read-only</p>
+<p>指定<strong>slave</strong>是否只读，默认为<strong>yes</strong>。若配置为<strong>no</strong>，表示<strong>slave</strong>是可写的，但写的内容在主从同步完成后会被删除掉。</p>
+</li>
+<li><p>repl-disable-tcp-nodelay</p>
+<p>指定向<strong>slave</strong>同步数据时，是否禁用<strong>socket</strong>的<strong>NO_DELAY</strong>选项。若配置为<strong>yes</strong>，则禁用<strong>NO_DELAY</strong>，则<strong>TCP</strong>协议栈会合并小包统一发送，这样可以减少主从节点间的包数量并节省宽带，但会增加数据同步到<strong>slave</strong>的时间。若配置为<strong>no</strong>，表明启用<strong>NO_DELAY</strong>，则<strong>TCP</strong>协议栈不会延迟小包的发送时间，这样数据同步的延时会减少，但需要更大的宽带。</p>
+</li>
+<li><p>slave-priority</p>
+<p>指定<strong>slave</strong>的优先级。在不只1个<strong>slave</strong>存在的部署环境下，当<strong>master</strong>宕机时，<strong>Redis Sentinel</strong> 会将<strong>priority</strong>值最小的<strong>slave</strong>提升为<strong>master</strong>。需要注意的是，若该配置项为0，则对应的<strong>slave</strong>永远不会被<strong>Redis Sentinel</strong> 自动提升为<strong>master</strong>。</p>
+</li>
+</ul>
+<h2 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h2><h3 id="复制数据延迟"><a href="#复制数据延迟" class="headerlink" title="复制数据延迟"></a>复制数据延迟</h3><p><strong>Redis</strong>复制数据的延迟由于异步复制特性是无法避免的，延迟取决于网络宽带和命令阻塞情况，比如刚在主节点写入数据后立刻在从节点上读取可能获取不到。需要业务场景允许短时间内的数据延迟。对于无法容忍大量延迟场景，可以编写外部监控程序监听主从节点的复制偏移量，当延迟较大时触发报警或通知客户端避免读取延迟过高的从节点。</p>
+<p>具体实现逻辑：</p>
+<ul>
+<li>监控程序定期检查主从节点的偏移量，主节点偏移量在<code>info replication</code>的<code>master_repl_offset</code>指标记录，从节点偏移量可以查询主节点的<code>slave0</code>字段的<code>offset</code>指标，它们的差值就是主从节点延迟的字节量。</li>
+<li>对于无法容忍大量延迟场景，可以编写外部监控程序监听主从节点的复制偏移量，当延迟较大时触发报警或者通知客户端避免读取延迟过高的从节点，同时从节点的<code>slave-serve-stable-data</code>参数也与此有关，它控制这种情况下从节点的表现，当从库同主机失去连接或者复制正在进行，从机库有两种运行方式。</li>
+</ul>
+<h3 id="读取过期数据"><a href="#读取过期数据" class="headerlink" title="读取过期数据"></a>读取过期数据</h3><p>当主节点存储大量设置超时的数据时，redis内部需要维护过期数据删除策略，删除策略主要有两种：</p>
+<ul>
+<li><p>惰性删除</p>
+<p>主节点每次处理读取命令时，都会检查健是否超时，如果超时则执行·<code>del</code>命令删除键对象，之后<code>del</code>命令也会异步发给从节点。因为保持复制的一致性，从节点自身永远不会主动删除超时数据。</p>
+</li>
+<li><p>定时删除</p>
+<p><strong>Redis</strong>主节点在内部定时任务会循环采样一定数据量的键，当发现采用的键过期时会执行<code>del</code>命令，之后再同步给从节点。</p>
+</li>
+</ul>
+<h3 id="从节点故障问题"><a href="#从节点故障问题" class="headerlink" title="从节点故障问题"></a>从节点故障问题</h3><p>对于从节点的故障问题，需要在客户端维护一个可用从节点可用列表，当从节点故障时，立刻切换到其他从节点或主节点，<strong>redis Cluster</strong>可以解决这个问题。</p>
+<h2 id="配置不一致"><a href="#配置不一致" class="headerlink" title="配置不一致"></a>配置不一致</h2><p>主节点和从节点不同，经常导致主节点和从节点的配置不同，并带来问题。</p>
+<p>主从配置不一致是一个容易忽视的问题。对于有些配置主从之间是可以不一致，比如：主节点关闭AOF，从节点开启AOF。但对于内存相关的配置必须要一致，比如<code>maxmemory</code>,<code>hash-max-ziplist-entries</code>等参数。</p>
+<p>数据丢失：主机和从机有时候发生配置不一致的情况，例如<code>maxmemory</code>不一致。假如主机配置<code>maxmemory</code>为8G，从机设置为4G，这个时候是可以用的，而且不会报错。但如果要做高可用，让从节点变成主节点的时候，就会发现数据已经丢失，而且无法挽回。</p>
+<h2 id="规避全量复制"><a href="#规避全量复制" class="headerlink" title="规避全量复制"></a>规避全量复制</h2><p>全量复制指的是当<strong>slave</strong>断开并重启后，<strong>runid</strong>产生变化而导致需要在<strong>master</strong>主机里拷贝全部数据。这种拷贝全部数据的过程非常耗资源。</p>
+<p>全量复制是不可避免的，例如第一次的全量复制就不可避免，这时我们需要选择小主节点，且<code>maxmemory</code>值不要过大，这样就会比较快。同时选择在低峰值的时候做全量复制。</p>
+<p>造成全量复制的原因：</p>
+<ul>
+<li>主从机的运行<strong>runid</strong>不匹配。解释一下，主节点如果重启，<strong>runid</strong>将会发生变化。如果从节点监控到<strong>runid</strong>不是同一个，它就会认为你的节点不安全。当发生故障转移的时候，如果主节点发生故障，那么从节点就会变成主节点（哨兵和集群）。</li>
+<li>复制缓冲区空间不足，比如默认值为1M，可以部分复制，但如果缓冲区不够大的话，首先需要网络中断，部分复制将无法满足。其次需要增大复制缓冲区配置<code>repl-backlog-size</code>，对网络的缓冲增强。</li>
+</ul>
+<p>怎么解决：</p>
+<ul>
+<li>在一些场景下，可能希望对主节点进行重启，例如主节点内存碎片率过高，或者希望调整一些只能在启动时调整的参数。如果使用普通的手段重启主节点，会使得<strong>runid</strong>发生变化，可能导致不必要的全量复制。</li>
+<li>为了解决这个问题，<strong>Redis</strong>提供了<strong>debug reload</strong>的重启方式：重启后，主节点的<strong>runid</strong>和<strong>offset</strong>都不受影响，避免了全量复制。</li>
+</ul>
+<h2 id="规避复制风暴"><a href="#规避复制风暴" class="headerlink" title="规避复制风暴"></a>规避复制风暴</h2><p>复制风暴是指大量从节点对同一主节点或者对同一台机器的多个主节点短时间内发起全量复制的过程。复制风暴对发起复制的主节点或者机器造成大量开销，导致 CPU、内存、带宽消耗。因此我们应该分析出复制风暴发生的场景，提前采用合理的方式规避。规避方式有如下几个。</p>
+<h3 id="单节点复制风暴"><a href="#单节点复制风暴" class="headerlink" title="单节点复制风暴"></a>单节点复制风暴</h3><p>当一个主机下面挂了很多个 <strong>slave</strong>从机的时候，主机 <strong>master</strong> 挂了，这时 <strong>master</strong> 主机重启后，因为 <strong>runid</strong> 发生了变化，所有的 <strong>slave</strong> 从机都要做一次全量复制。这将引起单节点和单机器的复制风暴，开销会非常大。</p>
+<p>解决：</p>
+<ul>
+<li>可以采用树状结构降低多个从节点对主节点的消耗。</li>
+<li>从节点采用树状树非常有用，网络开销交给位于中间层的从节点，而不必消耗顶层的主节点。但是这种树状结构也带来了运维的复杂性，增加了手动和自动 处理故障转移的难度。</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzA1LzI2ZGMzOWNiOWRmZTUucG5n?x-oss-process=image/format,png"></p>
+<h3 id="单机器复制风暴"><a href="#单机器复制风暴" class="headerlink" title="单机器复制风暴"></a>单机器复制风暴</h3><p>由于 <strong>Redis</strong> 的单线程架构，通常单台机器会部署多个 <strong>Redis</strong> 实例。当一台机器（<strong>machine</strong>）上同时部署多个主节点（<strong>master</strong>）时，如果每个 <strong>master</strong> 主机只有一台 <strong>slave</strong> 从机，那么当机器宕机以后，会产生大量全量复制。这种情况是非常危险的情况，带宽马上会被占用，会导致不可用。</p>
+<p>解决：</p>
+<ul>
+<li>应该把主节点尽量分散在多台机器上，避免在单台机器上部署过多的主节点。 </li>
+<li>当主节点所在机器故障后提供故障转移机制，避免机器恢复后进行密集的全量复制。</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzA1LzQ5NzJkZmFkN2EyNTEucG5n?x-oss-process=image/format,png"></p>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>###########从库############## </p>
+<p>#设置该数据库为其他数据库的从数据库 </p>
+<p><code>slaveof &lt;masterip&gt; &lt;masterport&gt; </code></p>
+<p>#主从复制中，设置连接<strong>master</strong>服务器的密码（前提<strong>master</strong>启用了认证） </p>
+<p><code>masterauth &lt;master-password&gt; </code></p>
+<p># 当从库同主库失去连接或者复制正在进行，从库有两种运行方式： </p>
+<p># 1) 如果<code>slave-serve-stale-data</code>设置为<strong>yes</strong>(默认设置)，从库会继续相应客户端的请求 </p>
+<p># 2) 如果<code>slave-serve-stale-data</code>设置为<strong>no</strong>，除了<strong>INFO</strong>和<strong>SLAVOF</strong>命令之外的任何请求都会返回一个错误”<strong>SYNC with master in progress</strong>“ </p>
+<p><code>slave-serve-stale-data yes </code></p>
+<p>#当主库发生宕机时候，哨兵会选择优先级最高的一个称为主库，从库优先级配置默认100，数值越小优先级越高 </p>
+<p><code>slave-priority 100</code></p>
+<p>#从节点是否只读；默认<strong>yes</strong>只读，为了保持数据一致性，应保持默认。</p>
+<p><code>slave-read-only yes</code></p>
+<p>########主库配置############## </p>
+<p>#在<strong>slave</strong>和<strong>master</strong>同步后（发送<strong>psync</strong>/<strong>sync</strong>），后续的同步是否设置成<strong>TCP_NODELAY</strong>假如设置成<strong>yes</strong>，则<strong>redis</strong>会合并小的<strong>TCP</strong>包从而节省带宽，但会增加同步延迟（40ms），造成<strong>master</strong>与<strong>slave</strong>数据不一致假如设置成<strong>no</strong>，则<strong>redis master</strong>会立即发送同步数据，没有延迟。</p>
+<p>#前者关注性能，后者关注一致性 </p>
+<p><code>repl-disable-tcp-nodelay no </code></p>
+<p>#从库会按照一个时间间隔向主库发送<strong>PING</strong>命令来判断主服务器是否在线，默认是10秒 </p>
+<p><code>repl-ping-slave-period 10</code> </p>
+<p>#复制积压缓冲区大小设置 </p>
+<p><code>repl-backlog-size 1mb</code> </p>
+<p>#<strong>master</strong>没有<strong>slave</strong>一段时间会释放复制缓冲区的内存，<code>repl-backlog-ttl</code>用来设置该时间长度。单位为秒。 </p>
+<p><code>repl-backlog-ttl 3600</code></p>
+<p>#<strong>redis</strong>提供了可以让<strong>master</strong>停止写入的方式，如果配置了<code>min-slaves-to-write</code>，健康的<strong>slave</strong>的个数小于<strong>N</strong>，<strong>mater</strong>就禁止写入。<strong>master</strong>最少得有多少个健康的<strong>slave</strong>存活才能执行写命令。这个配置虽然不能保证<strong>N</strong>个<strong>slave</strong>都一定能接收到<strong>master</strong>的写操作，但是能避免没有足够健康的slave的时候，<strong>master</strong>不能写入来避免数据丢失。设置为0是关闭该功能。 </p>
+<p><code>min-slaves-to-write 3</code></p>
+<p><code>min-slaves-max-lag 10</code> </p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-12-19T17:01:46.000Z" title="12/19/2019, 5:01:46 PM">2019-12-19</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">10 分钟读完 (大约1539个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/19/docker%E5%AE%9E%E7%8E%B0redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6.html">docker实现redis主从复制</a></h1><div class="content"><h3 id="主从复制说明"><a href="#主从复制说明" class="headerlink" title="主从复制说明"></a>主从复制说明</h3><h4 id="面临问题"><a href="#面临问题" class="headerlink" title="面临问题"></a>面临问题</h4><p>在实际的场景当中单一节点的redis容易面临风险。<br>比如:</p>
+<ul>
+<li>机器故障。我们部署到一台 Redis 服务器，当发生机器故障时，需要迁移到另外一台服务器并且要保证数据是同步的。而数据是最重要的，如果你不在乎， 基本上也就不会使用 Redis 了。</li>
+</ul>
+<p>要实现分布式数据库的更大的存储容量和承受高并发访问量，我们会将原来集中式数据库的数据分别存储到其他多个网络节点上。</p>
+<p>Redis 为了解决这个单一节点的问题，也会把数据复制多个副本部署到其他节点上进行复制，实现 Redis的高可用，实现对数据的冗余备份，从而保证数据和服务 的高可用。</p>
+<h4 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h4><ul>
+<li>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master)，后者称为从节点(slave),数据的复制是单向的，只能由主节点到 从节点。</li>
+<li>默认情况下，每台Redis服务器都是主节点，且一个主节点可以有多个从节点(或没有从节点)，但一个从节点只能有一个主节点。</li>
+</ul>
+<h3 id="主从复制的作用"><a href="#主从复制的作用" class="headerlink" title="主从复制的作用"></a>主从复制的作用</h3><ul>
+<li>数据冗余:主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
+<li>故障恢复:当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复;实际上是一种服务的冗余。</li>
+<li>负载均衡:在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务(即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点) 分担服务器负载;尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。</li>
+<li>读写分离:可以用于实现读写分离，主库写、从库读，读写分离不仅可以提高服务器的负载能力，同时可根据需求的变化，改变从库的数量;</li>
+<li>高可用基石:除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础。        </li>
+</ul>
+<h4 id="主从复制启用"><a href="#主从复制启用" class="headerlink" title="主从复制启用"></a>主从复制启用</h4><p>从节点开启主从复制，有3种方式:</p>
+<ol>
+<li>配置文件<br>在从服务器的配置文件中加入:slaveof <masterip> <masterport><br>不推荐使用 配置文件可被动态修改</li>
+<li>启动命令<br>redis-server启动命令后加入 –slaveof <masterip> <masterport></li>
+<li>客户端命令<br>Redis服务器启动后，直接通过客户端执行命令:slaveof <masterip> <masterport>，则该Redis实例成为从节点。<br>通过 info replication 命令可以看到复制的一些参数信息</li>
+</ol>
+<h4 id="主从复制原理"><a href="#主从复制原理" class="headerlink" title="主从复制原理"></a>主从复制原理</h4><p>主从复制的原理以及过程必须要掌握，这样我们才知道为什么会出现这些问题 主从复制过程大体可以分为3个阶段:连接建立阶段(即准备阶段)、数据同步阶段、命令传播阶段。<br>在从节点执行 slaveof 命令后，复制过程便开始运作，下面图示大概可以看到， 从图中可以看出复制过程大致分为6个过程<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNTVmNTM3MmVhNTgzNy5wbmc?x-oss-process=image/format,png"></p>
+<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><h4 id="dockerfile构建redis镜像"><a href="#dockerfile构建redis镜像" class="headerlink" title="dockerfile构建redis镜像"></a>dockerfile构建redis镜像</h4><p>DockerFile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">FROM alpine</span><br><span class="line">RUN sed -i &#x27;s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g&#x27; /etc/apk/repositories \</span><br><span class="line">  &amp;&amp; apk add  gcc g++ libc-dev  wget vim  openssl-dev make  linux-headers \</span><br><span class="line">  &amp;&amp; rm -rf /var/cache/apk/*</span><br><span class="line"></span><br><span class="line">#通过选择更小的镜像，删除不必要文件清理不必要的安装缓存，从而瘦身镜像</span><br><span class="line">#创建相关目录能够看到日志信息跟数据跟配置文件</span><br><span class="line">RUN mkdir -p /usr/src/redis \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/data \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/conf \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/log   \</span><br><span class="line">      &amp;&amp; mkdir -p /var/log/redis</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RUN wget  -O /usr/src/redis/redis-4.0.11.tar.gz  &quot;http://download.redis.io/releases/redis-4.0.11.tar.gz&quot; \</span><br><span class="line">   &amp;&amp; tar -xzf /usr/src/redis/redis-4.0.11.tar.gz  -C /usr/src/redis \</span><br><span class="line">   &amp;&amp; rm -rf /usr/src/redis/redis-4.0.11.tar.tgz</span><br><span class="line"></span><br><span class="line">RUN cd /usr/src/redis/redis-4.0.11 &amp;&amp;  make &amp;&amp; make PREFIX=/usr/local/redis install \</span><br><span class="line">&amp;&amp; ln -s /usr/local/redis/bin/*  /usr/local/bin/  &amp;&amp; rm -rf /usr/src/redis/redis-4.0.11</span><br><span class="line"></span><br><span class="line">#COPY ./conf/redis.conf  /usr/src/redis/conf</span><br><span class="line"></span><br><span class="line">CMD [&quot;/usr/local/bin/redis-server&quot;,&quot;/usr/src/redis/conf/redis.conf&quot;]</span><br></pre></td></tr></table></figure>
+<p>切换到当前dockfile文件目录下 执行命令</p>
+<p><code>docker build -t redis .</code></p>
+<p>等待构建完成就可以了</p>
+<h4 id="docker创建自定义网络及redis主从集群规划"><a href="#docker创建自定义网络及redis主从集群规划" class="headerlink" title="docker创建自定义网络及redis主从集群规划"></a>docker创建自定义网络及redis主从集群规划</h4><p>执行自定义网络命令</p>
+<p><code>docker network create --subnet=192.168.1.0/24 redis-network</code></p>
+<table>
+<thead>
+<tr>
+<th>容器名称</th>
+<th>容器IP地址</th>
+<th>映射端口号</th>
+<th>宿主机IP地址</th>
+<th>服务运行模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>redis-master</td>
+<td>192.168.1.2</td>
+<td>6380-&gt;6379</td>
+<td>127.0.0.1</td>
+<td>master</td>
+</tr>
+<tr>
+<td>redis-slave</td>
+<td>192.168.1.3</td>
+<td>6381-&gt;6379</td>
+<td>127.0.0.1</td>
+<td>slave</td>
+</tr>
+</tbody></table>
+<h4 id="docker启动容器"><a href="#docker启动容器" class="headerlink" title="docker启动容器"></a>docker启动容器</h4><p>在 /data/ 下面创建该目录结构</p>
+<p>data和log下面文件忽略</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNDU2MTlhNWFhOTE5Yi5wbmc?x-oss-process=image/format,png"></p>
+<p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1hi4eAt6RZTBhGNX-bawecA">目录代码</a></p>
+<p>提取码：r8r1</p>
+<p>下载完放到 /data 下面</p>
+<p>用户可自行定义宿主机目录</p>
+<p>master<br><code>docker run -itd --name  redis-master  --net redis-network -v /data/redis/master:/usr/src/redis  -p 6380:6379  --ip 192.168.1.2  redis </code></p>
+<p>slave<br><code>docker run -itd --name  redis-slave  --net redis-network -v /data/redis/slave:/usr/src/redis  -p 6381:6379  --ip 192.168.1.3  redis </code></p>
+<h4 id="测试主从复制"><a href="#测试主从复制" class="headerlink" title="测试主从复制"></a>测试主从复制</h4><p>主从的配置文件 没有设置redis密码</p>
+<p>开两个终端分别执行</p>
+<p><code>docker exec -it redis-master sh</code></p>
+<p><code>docker exec -it redis-slave sh</code></p>
+<p>进入容器后执行(都要执行)</p>
+<p><code>redis-cli</code></p>
+<p>在slave执行</p>
+<p><code>SLAVEOF 192.168.1.2 6379</code></p>
+<p><code>info repliaction</code></p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvMWMyZGMxMzJmNjczMS5wbmc?x-oss-process=image/format,png"></p>
+<p><code>master_link_status</code>为up就成功了！</p>
+<p>当前是通过内网连接 端口号为6379</p>
+<p>如果通过宿主机IP连接 端口号为6380</p>
+<p>这时候在master进行操作 就可以看到slave的变化了！</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNjM5YjQxZTA3MDIzZi5wbmc?x-oss-process=image/format,png"></p>
+<hr>
+</div></article></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/44792981?s=400&amp;u=273c6d745868dcacf7889e5da4499b751179f773&amp;v=4" alt="Stitch"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Stitch</p><p class="is-size-6 is-block">Alien monster</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Alien</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">39</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Stitch-June" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/Stitch-June"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Go/"><span class="level-start"><span class="level-item">Go</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/Kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Laravel/"><span class="level-start"><span class="level-item">Laravel</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Php/"><span class="level-start"><span class="level-item">Php</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/Swoole/"><span class="level-start"><span class="level-item">Swoole</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/uncategorized/"><span class="level-start"><span class="level-item">uncategorized</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li></ul></div></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/09/"><span class="level-start"><span class="level-item">九月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/06/"><span class="level-start"><span class="level-item">六月 2020</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/05/"><span class="level-start"><span class="level-item">五月 2020</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/04/"><span class="level-start"><span class="level-item">四月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/03/"><span class="level-start"><span class="level-item">三月 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/12/"><span class="level-start"><span class="level-item">十二月 2019</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/10/"><span class="level-start"><span class="level-item">十月 2019</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/08/"><span class="level-start"><span class="level-item">八月 2019</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-04-01T00:48:13.000Z">2021-04-01</time></p><p class="title"><a href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-03-31T01:12:26.000Z">2021-03-31</time></p><p class="title"><a href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-23T06:52:22.000Z">2020-09-23</time></p><p class="title"><a href="/2020/09/23/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BD%BF%E7%94%A8.html">ElasticSearch全文检索引擎-使用</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-20T19:06:20.000Z">2020-09-20</time></p><p class="title"><a href="/2020/09/20/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BB%8B%E7%BB%8D.html">ElasticSearch全文检索引擎-介绍</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-20T18:52:44.000Z">2020-09-20</time></p><p class="title"><a href="/2020/09/20/go%E5%9F%BA%E6%9C%AC%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84.html">Go基本程序结构</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Stitch&#039;s Blog</a><p class="is-size-7"><span>&copy; 2021 stitch</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

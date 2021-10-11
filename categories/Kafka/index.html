@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>分类: Kafka - Stitch&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Stitch&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Stitch&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Stitch&#039;s Blog"><meta property="og:url" content="https://stitch.cn/"><meta property="og:site_name" content="Stitch&#039;s Blog"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://stitch.cn/img/og_image.png"><meta property="article:author" content="stitch"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stitch.cn"},"headline":"Stitch's Blog","image":["https://stitch.cn/img/og_image.png"],"author":{"@type":"Person","name":"stitch"},"publisher":{"@type":"Organization","name":"Stitch's Blog","logo":{"@type":"ImageObject","url":{"text":"Stitch's Blog"}}},"description":""}</script><link rel="alternate" href="/atom.xml" title="Stitch&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Stitch&#039;s Blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><div class="card-content"><nav class="breadcrumb" aria-label="breadcrumbs"><ul><li><a href="/categories">分类</a></li><li class="is-active"><a href="#" aria-current="page">Kafka</a></li></ul></nav></div></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:40:57.000Z" title="8/27/2019, 5:40:57 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kafka/">Kafka</a></span><span class="level-item">3 分钟读完 (大约502个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6kafka-php%E6%93%8D%E4%BD%9C%E4%BD%BF%E7%94%A8kafka.html">消息中间件Kafka - PHP操作使用Kafka</a></h1><div class="content"><h1 id="PHP使用Kafka"><a href="#PHP使用Kafka" class="headerlink" title="PHP使用Kafka"></a>PHP使用Kafka</h1><blockquote>
+<p><strong>我们需要安装<a target="_blank" rel="noopener" href="https://github.com/edenhill/librdkafka">libkafka</a>和<a target="_blank" rel="noopener" href="https://github.com/arnaud-lb/php-rdkafka">rdkafka</a></strong></p>
+</blockquote>
+<h2 id="安装libkafka"><a href="#安装libkafka" class="headerlink" title="安装libkafka"></a>安装libkafka</h2><ol>
+<li><p><strong>下载</strong></p>
+<p>去GitHub上克隆下来</p>
+<p> <code>git clone https://github.com/edenhill/librdkafka.git</code></p>
+</li>
+<li><p><strong>安装</strong></p>
+</li>
+</ol>
+<p>   <code>cd librdkafka/</code></p>
+<pre><code>`./configure &amp;&amp; make &amp;&amp; make install`
+</code></pre>
+<p>   安装成功界面 没有报错就是安装成功</p>
+<pre><code>![14c1ce5d9719d16db1f2de5e9eed9553.png](https://img-blog.csdnimg.cn/20190320100758703.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70)
+</code></pre>
+<h2 id="安装rdkafka"><a href="#安装rdkafka" class="headerlink" title="安装rdkafka"></a>安装rdkafka</h2><ol>
+<li><p><strong>下载</strong></p>
+<p> <code>git clone https://github.com/arnaud-lb/php-rdkafka</code></p>
+<p> <code>cd php-rdkafka/</code></p>
+</li>
+<li><p><strong>为php安装扩展</strong></p>
+</li>
+</ol>
+<pre><code>在php-rdkafka这个目录下
+
+`phpize`
+
+然后会生成源代码安装的脚本
+
+把php-config的位置改成自己php-config的位置
+
+` ./configure --with-php-config=/usr/local/php/bin/php-config`
+
+编译安装
+
+`make &amp;&amp; make install`
+
+成功后会出现一个文件夹
+
+![70c28ed68f37346a84abe96a2fe03aae.png](https://img-blog.csdnimg.cn/20190320100828577.png)
+
+这个位置就是保存的我们刚刚安装的扩展
+
+进入该目录
+
+`cd /usr/local/php/lib/php/extensions/no-debug-non-zts-20170718/`
+
+会发现出现个rdkafka.so文件
+
+![2bb11d41b5e08b42a3fad4fc181eb791.png](https://img-blog.csdnimg.cn/20190320100957658.png)
+
+修改php.ini文件加入  这里的路径就是写自己rdkafka.so文件的路径
+
+`extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20170718/rdkafka.so `
+重启php
+</code></pre>
+<p>   <code> php-m</code></p>
+<p>   出现rdkafka就是安装成功</p>
+<pre><code>![fe40f168197be21fb00db6d06428df24.png](https://img-blog.csdnimg.cn/20190320101008302.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70)
+</code></pre>
+<h2 id="php操作kafka"><a href="#php操作kafka" class="headerlink" title="php操作kafka"></a>php操作kafka</h2><blockquote>
+<p><strong>运行前先开启我们的zookeeper和kafka 上篇文章有如何开启</strong></p>
+</blockquote>
+<ol>
+<li><strong>运行producer</strong><br> kafka默认端口9092 <code>vim producer.php</code><pre><code> &lt;?php
+    $rk = new RdKafka\Producer();
+    $rk-&gt;setLogLevel(LOG_DEBUG);
+    $rk-&gt;addBrokers(&quot;ip:9092&quot;);       
+    $topic = $rk-&gt;newTopic(&quot;test&quot;);
+    $topic-&gt;produce(RD_KAFKA_PARTITION_UA, 0, &quot;要发送的消息&quot;);
+           
+           
+</code></pre>
+</li>
+<li><strong>运行consumer</strong><br><code>vim consumer.php</code><pre><code> &lt;?php
+    $rk = new RdKafka\Consumer();
+    $rk-&gt;setLogLevel(LOG_DEBUG);
+    $rk-&gt;addBrokers(&quot;ip&quot;);
+    $topic = $rk-&gt;newTopic(&quot;test&quot;);
+    $topic-&gt;consumeStart(0, RD_KAFKA_OFFSET_BEGINNING);
+    while(true)&#123;
+        sleep(1);
+        $msg = $topic-&gt;consume(0, 1000);
+        if ($msg) &#123;
+            echo $msg-&gt;payload, &quot;\n&quot;;
+        &#125;          
+    &#125;    
+    
+    
+</code></pre>
+开启两个窗口一个运行consumer 一个运行producer   <code>php consumer.php</code><br>  <code>php producer.php</code>会发现我们已经简单的会使用kafka了。</li>
+</ol>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:35:51.000Z" title="8/27/2019, 5:35:51 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kafka/">Kafka</a></span><span class="level-item">6 分钟读完 (大约959个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF.html">消息队列 - 应用场景</a></h1><div class="content"><h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><blockquote>
+<p><strong>消息队列中间件时分布式系统中重要的组件，主要解决应用耦合，异步消息，流量削锋等问题。实现高性能，高可用，可伸缩和最终一致性架构。是大型分布式系统不可缺少的中间件。</strong></p>
+</blockquote>
+<h5 id="异步处理"><a href="#异步处理" class="headerlink" title="异步处理"></a>异步处理</h5><ul>
+<li><strong>场景说明</strong>：用户注册成功后，发送注册邮件，再发送注册短信。</li>
+<li><strong>串行方式</strong>：将注册信息写入数据库成功后，向用户发送邮件，再发送注册短信，将结果返回客户端。</li>
+<li><strong>并行方式</strong>：将注册信息写入数据库成功后，发送注册邮件的同时，发送注册短信，以上三个任务完成后，返回给客户端。</li>
+<li><strong>消息队列</strong>：将注册信息写入数据库成功后，注册信息写入消息队列，发送邮件和短信的消费者异步读取消息队列，写入消息队列即将返回给客户端。<br><img src="https://img-blog.csdnimg.cn/20190320100319650.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70" alt="19ce1bd87b7cc498e92733342f4d9f01.png"></li>
+</ul>
+<h5 id="应用解耦"><a href="#应用解耦" class="headerlink" title="应用解耦"></a>应用解耦</h5><ul>
+<li><strong>场景说明</strong>：用户下单后，订单系统需要通知库存系统。</li>
+<li><strong>传统方式</strong>：订单系统调用库存系统的接口。</li>
+<li><strong>消息队列</strong>-&gt;</li>
+<li>订单系统*：用户下单后，订单系统完成持久化处理，将消息写入消息队列，返回用户订单下单成功。</li>
+<li>库存系统*：订阅下单的消息，采用拉/推的方式，获取下单信息，库存系统根据下单信息，进行库存操作。<br><img src="https://img-blog.csdnimg.cn/20190320100345509.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70" alt="5828d130146f855b2730f9e404537d5f.png"></li>
+</ul>
+<h5 id="流量削锋"><a href="#流量削锋" class="headerlink" title="流量削锋"></a>流量削锋</h5><ul>
+<li><strong>场景说明</strong>：秒杀活动，一般会因为流量过大，导致流量暴增。</li>
+<li><strong>传统方式</strong>：服务端突然接受来自前端的大量订单请求</li>
+<li><strong>消息队列</strong>：在应用前端加入消息队列-&gt;</li>
+</ul>
+<ol>
+<li>用户的请求，服务器接收后，首先写入消息队列。假如消息队列长度超过最大数量，则直接抛弃用户请求或跳转到错误页面</li>
+<li>秒杀业务根据消息队列中的请求信息，再做后续处理<br><img src="https://img-blog.csdnimg.cn/20190320100355868.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70" alt="bf97f667722518fa1bb367b4ce3959fc.png"></li>
+</ol>
+<h5 id="日志处理"><a href="#日志处理" class="headerlink" title="日志处理"></a>日志处理</h5><ul>
+<li>解决大量日志传输的问题</li>
+<li>日志采集客户端，负责日志数据采集，写入消息队列</li>
+<li>消息队列，负责日志数据的接收，存储和转发</li>
+<li>日志处理应用：订阅并消费消息队列中的日志数据<br><img src="https://img-blog.csdnimg.cn/20190320100406323.png" alt="abb22f7464ce76ffb6ff86a2da88efb4.png"></li>
+</ul>
+<h5 id="消息通讯"><a href="#消息通讯" class="headerlink" title="消息通讯"></a>消息通讯</h5><ul>
+<li>点对点消息队列，或者聊天室<br><img src="https://img-blog.csdnimg.cn/2019032010042184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70" alt="440b22e6237a9a48f1599c6dea10fee8.png"></li>
+<li>客户端A和客户端B使用同一队列，进行消息通讯</li>
+<li>客户端A，客户端B，客服端N订阅同一主题，进行消息发布和接收<br><img src="https://img-blog.csdnimg.cn/20190320100435178.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxMzIwMjgx,size_16,color_FFFFFF,t_70" alt="7abde092c2b5ab7cecc9b23b4dd3bc2d.png"></li>
+</ul>
+<h4 id="主要产品"><a href="#主要产品" class="headerlink" title="主要产品"></a>主要产品</h4><blockquote>
+<p><strong>目前在生成环境，使用较多的消息队列有ActiveMQ，RabbitMQ，ZeroMQ，Kafka，MetaMQ，RocketMQ等</strong></p>
+</blockquote>
+</div></article></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/44792981?s=400&amp;u=273c6d745868dcacf7889e5da4499b751179f773&amp;v=4" alt="Stitch"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Stitch</p><p class="is-size-6 is-block">Alien monster</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Alien</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">39</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Stitch-June" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/Stitch-June"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Go/"><span class="level-start"><span class="level-item">Go</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/Kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Laravel/"><span class="level-start"><span class="level-item">Laravel</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Php/"><span class="level-start"><span class="level-item">Php</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/Swoole/"><span class="level-start"><span class="level-item">Swoole</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/uncategorized/"><span class="level-start"><span class="level-item">uncategorized</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li></ul></div></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/09/"><span class="level-start"><span class="level-item">九月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/06/"><span class="level-start"><span class="level-item">六月 2020</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/05/"><span class="level-start"><span class="level-item">五月 2020</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/04/"><span class="level-start"><span class="level-item">四月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/03/"><span class="level-start"><span class="level-item">三月 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/12/"><span class="level-start"><span class="level-item">十二月 2019</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/10/"><span class="level-start"><span class="level-item">十月 2019</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/08/"><span class="level-start"><span class="level-item">八月 2019</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-04-01T00:48:13.000Z">2021-04-01</time></p><p class="title"><a href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-03-31T01:12:26.000Z">2021-03-31</time></p><p class="title"><a href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-23T06:52:22.000Z">2020-09-23</time></p><p class="title"><a href="/2020/09/23/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BD%BF%E7%94%A8.html">ElasticSearch全文检索引擎-使用</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-20T19:06:20.000Z">2020-09-20</time></p><p class="title"><a href="/2020/09/20/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BB%8B%E7%BB%8D.html">ElasticSearch全文检索引擎-介绍</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-20T18:52:44.000Z">2020-09-20</time></p><p class="title"><a href="/2020/09/20/go%E5%9F%BA%E6%9C%AC%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84.html">Go基本程序结构</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Stitch&#039;s Blog</a><p class="is-size-7"><span>&copy; 2021 stitch</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
