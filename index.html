@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Stitch&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Stitch&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Stitch&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Stitch&#039;s Blog"><meta property="og:url" content="https://stitch.cn/"><meta property="og:site_name" content="Stitch&#039;s Blog"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://stitch.cn/img/og_image.png"><meta property="article:author" content="stitch"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stitch.cn"},"headline":"Stitch's Blog","image":["https://stitch.cn/img/og_image.png"],"author":{"@type":"Person","name":"stitch"},"publisher":{"@type":"Organization","name":"Stitch's Blog","logo":{"@type":"ImageObject","url":{"text":"Stitch's Blog"}}},"description":""}</script><link rel="alternate" href="/atom.xml" title="Stitch&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Stitch&#039;s Blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item is-active" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-04-01T00:48:13.000Z" title="4/1/2021, 12:48:13 AM">2021-04-01</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">6 分钟读完 (大约973个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></h1><div class="content"><p>链表提供了高效的节点重排能力，以及顺序性的节点访问方式，并且可以通过增删节点来灵活的调整链表的长度。</p>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Stitch&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Stitch&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Stitch&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Stitch&#039;s Blog"><meta property="og:url" content="https://stitch.cn/"><meta property="og:site_name" content="Stitch&#039;s Blog"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://stitch.cn/img/og_image.png"><meta property="article:author" content="stitch"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stitch.cn"},"headline":"Stitch's Blog","image":["https://stitch.cn/img/og_image.png"],"author":{"@type":"Person","name":"stitch"},"publisher":{"@type":"Organization","name":"Stitch's Blog","logo":{"@type":"ImageObject","url":{"text":"Stitch's Blog"}}},"description":""}</script><link rel="alternate" href="/atom.xml" title="Stitch&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Stitch&#039;s Blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item is-active" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-04-01T00:48:13.000Z" title="4/1/2021, 12:48:13 AM">2021-04-01</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.014Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">6 分钟读完 (大约973个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></h1><div class="content"><p>链表提供了高效的节点重排能力，以及顺序性的节点访问方式，并且可以通过增删节点来灵活的调整链表的长度。</p>
 <p>作为一种常用数据结构，链表内置在很多高级的编程语言里面，因为<code>Redis</code>使用的<code>c</code>语言并没有内置这种数据结构，所以<code>Redis</code>构建了自己的链表实现。</p>
 <p>链表在<code>Redis</code>中的应用非常广泛，比如列表键的底层实现之一就是链表。当一个列表键包含了数量比较多的元素，又或者列表中包含的元素都是比较长的字符串的时，<code>Redis</code>就会使用链表作为列表键的实现。</p>
 <p>举个例子，以下展示的<code>integers</code>列表键包含了<code>1-1024</code>共一千零二十四个整数：</p>
@@ -30,7 +30,7 @@
 <li>带链表长度计数器：程序使用<code>list</code>结构的<code>len</code>属性来对<code>list</code>持有的链表节点进行计数，程序获取链表中节点数量的的复杂度为O(1)。</li>
 <li>多态：链表节点使用<code>void*</code>指针来保存节点值，并且可以通过<code>list</code>结构的<code>dup</code>，<code>free</code>，<code>match</code>三个属性为节点值设置类型特定函数，所以链表可以用于保存各种不同类型的值。</li>
 </ul>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-03-31T01:12:26.000Z" title="3/31/2021, 1:12:26 AM">2021-03-31</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">22 分钟读完 (大约3350个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></h1><div class="content"><h1 id="Redis-简单动态字符串SDS"><a href="#Redis-简单动态字符串SDS" class="headerlink" title="Redis-简单动态字符串SDS"></a>Redis-简单动态字符串SDS</h1><blockquote>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-03-31T01:12:26.000Z" title="3/31/2021, 1:12:26 AM">2021-03-31</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.014Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">22 分钟读完 (大约3350个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></h1><div class="content"><h1 id="Redis-简单动态字符串SDS"><a href="#Redis-简单动态字符串SDS" class="headerlink" title="Redis-简单动态字符串SDS"></a>Redis-简单动态字符串SDS</h1><blockquote>
 <p>好久没写博客了，今天水一篇文章。</p>
 </blockquote>
 <p><code>Redis</code>没有使用<code>c</code>语言传统的字符串去表示。而是构建了一种名为简单动态字符串<code>（simple dynamic string, SDS）</code>的抽象类型，并将<code>sds</code>用作<code>redis</code>的默认字符串表示。</p>
@@ -150,468 +150,7 @@
 <td align="center">可以使用一部分<code>&lt;string.h&gt;</code>库中的函数</td>
 </tr>
 </tbody></table>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-23T06:52:22.000Z" title="9/23/2020, 6:52:22 AM">2020-09-23</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">5 分钟读完 (大约812个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/23/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BD%BF%E7%94%A8.html">ElasticSearch全文检索引擎-使用</a></h1><div class="content"><h1 id="ElasticSearch使用"><a href="#ElasticSearch使用" class="headerlink" title="ElasticSearch使用"></a>ElasticSearch使用</h1><h4 id="手册官网"><a href="#手册官网" class="headerlink" title="手册官网"></a>手册官网</h4><p><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">es-docs</a><br><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/cn/elasticsearch/php/current/index.html">es-php-docs</a></p>
-<h4 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h4><ol>
-<li><p><strong>创建索引</strong></p>
-<p> <code>vim createindex.json</code></p>
-<pre><code> &#123;
-     &quot;settings&quot;: &#123;
-         &quot;refresh_interval&quot;: &quot;5s&quot;,
-         &quot;number_of_shards&quot;: 1,
-         &quot;number_of_replicas&quot;: 0
-     &#125;,
-     &quot;mappings&quot;: &#123;
-         &quot;_default_&quot;: &#123;
-             &quot;_all&quot;: &#123;
-                 &quot;enabled&quot;: true
-             &#125;
-         &#125;
-     &#125;,
-     &quot;products&quot;: &#123;
-         &quot;dynamic&quot;: false,
-         &quot;properties&quot;: &#123;
-             &quot;productid&quot;: &#123;
-                 &quot;type&quot;: &quot;long&quot;
-             &#125;,
-             &quot;title&quot;: &#123;
-                 &quot;type&quot;: &quot;string&quot;,
-                 &quot;index&quot;: &quot;analyzed&quot;,
-                 &quot;analyzer&quot;: &quot;ik&quot;
-             &#125;,
-             &quot;descr&quot;: &#123;
-                 &quot;type&quot;: &quot;string&quot;,
-                 &quot;index&quot;: &quot;analyzed&quot;,
-                 &quot;analyzer&quot;: &quot;ik&quot;
-             &#125;
-         &#125;
-     &#125;
- &#125;
-</code></pre>
-<p> 具体的字段意思手册上都有</p>
-<p> 创建 </p>
-<p><code>curl -XPOST &quot;http://ip:port/shop&quot; -d&#39;@createindex.json</code>    </p>
-<p>这里的shop就是我们要设置的索引名称 可以自定义<br>products 是 索引的type类型 可以自定义</p>
-</li>
-<li><p><strong>添加数据</strong></p>
-<p> <code>curl -XPUT &quot;http://119.23.51.33:9200/shop/products/1&quot; -d&#39;&#123;&quot;productid&quot;:1,&quot;title&quot;:&quot;这是一个商品的标题&quot;,&quot;descr&quot;:&quot;这是一个商品的描述&quot;&#125;&#39;</code></p>
-</li>
-</ol>
-<pre><code>`curl -XPUT &quot;http://ip:port/shop/products/2?pretty&quot; -d&#39;&#123;&quot;productid&quot;:2,&quot;title&quot;:&quot;这是一部手机&quot;,&quot;descr&quot;:&quot;这是一个苹果手机的描述信息&quot;&#125;&#39;`
-
-url地址后面的整值要跟文章id一致
-
-pretty就是 Elasticsearch美化输出(pretty-print)JSON响应以便更加容易阅读。
-</code></pre>
-<ol start="3">
-<li><p><strong>搜索数据</strong></p>
-<p> <code>vim search.json</code></p>
-<pre><code>  &#123;
-     &quot;query&quot;: &#123;
-         &quot;multi_match&quot;: &#123;
-             &quot;query&quot;: &quot;苹果&quot;,
-             &quot;fields&quot;: [
-                 &quot;title&quot;,
-                 &quot;descr&quot;
-             ]
-         &#125;
-     &#125;,
-     &quot;highlight&quot;: &#123;
-         &quot;pre_tags&quot;: [
-             &quot;&lt;em&gt;&quot;
-         ],
-         &quot;post_tags&quot;: [
-             &quot;&lt;/em&gt;&quot;
-         ],
-         &quot;fields&quot;: &#123;
-             &quot;title&quot;: &#123;&#125;,
-             &quot;descr&quot;: &#123;&#125;
-         &#125;
-     &#125;
- &#125;
- 
-</code></pre>
-<p> query 要查询的关键字<br> fields 哪些字段需要被查询<br> highlight 被查询出来的关键字 进行一些改变 相当于高亮显示<br> pre_tags 标签开始 post_tags标签结束</p>
-<p> 测试</p>
-<p> <code>curl -XGET &quot;http://ip:port/shop/_search?pretty&quot; -d&quot;@search.json&quot;</code></p>
-</li>
-</ol>
-<h4 id="elasticsearch-jdbc"><a href="#elasticsearch-jdbc" class="headerlink" title="elasticsearch-jdbc"></a>elasticsearch-jdbc</h4><p>   将数据库的数据同步到elasticsearch</p>
-<ol>
-<li><p><strong>下载</strong></p>
-<p> <code>wget http://xbib.org/repository/org/xbib/elasticsearch/importer/elasticsearch-jdbc/2.3.4.0/elasticsearch-jdbc-2.3.4.0-dist.zip</code></p>
-<p> <code>unzip elasticsearch-jdbc-2.3.4.0-dist.zip</code> </p>
-</li>
-</ol>
-<ol start="2">
-<li><p><strong>修改配置</strong></p>
-<p> <code> cd elasticsearch-jdbc-2.3.4.0/bin</code></p>
-<p> 为了防止出错 先备份一下</p>
-<p> <code>cp mysql-blog.sh mysql-blog.sh.bak</code></p>
-<p> <code>vim mysql-blog.sh</code></p>
-<p> 将 echo  下的内容替换成以下内容</p>
-<pre><code> &#123;
-     &quot;type&quot; : &quot;jdbc&quot;,
-     &quot;jdbc&quot; : &#123;
-         &quot;url&quot; : &quot;jdbc:mysql://localhost:3306/good&quot;,
-         &quot;user&quot; : &quot;root&quot;,
-         &quot;password&quot; : &quot;1C292567e208&quot;,
-         &quot;sql&quot; : &quot;select productid,title,descr,productid as _id from test&quot;,
-         &quot;index&quot; : &quot;shop&quot;,
-         &quot;type&quot; : &quot;products&quot;,
-         &quot;elasticsearch&quot; : &#123;
-              &quot;cluster&quot; : &quot;search&quot;,
-              &quot;host&quot; : &quot;ip&quot;,
-              &quot;port&quot; : 9300
-         &#125;   
-     &#125;
- &#125;
-</code></pre>
-<p> url 是我们的数据库 good是库名 对哪个库进行操作<br> user password 用户名和密码<br> sql语句 就是 执行后 把查询出来的数据添加到es中<br> 这里呢productid as _id 是因为es的唯一标识是根据_id生成的<br> index 我们刚刚创建的索引名称<br> products 是索引type类型<br> cluster 是我们es配置文件中的项目名称<br> host port 分别为ip和端口号 port为9300 这个地方不可以改</p>
-</li>
-<li><p><strong>运行</strong></p>
-<p><code>./mysql-blog.sh</code></p>
-<p><code>curl -XGET &quot;http://119.23.51.33:9200/shop/_search?pretty&quot;</code></p>
-<p>可以看到数据库的内容被添加进去了</p>
-<p>但是修改数据库内容 或者 添加内容 es却不会改变  下面怎么改变呢</p>
-</li>
-<li><p><strong>监控 实时同步</strong></p>
-<pre><code> &#123;
-     &quot;type&quot; : &quot;jdbc&quot;,
-     &quot;jdbc&quot; : &#123;
-         &quot;url&quot; : &quot;jdbc:mysql://localhost:3306/good&quot;,
-         &quot;schedule&quot; : &quot;0 0-59 0-23 ? * *&quot;,
-         &quot;user&quot; : &quot;root&quot;,
-         &quot;password&quot; : &quot;1C292567e208&quot;,
-         &quot;sql&quot; : [&#123;
-                 &quot;statement&quot;: &quot;select productid,title,descr,productid as _id from test where updatetime &gt; unix_timestamp(?) &quot;,
-                 &quot;parameter&quot;: [&quot;$metrics.lastexecutionstart&quot;]&#125;
-             ],
-         &quot;index&quot; : &quot;shop&quot;,
-         &quot;type&quot; : &quot;products&quot;,
-         &quot;metrics&quot;: &#123;
-             &quot;enabled&quot; : true
-         &#125;,
-         &quot;elasticsearch&quot; : &#123;
-              &quot;cluster&quot; : &quot;search&quot;,
-              &quot;host&quot; : &quot;ip&quot;,
-              &quot;port&quot; : 9300
-         &#125;   
-     &#125;
- &#125;
- 
-</code></pre>
-<p> 这时需要一个字段去判断  那就是我们数据的修改时间<br> parameter 里面的内容 就是获取上次脚本执行时间<br> sql 的where条件 就是判断 修改时间大于上次脚本执行时间 就属于新数据</p>
-<p> 重新执行下脚本 就可以了</p>
-<p> 怎么用php操作呢 </p>
-<p> 现在有好多框架的轮子</p>
-<p> 或者直接看<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/cn/elasticsearch/php/current/index.html">es-php-docs</a></p>
-<p> php框架：</p>
-<p> <a target="_blank" rel="noopener" href="https://github.com/cviebrock/laravel-elasticsearch">laravel-elasticsearch</a><br> <a target="_blank" rel="noopener" href="https://github.com/yiisoft/yii2-elasticsearch">yii2-elasticsearch</a><br> 去GitHub上查找就行</p>
-</li>
-</ol>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-20T19:06:20.000Z" title="9/20/2020, 7:06:20 PM">2020-09-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">5 分钟读完 (大约814个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/20/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BB%8B%E7%BB%8D.html">ElasticSearch全文检索引擎-介绍</a></h1><div class="content"><h1 id="全文检索"><a href="#全文检索" class="headerlink" title="全文检索"></a>全文检索</h1><blockquote>
-<p>一<strong>种将文件种或者数据库中所有文本与检索项匹配的文字资料检索方法。对全文数据的检索</strong></p>
-</blockquote>
-<h4 id="数据分类："><a href="#数据分类：" class="headerlink" title="数据分类："></a>数据分类：</h4><ul>
-<li><p>结构化数据</p>
-<pre><code>  行数据，存储在数据库里，可以用二维表结构来逻辑表达实现的数据 
-  能够用数据或统一的结构加以表示 
-  数字、符号去表示
-</code></pre>
-</li>
-<li><p>非结构化数据</p>
-<pre><code>  无法用数字或统一的结构表示
-  文本、图像、声音、网页
-  结构化数据属于非结构化数据
-  非结构化数据即为全文数据
-</code></pre>
-</li>
-</ul>
-<h5 id="两种方法"><a href="#两种方法" class="headerlink" title="两种方法"></a>两种方法</h5><ul>
-<li><p>顺序扫描法</p>
-<pre><code>  将数据库中所有的内容挨个扫描
-</code></pre>
-</li>
-<li><p>索引扫描法</p>
-<pre><code>  全文检索的基本思路，也即将非结构化数据中的一部分信息提取出来，重新组织，使其变得有一定结构，然后对此有一定结构的数据进行搜索，从而达到搜索相对较快的目的。
-</code></pre>
-</li>
-</ul>
-<h5 id="全文检索过程"><a href="#全文检索过程" class="headerlink" title="全文检索过程"></a>全文检索过程</h5><ul>
-<li><strong>索引创建</strong><pre><code>  索引保存的是一个词元，对应文档的id
-  索引只会创建一次
-</code></pre>
-</li>
-</ul>
-<blockquote>
-<p><em>如何创建：</em></p>
-</blockquote>
-<ol>
-<li><pre><code>    一些要索引的原文档(Document)
-</code></pre>
-</li>
-<li><pre><code>    将原文档传给分词组件(Tokenizer)
-</code></pre>
-</li>
-<li><pre><code>    将得到的词元(Token)传给语言处理组件(LinguisticProcessor)
-</code></pre>
-</li>
-<li><pre><code> 将得到的词(Term)传给索引组件(Indexer)
-
-     
-</code></pre>
-</li>
-</ol>
-<ul>
-<li><strong>搜索索引</strong></li>
-</ul>
-<ol>
-<li><pre><code>    用户输入查询语句
-</code></pre>
-</li>
-<li><pre><code>    对查询语句进行词法分析，语法分析，及语言处理
-</code></pre>
-</li>
-<li><pre><code>    搜索索引，得到符号文档
-</code></pre>
-</li>
-</ol>
-<h4 id="全文检索引擎"><a href="#全文检索引擎" class="headerlink" title="全文检索引擎"></a>全文检索引擎</h4><blockquote>
-<p><strong>全文检索引擎是目前广泛应用的主流搜索引擎。<br>它的工作原理是计算机索引程序通过扫描文章中的每一个词，对每一个词建立一个索引，指明该词在文章中出现的次数和位置，当用户查询时，检索程序就根据事先建立的索引进行查找，并将查找的结果反馈给用户的检索方式。</strong></p>
-</blockquote>
-<h5 id="相关产品"><a href="#相关产品" class="headerlink" title="相关产品"></a>相关产品</h5><blockquote>
-<p>Lucene,Sphinx,Xapian,Nutch,DataparkSearch…</p>
-</blockquote>
-<h4 id="ElasticSearch"><a href="#ElasticSearch" class="headerlink" title="ElasticSearch"></a>ElasticSearch</h4><blockquote>
-<p><strong>ElasticSearch是一个基于Apache Lucene(TM)的开源搜索引擎。无论在开源还是专有领域，Lucene可以被认为是迄今为止最先进、性能最好的，功能最全的搜索引擎库。</strong></p>
-</blockquote>
-<h5 id="为什么要选择ElasticSearch"><a href="#为什么要选择ElasticSearch" class="headerlink" title="为什么要选择ElasticSearch"></a>为什么要选择ElasticSearch</h5><blockquote>
-<p><strong>ElasticSearch也使用Java开发并使用Lucene作为其核心来实现所有索引和搜索的功能，但是它的目的是通过简单的RESTful API来隐藏Lucene的复杂性，从而让全文搜索变得简单。</strong></p>
-</blockquote>
-<blockquote>
-<p><strong>分布式的实时文件存储，每个字段都被索引可被搜索<br>分布式的实时分析搜索引擎<br>可以扩展到上百台服务器，处理PB级结构化或非结构化数据</strong></p>
-</blockquote>
-<blockquote>
-<p><strong>所有功能都集成在一个服务里面，可以通过RESTful API、各种语言的客户端甚至命令行与之交互<br>上手容易，提供了很多合理的缺省值，开箱即用，学习成本低<br>可免费下载、使用和修改 配置灵活</strong></p>
-</blockquote>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-20T18:52:44.000Z" title="9/20/2020, 6:52:44 PM">2020-09-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">6 分钟读完 (大约900个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/09/20/go%E5%9F%BA%E6%9C%AC%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84.html">Go基本程序结构</a></h1><div class="content"><h2 id="编写测试程序"><a href="#编写测试程序" class="headerlink" title="编写测试程序"></a>编写测试程序</h2><p>测试程序：</p>
-<ul>
-<li><p>源码文件以<code>_test</code>结尾：<code>x x x_test.go</code></p>
-</li>
-<li><p>测试方法名以Test开头：<code>func TestXXX(t *testing.T) &#123;...&#125;</code></p>
-</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestFirstTry</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	t.Log(<span class="string">&quot;My first try!&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>实现Fibonacci数列</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> test</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;testing&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestFibonacciList</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">//var a int = 1 // 定义变量</span></span><br><span class="line">	<span class="comment">//var b int = 1</span></span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		a <span class="keyword">int</span> = <span class="number">1</span></span><br><span class="line">		b <span class="keyword">int</span> = <span class="number">1</span></span><br><span class="line">	) <span class="comment">// 这样也可以定义变量</span></span><br><span class="line">	<span class="comment">// a := 1 直接赋值</span></span><br><span class="line">	<span class="comment">// b := 1</span></span><br><span class="line">	t.Log(a)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">		t.Log(<span class="string">&quot; &quot;</span>, b)</span><br><span class="line">		tmp := a</span><br><span class="line">		a = b</span><br><span class="line">		b = tmp + a</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="变量及常量"><a href="#变量及常量" class="headerlink" title="变量及常量"></a>变量及常量</h2><p>变量</p>
-<ul>
-<li>赋值可以进行自动类型推断</li>
-<li>在一个赋值语句中可以对多个变量进行同时赋值</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestExchange</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	a := <span class="number">1</span></span><br><span class="line">	b := <span class="number">2</span></span><br><span class="line">	<span class="comment">//tmp := a</span></span><br><span class="line">	<span class="comment">//a = b</span></span><br><span class="line">	<span class="comment">//b = tmp</span></span><br><span class="line">	a, b = b, a <span class="comment">// 变量交换</span></span><br><span class="line">	t.Log(a, b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>常量 进行快速 设置连续值</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	Monday = <span class="literal">iota</span> + <span class="number">1</span></span><br><span class="line">	Tuesday <span class="comment">// 2</span></span><br><span class="line">	Wednesday <span class="comment">// 3</span></span><br><span class="line">	Thursday <span class="comment">// 4</span></span><br><span class="line">	Friday <span class="comment">// 5</span></span><br><span class="line">	Saturday <span class="comment">// 6</span></span><br><span class="line">	Sunday <span class="comment">// 7</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	Readable = <span class="number">1</span> &lt;&lt; <span class="literal">iota</span></span><br><span class="line">	Writable</span><br><span class="line">	Executable</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestConstantTry</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	t.Log(Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday) <span class="comment">// 1 2 3 4 5 6 7</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestConstantTry1</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	a := <span class="number">7</span> <span class="comment">// 1111</span></span><br><span class="line">	t.Log(a&amp;Readable == Readable, a&amp;Writable == Writable, a&amp;Executable == Executable) <span class="comment">// true true true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>所有类型：</p>
-<ul>
-<li><p><code>bool</code></p>
-</li>
-<li><p><code>string</code></p>
-</li>
-<li><p><code>int</code> <code>int8</code> <code>int16</code> <code>int32</code> <code>int64</code></p>
-</li>
-<li><p><code>uint</code> <code>uint8</code>  <code>uint16</code> <code>uint32</code> <code>uint64</code> <code>uintptr</code></p>
-</li>
-<li><p><code>byte</code>  // alias for uint8</p>
-</li>
-<li><p><code>rune</code> // alias for int32,represents a Unicode code point</p>
-</li>
-<li><p><code>float32</code> <code>float64</code></p>
-</li>
-<li><p><code>Complex64</code> <code>complex128</code></p>
-</li>
-</ul>
-<p>与其它主要编程语言的差异：</p>
-<ul>
-<li><p>Go语言不允许隐式类型转换</p>
-</li>
-<li><p>别名和原有类型也不能进行隐式类型转换</p>
-</li>
-</ul>
-<p>类型的预定义值：</p>
-<ul>
-<li><code>math.MaxInt64</code></li>
-<li><code>math.MaxFloat64</code></li>
-<li><code>math.MaxUint32</code></li>
-</ul>
-<p>指针类型：</p>
-<ul>
-<li>不支持指针运算</li>
-<li><code>string</code>是值类型，其默认的初始化值为空字符串，而不是<code>nil</code></li>
-</ul>
-<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h3><table>
-<thead>
-<tr>
-<th align="center">运算符</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">+</td>
-<td align="center">相加</td>
-</tr>
-<tr>
-<td align="center">-</td>
-<td align="center">相减</td>
-</tr>
-<tr>
-<td align="center">*</td>
-<td align="center">相乘</td>
-</tr>
-<tr>
-<td align="center">/</td>
-<td align="center">相除</td>
-</tr>
-<tr>
-<td align="center">%</td>
-<td align="center">求余</td>
-</tr>
-<tr>
-<td align="center">++</td>
-<td align="center">自增</td>
-</tr>
-<tr>
-<td align="center">–</td>
-<td align="center">自减</td>
-</tr>
-</tbody></table>
-<p>Go语言没有前置的 ++和–</p>
-<h3 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h3><table>
-<thead>
-<tr>
-<th align="center">运算符</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">==</td>
-<td align="center">检查两个值是否相等</td>
-</tr>
-<tr>
-<td align="center">!=</td>
-<td align="center">检查两个值是否不相等</td>
-</tr>
-<tr>
-<td align="center">&gt;</td>
-<td align="center">检查左边值是否大于右边值</td>
-</tr>
-<tr>
-<td align="center">&lt;</td>
-<td align="center">检查左边值是否小于右边值</td>
-</tr>
-<tr>
-<td align="center">&gt;=</td>
-<td align="center">检查左边值是否大于等于右边值</td>
-</tr>
-<tr>
-<td align="center">&lt;=</td>
-<td align="center">检查左边值是否小于等于右边值</td>
-</tr>
-</tbody></table>
-<p>用 == 比较数组：</p>
-<ul>
-<li>相同维数且含有相同个数元素的数组才可以比较</li>
-<li>每个元素都相同的才想等</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestCompareArray</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	a := [...]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">	b := [...]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>&#125;</span><br><span class="line">	c := [...]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">	t.Log(a == b) <span class="comment">// false</span></span><br><span class="line">	t.Log(a == c) <span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><table>
-<thead>
-<tr>
-<th align="center">运算符</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">&amp;&amp;</td>
-<td align="center">逻辑AND运算符</td>
-</tr>
-<tr>
-<td align="center">||</td>
-<td align="center">逻辑OR运算符</td>
-</tr>
-<tr>
-<td align="center">!</td>
-<td align="center">逻辑NOT运算符</td>
-</tr>
-</tbody></table>
-<h3 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h3><table>
-<thead>
-<tr>
-<th align="center">运算符</th>
-<th align="center">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">&amp;</td>
-<td align="center">参与运算两数各对应的二进位相与</td>
-</tr>
-<tr>
-<td align="center">|</td>
-<td align="center">参与运算两数各对应的二进位相或</td>
-</tr>
-<tr>
-<td align="center">^</td>
-<td align="center">参与运算两数各对应的二进位相异或</td>
-</tr>
-<tr>
-<td align="center">&lt;&lt;</td>
-<td align="center">左移运算符</td>
-</tr>
-<tr>
-<td align="center">&gt;&gt;</td>
-<td align="center">右移运算符</td>
-</tr>
-</tbody></table>
-<p>&amp;^按位置零</p>
-<p>1 &amp;^ 0 – 1</p>
-<p>1 &amp;^ 1 – 0</p>
-<p>0 &amp;^ 1 – 0</p>
-<p>0 &amp;^ 0 – 0</p>
-<h2 id="条件和循环"><a href="#条件和循环" class="headerlink" title="条件和循环"></a>条件和循环</h2><h3 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h3><p>Go语言仅支持循环关键字 <code>for</code></p>
-<p>循环：<code>for (j := 7; j&lt;=9; i++)</code></p>
-<p>条件循环 while(n&lt;5)</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">n := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> n &lt; <span class="number">5</span> &#123;</span><br><span class="line">		t.Log(n)</span><br><span class="line">		n++</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p>无限循环 while(true)</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">n := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		t.Log(n)</span><br><span class="line">		n++</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="条件"><a href="#条件" class="headerlink" title="条件"></a>条件</h3><p>if条件：</p>
-<ul>
-<li>condition 表达式结果必须为布尔值</li>
-<li>支持变量赋值：</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestIfMultiSec</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> a := <span class="number">1</span> == <span class="number">1</span>; a &#123;</span><br><span class="line">		t.Log(a)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>switch条件：</p>
-<ul>
-<li>条件表达式不限制为常量或者整数；</li>
-<li>单个case中，可以出现多个结果选项，用逗号分隔；</li>
-<li>与C语言等规则相反，Go语言不需要用break来明确退出一个case；</li>
-<li>可以不设定switch之后的条件表达式，在此种情况下，整个switch结构与多个if…else..的逻辑作用等同；</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestSwitchMultiCase</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">switch</span> i &#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">0</span>, <span class="number">2</span>:</span><br><span class="line">			t.Log(<span class="string">&quot;even&quot;</span>)</span><br><span class="line">		<span class="keyword">case</span> <span class="number">1</span>, <span class="number">3</span>:</span><br><span class="line">			t.Log(<span class="string">&quot;odd&quot;</span>)</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			t.Log(<span class="string">&quot;it is not 0-3&quot;</span>)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestSwitchCaseCondition</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">switch</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> i%<span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line">			t.Log(<span class="string">&quot;even&quot;</span>)</span><br><span class="line">		<span class="keyword">case</span> i%<span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">			t.Log(<span class="string">&quot;odd&quot;</span>)</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			t.Log(<span class="string">&quot;it is not 0-3&quot;</span>)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-30T22:34:23.000Z" title="6/30/2020, 10:34:23 PM">2020-06-30</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">35 分钟读完 (大约5204个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/30/%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BAredis-cluster.html">如何搭建redis-cluster</a></h1><div class="content"><p>​        假设在一台主从机器上配置了20G内存，但是业务需求是需要50G内存的时候，主从结构+哨兵可以实现高可用故障切换+冗余备份，但是不能解决数据容量的问题，用哨兵，每个<strong>redis</strong>实例存储的数据也都是完整的数据，浪费内存且有木桶效应。</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-30T22:34:23.000Z" title="6/30/2020, 10:34:23 PM">2020-06-30</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.018Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">35 分钟读完 (大约5204个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/30/%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BAredis-cluster.html">如何搭建redis-cluster</a></h1><div class="content"><p>​        假设在一台主从机器上配置了20G内存，但是业务需求是需要50G内存的时候，主从结构+哨兵可以实现高可用故障切换+冗余备份，但是不能解决数据容量的问题，用哨兵，每个<strong>redis</strong>实例存储的数据也都是完整的数据，浪费内存且有木桶效应。</p>
 <p>​        为了最大化利用内存，可以采用<strong>cluster</strong>，就是分布式存储。即每台<strong>redis</strong>存储不同的内容。</p>
 <p><strong>Redis</strong>分布式方案一般有两种：</p>
 <ul>
@@ -815,7 +354,7 @@ pretty就是 Elasticsearch美化输出(pretty-print)JSON响应以便更加容易
 <blockquote>
 <p>以上理论知识内容为网络整理。。。。</p>
 </blockquote>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-22T14:09:55.000Z" title="6/22/2020, 2:09:55 PM">2020-06-22</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">19 分钟读完 (大约2811个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/22/redis%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E5%8F%8A%E5%AE%9E%E7%8E%B0.html">redis哨兵故障转移及实现</a></h1><div class="content"><blockquote>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-22T14:09:55.000Z" title="6/22/2020, 2:09:55 PM">2020-06-22</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.018Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">19 分钟读完 (大约2811个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/22/redis%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E5%8F%8A%E5%AE%9E%E7%8E%B0.html">redis哨兵故障转移及实现</a></h1><div class="content"><blockquote>
 <p>在上篇文章中docker-compose搭建redis-sentinel(成功的搭建了1主2从3哨兵。</p>
 </blockquote>
 <h2 id="Sentinel命令"><a href="#Sentinel命令" class="headerlink" title="Sentinel命令"></a>Sentinel命令</h2><p><strong>sentinel</strong>是一个特殊的<strong>redis</strong>节点，它有自己专属的<strong>api</strong>：</p>
@@ -959,7 +498,7 @@ pretty就是 Elasticsearch美化输出(pretty-print)JSON响应以便更加容易
 <p>​        集群脑裂因为<strong>client</strong>还没来得及切换成新的<strong>master</strong>，还继续写向旧的master的数据可能就丢失了通过<code>min-slaves-to-write</code>确保必须是有多少个从节点连接，并且延迟时间小于<code>min-slaves-max-lag</code>多少秒。</p>
 <p>客户端需要怎么做：</p>
 <p>​        对于<strong>client</strong>来讲，就需要做些处理，比如先将数据缓存到内存当中，然后过一段时间处理，或者连接失败，接收到错误切换新的<strong>master</strong>处理。 </p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-20T01:10:48.000Z" title="6/20/2020, 1:10:48 AM">2020-06-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">13 分钟读完 (大约1885个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/20/docker-compose%E6%90%AD%E5%BB%BAredis-sentinel.html">docker-compose搭建redis-sentinel</a></h1><div class="content"><h2 id="主从复制的问题"><a href="#主从复制的问题" class="headerlink" title="主从复制的问题"></a>主从复制的问题</h2><p>​    对于上篇文章redis持久化rdb及aof中，<strong>redis</strong>服务器重启时的数据恢复，在新版本中是不符合我画的那个流程图的。</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-20T01:10:48.000Z" title="6/20/2020, 1:10:48 AM">2020-06-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.014Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">13 分钟读完 (大约1885个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/20/docker-compose%E6%90%AD%E5%BB%BAredis-sentinel.html">docker-compose搭建redis-sentinel</a></h1><div class="content"><h2 id="主从复制的问题"><a href="#主从复制的问题" class="headerlink" title="主从复制的问题"></a>主从复制的问题</h2><p>​    对于上篇文章redis持久化rdb及aof中，<strong>redis</strong>服务器重启时的数据恢复，在新版本中是不符合我画的那个流程图的。</p>
 <p>​    <strong>redis</strong>启动的时候会去判断是否开启<strong>aof</strong>，如果开启了，不存在<strong>aof</strong>文件的话，会去判断是否存在<strong>rdb</strong>，但在新的版本中，如果开启<strong>aof</strong>，不存在<strong>aof</strong>文件的时候，<strong>redis</strong>会主动创建<strong>aof</strong>文件并且加载<strong>aof</strong>，这就会导致数据丢失。解决方案如下：</p>
 <ul>
 <li>关闭<strong>aof</strong></li>
@@ -1068,7 +607,7 @@ pretty就是 Elasticsearch美化输出(pretty-print)JSON响应以便更加容易
 <p>如果 <strong>Sentinel</strong> 监控的主节点配置了密码，<code>sentinel auth-pass</code> 配置通过添加主节点的密码，防止 <strong>Sentinel</strong> 节点对主节点无法监控。</p>
 <p><code>sentinel failover-timeout mymaster 180000</code></p>
 <p>表示故障转移的时间。</p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-08T23:47:49.000Z" title="6/8/2020, 11:47:49 PM">2020-06-08</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Php/">Php</a></span><span class="level-item">10 分钟读完 (大约1533个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/08/php%E5%8F%8D%E5%B0%84%E5%AE%9E%E7%8E%B0Ioc-Di%E5%8F%8A%E6%B3%A8%E8%A7%A3.html">php反射实现Ioc-Di及注解</a></h1><div class="content"><p>PHP5之后提供了完整的反射API，添加了对类、接口、函数、方法和扩展进行反向工程的能力。此外，反射API提供了方法来取出函数、类和方法的文档注释。</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-08T23:47:49.000Z" title="6/8/2020, 11:47:49 PM">2020-06-08</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.014Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Php/">Php</a></span><span class="level-item">10 分钟读完 (大约1533个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/08/php%E5%8F%8D%E5%B0%84%E5%AE%9E%E7%8E%B0Ioc-Di%E5%8F%8A%E6%B3%A8%E8%A7%A3.html">php反射实现Ioc-Di及注解</a></h1><div class="content"><p>PHP5之后提供了完整的反射API，添加了对类、接口、函数、方法和扩展进行反向工程的能力。此外，反射API提供了方法来取出函数、类和方法的文档注释。</p>
 <p><strong>Ioc/Di</strong>大家应该都不陌生，但是对小白来说呢听起来就挺高大上的，下面就用代码来实现：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> gaobinzhan &lt;gaobinzhan<span class="doctag">@gmail</span>.com&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getClassName</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;this is Foo&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getClassName</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;this is Bar&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">Foo <span class="variable">$foo</span>, Bar <span class="variable">$bar</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        var_dump(<span class="variable">$foo</span>-&gt;getClassName());</span><br><span class="line">        var_dump(<span class="variable">$bar</span>-&gt;getClassName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params">Foo <span class="variable">$foo</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        var_dump(<span class="variable">$foo</span>-&gt;getClassName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 反射Test</span></span><br><span class="line"><span class="variable">$reflect</span> = <span class="keyword">new</span> ReflectionClass(Test::class);</span><br><span class="line"><span class="comment">// 获取是否有构造函数</span></span><br><span class="line"><span class="variable">$constructor</span> = <span class="variable">$reflect</span>-&gt;getConstructor();</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$constructor</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果存在构造 获取参数</span></span><br><span class="line">    <span class="variable">$constructorParams</span> = <span class="variable">$constructor</span>-&gt;getParameters();</span><br><span class="line">    <span class="comment">// 初始化注入的参数</span></span><br><span class="line">    <span class="variable">$args</span> = [];</span><br><span class="line">    <span class="comment">// 循环去判断参数</span></span><br><span class="line">    <span class="keyword">foreach</span> (<span class="variable">$constructorParams</span> <span class="keyword">as</span> <span class="variable">$param</span>) &#123;</span><br><span class="line">        <span class="comment">// 如果为class 就进行实例化</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$param</span>-&gt;getClass()) &#123;</span><br><span class="line">            <span class="variable">$args</span>[] = <span class="variable">$param</span>-&gt;getClass()-&gt;newInstance();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="variable">$args</span>[] = <span class="variable">$param</span>-&gt;getName();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 实例化注入参数</span></span><br><span class="line">    <span class="variable">$class</span> = <span class="variable">$reflect</span>-&gt;newInstanceArgs(<span class="variable">$args</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="variable">$class</span> = <span class="variable">$reflect</span>-&gt;newInstance();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 假设我们要调用index方法 在此之前自己判断下方法是否存在 我省略了</span></span><br><span class="line"><span class="variable">$reflectMethod</span> = <span class="keyword">new</span> ReflectionMethod(<span class="variable">$class</span>, <span class="string">&#x27;index&#x27;</span>);</span><br><span class="line"><span class="comment">// 判断方法修饰符是否为public</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$reflectMethod</span>-&gt;isPublic()) &#123;</span><br><span class="line">    <span class="comment">// 以下代码同等上面</span></span><br><span class="line">    <span class="variable">$args</span> = [];</span><br><span class="line">    <span class="variable">$methodParams</span> = <span class="variable">$reflectMethod</span>-&gt;getParameters();</span><br><span class="line">    <span class="keyword">foreach</span> (<span class="variable">$methodParams</span> <span class="keyword">as</span> <span class="variable">$param</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$param</span>-&gt;getClass()) &#123;</span><br><span class="line">            <span class="variable">$args</span>[] = <span class="variable">$param</span>-&gt;getClass()-&gt;newInstance();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="variable">$args</span>[] = <span class="variable">$param</span>-&gt;getName();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable">$reflectMethod</span>-&gt;invokeArgs(<span class="variable">$class</span>, <span class="variable">$args</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -1128,7 +667,7 @@ pretty就是 Elasticsearch美化输出(pretty-print)JSON响应以便更加容易
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/home</span><br><span class="line">/<span class="built_in">test</span></span><br></pre></td></tr></table></figure>
 
 <p>之前我们不是建立了个<strong>Parser</strong>的目录嘛，可以在里面创建对应的解析类，然后去解析，把它们封装一下子！！</p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-07T19:27:12.000Z" title="6/7/2020, 7:27:12 PM">2020-06-07</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">36 分钟读完 (大约5329个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/07/redis%E6%8C%81%E4%B9%85%E5%8C%96rdb%E5%8F%8Aaof.html">redis持久化rdb及aof</a></h1><div class="content"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>​        持久化的功能：<strong>Redis</strong>是内存数据库，数据都是存储在内存中，为了避免进程退出导致数据的永久丢失，需要定期将<strong>Redis</strong>中的数据以某种形式（数据或命令）从内存保存到硬盘中。当下次<strong>Redis</strong>重启时，利用持久化文件实现数据恢复。除此之外，为了进行灾难备份，可以将持久化文件拷贝到一个远程位置。<strong>Redis</strong>持久化分为<strong>RDB</strong>和<strong>AOF</strong>，前者将当前数据保存到硬盘，后者则是将每次执行的写命令保存的硬盘。</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-07T19:27:12.000Z" title="6/7/2020, 7:27:12 PM">2020-06-07</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.018Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">36 分钟读完 (大约5329个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/07/redis%E6%8C%81%E4%B9%85%E5%8C%96rdb%E5%8F%8Aaof.html">redis持久化rdb及aof</a></h1><div class="content"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>​        持久化的功能：<strong>Redis</strong>是内存数据库，数据都是存储在内存中，为了避免进程退出导致数据的永久丢失，需要定期将<strong>Redis</strong>中的数据以某种形式（数据或命令）从内存保存到硬盘中。当下次<strong>Redis</strong>重启时，利用持久化文件实现数据恢复。除此之外，为了进行灾难备份，可以将持久化文件拷贝到一个远程位置。<strong>Redis</strong>持久化分为<strong>RDB</strong>和<strong>AOF</strong>，前者将当前数据保存到硬盘，后者则是将每次执行的写命令保存的硬盘。</p>
 <h2 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h2><p>​        <strong>RDB</strong>是一种快照存储持久方式，具体就是将<strong>Redis</strong>某一时刻的内存数据保存到硬盘的文件当中，默认保存的文件名为<strong>dump.rdb</strong>，而在Redis服务器启动时，会重新加载<strong>dump.rdb</strong>文件的数据到内存当中恢复数据。触发<strong>RDB</strong>持久化过程分为手动触发和自动触发。</p>
 <h3 id="触发机制"><a href="#触发机制" class="headerlink" title="触发机制"></a>触发机制</h3><p>手动触发分别对应<code>save</code>和<code>bgsave</code>命令：</p>
 <p><code>save</code>命令：阻塞当前<strong>Redis</strong>服务器，直到<strong>RDB</strong>过程完成为止，对于内存比较大的实例会造成长时间阻塞，线上环境不建议使用。</p>
@@ -1306,7 +845,299 @@ pretty就是 Elasticsearch美化输出(pretty-print)JSON响应以便更加容易
 </ul>
 </li>
 </ul>
-</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous is-invisible is-hidden-mobile"><a href="/page/0/">上一页</a></div><div class="pagination-next"><a href="/page/2/">下一页</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link is-current" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li><li><a class="pagination-link" href="/page/3/">3</a></li><li><a class="pagination-link" href="/page/4/">4</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/44792981?s=400&amp;u=273c6d745868dcacf7889e5da4499b751179f773&amp;v=4" alt="Stitch"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Stitch</p><p class="is-size-6 is-block">Alien monster</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Alien</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">39</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Stitch-June" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/Stitch-June"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Go/"><span class="level-start"><span class="level-item">Go</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/Kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Laravel/"><span class="level-start"><span class="level-item">Laravel</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Php/"><span class="level-start"><span class="level-item">Php</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/Swoole/"><span class="level-start"><span class="level-item">Swoole</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/uncategorized/"><span class="level-start"><span class="level-item">uncategorized</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li></ul></div></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/09/"><span class="level-start"><span class="level-item">九月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/06/"><span class="level-start"><span class="level-item">六月 2020</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/05/"><span class="level-start"><span class="level-item">五月 2020</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/04/"><span class="level-start"><span class="level-item">四月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/03/"><span class="level-start"><span class="level-item">三月 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/12/"><span class="level-start"><span class="level-item">十二月 2019</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/10/"><span class="level-start"><span class="level-item">十月 2019</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/08/"><span class="level-start"><span class="level-item">八月 2019</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-04-01T00:48:13.000Z">2021-04-01</time></p><p class="title"><a href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-03-31T01:12:26.000Z">2021-03-31</time></p><p class="title"><a href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-23T06:52:22.000Z">2020-09-23</time></p><p class="title"><a href="/2020/09/23/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BD%BF%E7%94%A8.html">ElasticSearch全文检索引擎-使用</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-20T19:06:20.000Z">2020-09-20</time></p><p class="title"><a href="/2020/09/20/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BB%8B%E7%BB%8D.html">ElasticSearch全文检索引擎-介绍</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-20T18:52:44.000Z">2020-09-20</time></p><p class="title"><a href="/2020/09/20/go%E5%9F%BA%E6%9C%AC%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84.html">Go基本程序结构</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Stitch&#039;s Blog</a><p class="is-size-7"><span>&copy; 2021 stitch</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-05T15:05:29.000Z" title="6/5/2020, 3:05:29 PM">2020-06-05</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.018Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">20 分钟读完 (大约2953个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/05/redis%E4%B9%8B%E4%B8%BB%E4%BB%8E%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86.html">redis之主从问题处理</a></h1><div class="content"><h2 id="主从复制的常用相关配置"><a href="#主从复制的常用相关配置" class="headerlink" title="主从复制的常用相关配置"></a>主从复制的常用相关配置</h2><ul>
+<li><p>Slaveof</p>
+<p><code>slaveof &lt;masterip&gt; &lt;masterport&gt;</code></p>
+<p><strong>slave</strong>实例需要配置该项，指向<strong>master</strong>的(ip,port)</p>
+</li>
+<li><p>masterauth</p>
+<p><code>masterauth &lt;master-password&gt;</code></p>
+<p>如果<strong>master</strong>实例启用了密码保护，则该配置项需要填<strong>master</strong>的启动密码；</p>
+<p>如果未启用，需要将该配置项注视掉。</p>
+</li>
+<li><p>slave-serve-stale-data</p>
+<p>指定<strong>slave</strong>与<strong>master</strong>连接中断时的动作。默认为<strong>yes</strong>，表明<strong>slave</strong>会继续应答来自<strong>client</strong>的请求，但这些数据可能已经过期（因为连接中断导致无法从<strong>master</strong>同步）。若配置为<strong>no</strong>，则<strong>slave</strong>除正常应答“<strong>INFO</strong>”和“<strong>SLAVEOF</strong>”命令外，其余来自客户端的请求命令均会得到“<strong>SYNC with master in progress</strong>“的应答，直到该<strong>slave</strong>与<strong>master</strong>连接重建成功或该<strong>slave</strong>被提升为<strong>master</strong>。</p>
+</li>
+<li><p>slave-read-only</p>
+<p>指定<strong>slave</strong>是否只读，默认为<strong>yes</strong>。若配置为<strong>no</strong>，表示<strong>slave</strong>是可写的，但写的内容在主从同步完成后会被删除掉。</p>
+</li>
+<li><p>repl-disable-tcp-nodelay</p>
+<p>指定向<strong>slave</strong>同步数据时，是否禁用<strong>socket</strong>的<strong>NO_DELAY</strong>选项。若配置为<strong>yes</strong>，则禁用<strong>NO_DELAY</strong>，则<strong>TCP</strong>协议栈会合并小包统一发送，这样可以减少主从节点间的包数量并节省宽带，但会增加数据同步到<strong>slave</strong>的时间。若配置为<strong>no</strong>，表明启用<strong>NO_DELAY</strong>，则<strong>TCP</strong>协议栈不会延迟小包的发送时间，这样数据同步的延时会减少，但需要更大的宽带。</p>
+</li>
+<li><p>slave-priority</p>
+<p>指定<strong>slave</strong>的优先级。在不只1个<strong>slave</strong>存在的部署环境下，当<strong>master</strong>宕机时，<strong>Redis Sentinel</strong> 会将<strong>priority</strong>值最小的<strong>slave</strong>提升为<strong>master</strong>。需要注意的是，若该配置项为0，则对应的<strong>slave</strong>永远不会被<strong>Redis Sentinel</strong> 自动提升为<strong>master</strong>。</p>
+</li>
+</ul>
+<h2 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h2><h3 id="复制数据延迟"><a href="#复制数据延迟" class="headerlink" title="复制数据延迟"></a>复制数据延迟</h3><p><strong>Redis</strong>复制数据的延迟由于异步复制特性是无法避免的，延迟取决于网络宽带和命令阻塞情况，比如刚在主节点写入数据后立刻在从节点上读取可能获取不到。需要业务场景允许短时间内的数据延迟。对于无法容忍大量延迟场景，可以编写外部监控程序监听主从节点的复制偏移量，当延迟较大时触发报警或通知客户端避免读取延迟过高的从节点。</p>
+<p>具体实现逻辑：</p>
+<ul>
+<li>监控程序定期检查主从节点的偏移量，主节点偏移量在<code>info replication</code>的<code>master_repl_offset</code>指标记录，从节点偏移量可以查询主节点的<code>slave0</code>字段的<code>offset</code>指标，它们的差值就是主从节点延迟的字节量。</li>
+<li>对于无法容忍大量延迟场景，可以编写外部监控程序监听主从节点的复制偏移量，当延迟较大时触发报警或者通知客户端避免读取延迟过高的从节点，同时从节点的<code>slave-serve-stable-data</code>参数也与此有关，它控制这种情况下从节点的表现，当从库同主机失去连接或者复制正在进行，从机库有两种运行方式。</li>
+</ul>
+<h3 id="读取过期数据"><a href="#读取过期数据" class="headerlink" title="读取过期数据"></a>读取过期数据</h3><p>当主节点存储大量设置超时的数据时，redis内部需要维护过期数据删除策略，删除策略主要有两种：</p>
+<ul>
+<li><p>惰性删除</p>
+<p>主节点每次处理读取命令时，都会检查健是否超时，如果超时则执行·<code>del</code>命令删除键对象，之后<code>del</code>命令也会异步发给从节点。因为保持复制的一致性，从节点自身永远不会主动删除超时数据。</p>
+</li>
+<li><p>定时删除</p>
+<p><strong>Redis</strong>主节点在内部定时任务会循环采样一定数据量的键，当发现采用的键过期时会执行<code>del</code>命令，之后再同步给从节点。</p>
+</li>
+</ul>
+<h3 id="从节点故障问题"><a href="#从节点故障问题" class="headerlink" title="从节点故障问题"></a>从节点故障问题</h3><p>对于从节点的故障问题，需要在客户端维护一个可用从节点可用列表，当从节点故障时，立刻切换到其他从节点或主节点，<strong>redis Cluster</strong>可以解决这个问题。</p>
+<h2 id="配置不一致"><a href="#配置不一致" class="headerlink" title="配置不一致"></a>配置不一致</h2><p>主节点和从节点不同，经常导致主节点和从节点的配置不同，并带来问题。</p>
+<p>主从配置不一致是一个容易忽视的问题。对于有些配置主从之间是可以不一致，比如：主节点关闭AOF，从节点开启AOF。但对于内存相关的配置必须要一致，比如<code>maxmemory</code>,<code>hash-max-ziplist-entries</code>等参数。</p>
+<p>数据丢失：主机和从机有时候发生配置不一致的情况，例如<code>maxmemory</code>不一致。假如主机配置<code>maxmemory</code>为8G，从机设置为4G，这个时候是可以用的，而且不会报错。但如果要做高可用，让从节点变成主节点的时候，就会发现数据已经丢失，而且无法挽回。</p>
+<h2 id="规避全量复制"><a href="#规避全量复制" class="headerlink" title="规避全量复制"></a>规避全量复制</h2><p>全量复制指的是当<strong>slave</strong>断开并重启后，<strong>runid</strong>产生变化而导致需要在<strong>master</strong>主机里拷贝全部数据。这种拷贝全部数据的过程非常耗资源。</p>
+<p>全量复制是不可避免的，例如第一次的全量复制就不可避免，这时我们需要选择小主节点，且<code>maxmemory</code>值不要过大，这样就会比较快。同时选择在低峰值的时候做全量复制。</p>
+<p>造成全量复制的原因：</p>
+<ul>
+<li>主从机的运行<strong>runid</strong>不匹配。解释一下，主节点如果重启，<strong>runid</strong>将会发生变化。如果从节点监控到<strong>runid</strong>不是同一个，它就会认为你的节点不安全。当发生故障转移的时候，如果主节点发生故障，那么从节点就会变成主节点（哨兵和集群）。</li>
+<li>复制缓冲区空间不足，比如默认值为1M，可以部分复制，但如果缓冲区不够大的话，首先需要网络中断，部分复制将无法满足。其次需要增大复制缓冲区配置<code>repl-backlog-size</code>，对网络的缓冲增强。</li>
+</ul>
+<p>怎么解决：</p>
+<ul>
+<li>在一些场景下，可能希望对主节点进行重启，例如主节点内存碎片率过高，或者希望调整一些只能在启动时调整的参数。如果使用普通的手段重启主节点，会使得<strong>runid</strong>发生变化，可能导致不必要的全量复制。</li>
+<li>为了解决这个问题，<strong>Redis</strong>提供了<strong>debug reload</strong>的重启方式：重启后，主节点的<strong>runid</strong>和<strong>offset</strong>都不受影响，避免了全量复制。</li>
+</ul>
+<h2 id="规避复制风暴"><a href="#规避复制风暴" class="headerlink" title="规避复制风暴"></a>规避复制风暴</h2><p>复制风暴是指大量从节点对同一主节点或者对同一台机器的多个主节点短时间内发起全量复制的过程。复制风暴对发起复制的主节点或者机器造成大量开销，导致 CPU、内存、带宽消耗。因此我们应该分析出复制风暴发生的场景，提前采用合理的方式规避。规避方式有如下几个。</p>
+<h3 id="单节点复制风暴"><a href="#单节点复制风暴" class="headerlink" title="单节点复制风暴"></a>单节点复制风暴</h3><p>当一个主机下面挂了很多个 <strong>slave</strong>从机的时候，主机 <strong>master</strong> 挂了，这时 <strong>master</strong> 主机重启后，因为 <strong>runid</strong> 发生了变化，所有的 <strong>slave</strong> 从机都要做一次全量复制。这将引起单节点和单机器的复制风暴，开销会非常大。</p>
+<p>解决：</p>
+<ul>
+<li>可以采用树状结构降低多个从节点对主节点的消耗。</li>
+<li>从节点采用树状树非常有用，网络开销交给位于中间层的从节点，而不必消耗顶层的主节点。但是这种树状结构也带来了运维的复杂性，增加了手动和自动 处理故障转移的难度。</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzA1LzI2ZGMzOWNiOWRmZTUucG5n?x-oss-process=image/format,png"></p>
+<h3 id="单机器复制风暴"><a href="#单机器复制风暴" class="headerlink" title="单机器复制风暴"></a>单机器复制风暴</h3><p>由于 <strong>Redis</strong> 的单线程架构，通常单台机器会部署多个 <strong>Redis</strong> 实例。当一台机器（<strong>machine</strong>）上同时部署多个主节点（<strong>master</strong>）时，如果每个 <strong>master</strong> 主机只有一台 <strong>slave</strong> 从机，那么当机器宕机以后，会产生大量全量复制。这种情况是非常危险的情况，带宽马上会被占用，会导致不可用。</p>
+<p>解决：</p>
+<ul>
+<li>应该把主节点尽量分散在多台机器上，避免在单台机器上部署过多的主节点。 </li>
+<li>当主节点所在机器故障后提供故障转移机制，避免机器恢复后进行密集的全量复制。</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzA1LzQ5NzJkZmFkN2EyNTEucG5n?x-oss-process=image/format,png"></p>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>###########从库############## </p>
+<p>#设置该数据库为其他数据库的从数据库 </p>
+<p><code>slaveof &lt;masterip&gt; &lt;masterport&gt; </code></p>
+<p>#主从复制中，设置连接<strong>master</strong>服务器的密码（前提<strong>master</strong>启用了认证） </p>
+<p><code>masterauth &lt;master-password&gt; </code></p>
+<p># 当从库同主库失去连接或者复制正在进行，从库有两种运行方式： </p>
+<p># 1) 如果<code>slave-serve-stale-data</code>设置为<strong>yes</strong>(默认设置)，从库会继续相应客户端的请求 </p>
+<p># 2) 如果<code>slave-serve-stale-data</code>设置为<strong>no</strong>，除了<strong>INFO</strong>和<strong>SLAVOF</strong>命令之外的任何请求都会返回一个错误”<strong>SYNC with master in progress</strong>“ </p>
+<p><code>slave-serve-stale-data yes </code></p>
+<p>#当主库发生宕机时候，哨兵会选择优先级最高的一个称为主库，从库优先级配置默认100，数值越小优先级越高 </p>
+<p><code>slave-priority 100</code></p>
+<p>#从节点是否只读；默认<strong>yes</strong>只读，为了保持数据一致性，应保持默认。</p>
+<p><code>slave-read-only yes</code></p>
+<p>########主库配置############## </p>
+<p>#在<strong>slave</strong>和<strong>master</strong>同步后（发送<strong>psync</strong>/<strong>sync</strong>），后续的同步是否设置成<strong>TCP_NODELAY</strong>假如设置成<strong>yes</strong>，则<strong>redis</strong>会合并小的<strong>TCP</strong>包从而节省带宽，但会增加同步延迟（40ms），造成<strong>master</strong>与<strong>slave</strong>数据不一致假如设置成<strong>no</strong>，则<strong>redis master</strong>会立即发送同步数据，没有延迟。</p>
+<p>#前者关注性能，后者关注一致性 </p>
+<p><code>repl-disable-tcp-nodelay no </code></p>
+<p>#从库会按照一个时间间隔向主库发送<strong>PING</strong>命令来判断主服务器是否在线，默认是10秒 </p>
+<p><code>repl-ping-slave-period 10</code> </p>
+<p>#复制积压缓冲区大小设置 </p>
+<p><code>repl-backlog-size 1mb</code> </p>
+<p>#<strong>master</strong>没有<strong>slave</strong>一段时间会释放复制缓冲区的内存，<code>repl-backlog-ttl</code>用来设置该时间长度。单位为秒。 </p>
+<p><code>repl-backlog-ttl 3600</code></p>
+<p>#<strong>redis</strong>提供了可以让<strong>master</strong>停止写入的方式，如果配置了<code>min-slaves-to-write</code>，健康的<strong>slave</strong>的个数小于<strong>N</strong>，<strong>mater</strong>就禁止写入。<strong>master</strong>最少得有多少个健康的<strong>slave</strong>存活才能执行写命令。这个配置虽然不能保证<strong>N</strong>个<strong>slave</strong>都一定能接收到<strong>master</strong>的写操作，但是能避免没有足够健康的slave的时候，<strong>master</strong>不能写入来避免数据丢失。设置为0是关闭该功能。 </p>
+<p><code>min-slaves-to-write 3</code></p>
+<p><code>min-slaves-max-lag 10</code> </p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-06-04T00:15:22.000Z" title="6/4/2020, 12:15:22 AM">2020-06-04</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.014Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">28 分钟读完 (大约4167个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/06/04/redis%E4%B8%BB%E4%BB%8E%E4%B9%8B%E5%85%A8%E9%87%8F%E5%A4%8D%E5%88%B6%E5%8F%8A%E5%A2%9E%E9%87%8F%E5%A4%8D%E5%88%B6.html">redis主从之全量复制及增量复制</a></h1><div class="content"><h2 id="主从注意事项"><a href="#主从注意事项" class="headerlink" title="主从注意事项"></a>主从注意事项</h2><p>对于主从复制的好处，在上篇文章我也写了，下面说一下注意事项。</p>
+<p><strong>注意事项</strong>：</p>
+<ul>
+<li><p>安全</p>
+<p>对于数据比较重要的节点，主节点会通过设置<code>requirepass</code>参数进行密码验证，这时候所有的客户端访问必须使用<code>auth</code>命令进行验证。从节点与主节点的复制链接是通过一个特殊标识的客户端来完成。因此需要配置从节点的<code>masterauth</code>参数与主节点密码保持一致，这样从节点才可以正确地链接到主节点并发起复制流程。</p>
+</li>
+<li><p>从节点只读</p>
+<p>默认情况下<code>slave-read-only=yes</code>配置为只读，由于复制只能从主节点到从节点，对于从节点的任何修改主节点都无法感知，修改从节点会造成主从数据不一致。因此没必要就不要动这个配置。</p>
+</li>
+<li><p>网络延迟问题</p>
+<p>主从节点一般部署在不同机器上，复制时的网络延迟就成为需要考虑的问题，redis为我们提供了<code>repl-disable-tcp-nodelay</code>参数用于控制是否关闭 tcp nodelay，默认是关闭的，说明如下：</p>
+<blockquote>
+<p>当<strong>关闭</strong>时，主节点产生的命令数据无论大小都会及时地发送给从节点，这样主从之间延迟将会变小，但增加了网络宽带的消耗。适用于主从之间的网络环境较好的场景。</p>
+<p>当<strong>开启</strong>时，主节点会合并较小的TCP数据包从而节省宽带。默认发送时间间隔取决于Linux的内核，一般默认为40ms。这种配置节省了宽带但增大主从之间的延迟。适用于主从网络环境复杂或宽带紧张的场景。</p>
+</blockquote>
+</li>
+</ul>
+<p>部署主从节点时需要考虑网络延迟、宽带使用率、防灾级别等因素，如要求低延迟时，建议同机房部署并关闭<code>repl-disable-tcp-nodelay</code>，如考虑容灾性，可以跨机房部署并开启<code>repl-disable-tcp-nodelay</code>。</p>
+<h2 id="拓扑图"><a href="#拓扑图" class="headerlink" title="拓扑图"></a>拓扑图</h2><h3 id="一主一从"><a href="#一主一从" class="headerlink" title="一主一从"></a>一主一从</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">graph TD</span><br><span class="line"></span><br><span class="line">A[Redis-master] --&gt; B[Redis-slave]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="一主多从"><a href="#一主多从" class="headerlink" title="一主多从"></a>一主多从</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line"></span><br><span class="line">A[Redis-master] --&gt; B[Redis-slave]</span><br><span class="line">A[Redis-master] --&gt; C[Redis-slave]</span><br><span class="line">A[Redis-master] --&gt; D[Redis-slave]</span><br></pre></td></tr></table></figure>
+
+<h3 id="树状主从"><a href="#树状主从" class="headerlink" title="树状主从"></a>树状主从</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line"></span><br><span class="line">A[Redis-master] --&gt; B[Redis-slave]</span><br><span class="line">A[Redis-master] --&gt; C[Redis-slave]</span><br><span class="line">B[Redis-slave] --&gt; D[Redis-slave]</span><br><span class="line">B[Redis-slave] --&gt; E[Redis-slave]</span><br></pre></td></tr></table></figure>
+
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line"></span><br><span class="line">A[slaveof] --&gt;|127.0.0.1:6379| B[slave]</span><br><span class="line">B[slave] --&gt; D[保存主节点信息]</span><br><span class="line">D[保存主节点信息] --&gt; E[主从建立socket连接]</span><br><span class="line">E[主从建立socket连接] --&gt; F[发送ping命令]</span><br><span class="line">F[发送ping命令] --&gt; G[权限验证]</span><br><span class="line">G[权限验证] --&gt; H[同步数据集]</span><br><span class="line">H[同步数据集] --&gt; I[命令持续复制]</span><br><span class="line">I[命令持续复制] --&gt; J[master]</span><br></pre></td></tr></table></figure>
+
+<p>从上图可以看出来大致分为6个过程：</p>
+<ul>
+<li>执行slaveof后从节点保存主节点的地址信息便返回，这时候复制流程还没开始。</li>
+<li>从节点内部通过每秒运行的定时任务维护复制相关逻辑，当定时任务发现存在新的主节点后，会尝试与该节点建立网络连接，从节点会建立一个socket套接字。</li>
+<li>发送ping命令，检测主从之间网络套接字是否可用，检测主节点是否可用接受处理命令。如果发送 ping 命令后，从节点没有收到主节点的 pong 回复或者超时，比如网络超时或者主节点正在阻塞无法响应命令，从节点会断开复制连接，下次定时任务会发起重连。</li>
+<li>如果主节点配置了<code>requirepass</code>参数，则需要密码认证，从节点必须配置<code>masterauth</code>参数保证与主节点相同的密码才能通过验证。</li>
+<li>主从复制连接正常通信后，对于首次建立复制的场景，主节点会把持有的数据全部发送给从节点，这部分操作是耗时最长的步骤。 </li>
+<li>当主节点把当前的数据同步给从节点后，便完成了复制的建立流程。接下来主节点会持续地把写命令发送给从节点，保证主从数据一致性。 </li>
+</ul>
+<blockquote>
+<p>主从同步的过程中，从节点会把原来的数据清空。</p>
+</blockquote>
+<h2 id="数据同步"><a href="#数据同步" class="headerlink" title="数据同步"></a>数据同步</h2><p>同步方式：</p>
+<ul>
+<li><p>全量复制</p>
+<p>用于初次复制或其它无法进行部分复制的情况，将主节点中的所有数据都发送给从节点。当数据量过大的时候，会造成很大的网络开销。</p>
+</li>
+<li><p>部分复制</p>
+<p>用于处理在主从复制中因网络闪退等原因造成数据丢失场景，当从节点再次连上主节点，如果条件允许，主节点会补发丢失数据给从节点，因为补发的数据远远小于全量数据，可以有效避免全量复制的过高开销。但需要注意，如果网络中断时间过长，造成主节点没有能够完整地保存中断期间执行的写命令，则无法进行部分复制，仍使用全量复制 。</p>
+</li>
+</ul>
+<p>复制偏移量：</p>
+<ul>
+<li><p>参与复制的主从节点都会维护自身复制偏移量，主节点在处理完写入命令操作后，会把命令的字节长度做累加记录，统计信息在<code>info replication</code>中的<code>master_repl_offset</code>指标中。</p>
+</li>
+<li><p>从节点每秒钟上报自身的复制偏移量给主节点，因此主节点也会保存从节点的复制偏移量<code>slave0:ip=192.168.1.3,port=6379,state=online,offset=116424,lag=0</code></p>
+</li>
+<li><p>从节点在接收到主节点发送的命令后，也会累加记录自身的偏移量。统计信息在<code>info replication</code>中的<code>slave_repl_offset</code>中。</p>
+</li>
+</ul>
+<p>复制积压缓冲区：</p>
+<ul>
+<li>复制积压缓冲区是保存在主节点上的一个固定长度的队列，默认大小为1MB，当主节点有连接的从节点时被创建，这时主节点响应写命令时，不但会把命令发给从节点，还会写入复制积压缓冲区。</li>
+<li>在命令传播阶段，主节点除了将写命令发送给从节点，还会发送一份给复制积压缓冲区，作为写命令的备份；除了存储写命令，复制积压缓冲区中还存储了其中 的每个字节对应的复制偏移量(offset) 。由于复制积压缓冲区定长且先进先出，所以它保存的是主节点最近执行的写命令；时间较早的写命令会被挤出缓冲区。</li>
+</ul>
+<p>主节点运行ID：</p>
+<ul>
+<li>每个redis节点启动后都会动态分配一个40位的十六进制字符串为运行ID。运行ID的主要作用是来唯一识别redis节点，比如从节点保存主节点的运行ID识别自已正在复制是哪个主节点。如果只使用ip+port的方式识别主节点，那么主节点重启变更了整体数据集（如替换RDB/AOF文件），从节点再基于偏移量复制数据将是不安全的，因此当运行ID变化后从节点将做全量复制。可以在<code>info server</code>命令查看当前节点的运行ID。</li>
+<li>需要注意的是redis关闭再启动，运行的id会随之变化。</li>
+</ul>
+<p>Psync命令：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzAzL2Q4ZjA2Mjc5YzdlYzQucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li>从节点使用<code>psync</code>命令完成部分复制和全量复制功能<code>psync runid offset</code></li>
+<li>流程说明：<ul>
+<li> 从节点(slave)发送psync命令给主节点，参数runid是当前从节点保存的主节点运行id，如果没有则默认值为 ？, 参数offset是当前从节点保存的复制偏移量，如果是第一次参与复制则默认值为-1。</li>
+<li>主节点根据<code>pysnc</code>参数和自身数据情况决定响应结果：<ul>
+<li>如果回复+FULLRESYNC {runid} {offset}，那么从节点将触发全量复制流程。</li>
+<li>如果回复+CONTINUE，从节点将触发部分复制流程。</li>
+<li>如果回复-ERR，说明主节点版本低于Redis2.8。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>全量复制流程：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzAzLzczNTFiMzg5NTRhYjkucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li>发送psync命令进行数据同步，由于是第一次进行复制，从节点没有复制偏移量和主节点的运行id，所以发送psync ? -1 </li>
+<li> 主节点根据psync ? -1解析出当前为全量复制，回复+FULLRESYNC响应(主机会向从机发送 runid 和 offset，因为 slave 并没有对应的 offset，所以是全量复制)</li>
+<li>从节点接收主节点的响应数据保存运行ID和偏移量offset(从机 slave 会保存 主机master 的基本信息 save masterInfo)</li>
+<li>主节点收到全量复制的命令后，执行bgsave（异步执行），在后台生成RDB文件（快照），并使用一个缓冲区（称为复制缓冲区）记录从现在开始执行的所有写命令</li>
+<li>主节点发送RDB文件给从节点，从节点把接收到的RDB文件保存在本地并直接作为从节点的数据文件，接收完RDB后从节点打印相关日志，可以在日志中查看主节点发送的数据量(主机send RDB 发送 RDB 文件给从机)<ul>
+<li>注意！对于数据量较大的主节点，比如生成的RDB文件超过6GB以上时要格外小心。传输文件这一步操作非常耗时，速度取决于主从节点之间网络带宽。</li>
+<li>通过细致分析Full resync和MASTER &lt;-&gt; SLAVE这两行日志的时间差，可以算出RDB文件从创建到传输完毕消耗的总时间。如果总时间超过repl-timeout所配置的值 (默认60秒)，从节点将放弃接受RDB文件并清理已经下载的临时文件，导致全量复制失败;针对数据量较大的节点，建议调大repl-timeout参数防止出现全量同步数据超时; </li>
+<li>例如对于千兆网卡的机器，网卡带宽理论峰值大约每秒传输100MB,在不考虑其他进程消耗带宽的情况下，6GB的RDB文件至少需要60秒传输时间，默认配置下，极易出现主从数同步超时。</li>
+</ul>
+</li>
+<li>对于从节点开始接收RDB快照到接收完成期间，主节点仍然响应读写命令，因此主节点会把这期间写命令数据保存在复制客户端缓冲区内，当从节点加载完RDB文件后，主节点再把缓冲区内的数据发送给从节点，保证主从之间数据致性。(发送缓冲区数据) </li>
+<li>从节点接收完主节点传送来的全部数据后会清空自身旧数据(刷新旧的数据，从节点在载入主节点的数据之前要先将老数据清除) </li>
+<li>从节点清空数据后开始加载RDB文件，对于较大的RDB文件，这一步操作依然比较消耗时间，可以通过计算日志之间的实际差来判断加载RDB的总消耗时间(加载 RDB 文件将数据库状态更新至主节点执行bgsave时的数据库状态和缓冲区数据的加载。)</li>
+<li>从节点成功加载完RDB后，如果当前节点开启了AOF持久化的功能，它会立刻做bgrewriteeaof的操作，为了保证全量复制后AOF持久化文件立刻可用。 通过分析全量复制的所有流程，全量复制是一个非常耗时费力的操作。他的实际开销主要包括： <ul>
+<li>主节点bgsave时间</li>
+<li>RDB文件网络传输时间</li>
+<li>从节点清空数据时间</li>
+<li>从节点加载RDB的时间</li>
+<li>可能的AOF重写时间</li>
+</ul>
+</li>
+</ul>
+<p>部分复制流程：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA2LzA0LzY1YjBlNzYzZjRmZDIucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li><p>部分复制是 Redis 2.8 以后出现的，之所以要加入部分复制，是因为全量复制会产生很多问题，比如像上面的时间开销大、无法隔离等问题， Redis 希望能够在主节点出现抖动（相当于断开连接）的时候，可以有一些机制将复制的损失降低到最低</p>
+</li>
+<li><p>当主从节点之间网络出现中断时，如果超过repl-timeout时间，主节点会认为从节点出问题了并断开复制链接（如果网络抖动（连接断开 connection lost））。</p>
+</li>
+<li><p>主从连接中断期间主节点依然响应命令，但因复制链接中断命令无法发送给从节点不过主节点内部存在的复制积压缓存去，依然可以保存一段时间的写命令数据，默认最大缓存1MB(主机master 还是会写 replbackbuffer（复制缓冲区）) </p>
+</li>
+<li><p>当主从节点网络恢复后，从节点会再次连上主节点。(从机slave会继续尝试连接主机)</p>
+</li>
+<li><p>当主从连接恢复后，由于从节点之前保存了自身已复制的偏移量和主节点的运行id。因此会把他们当作psync参数发送给主节点，要求进行部分复制操作。(从机 slave 会把自己当前 runid 和偏移量传输给主机 master，并且执行 pysnc 命令同步) </p>
+</li>
+<li><p>主节点接到psync命令后首先核对参数的runid，如果 master 发现你的偏移量是在缓冲区的范围内，根据参数offset在缓冲区查找复制内内，如果在偏移量之后的数据存在缓存区中，则对从节点发送continue表示可以进行部分复制 </p>
+</li>
+<li><p>主节点根据偏移量把复制积压缓冲区里的数据发送给从节点，保证主从复制进入正常状态。(同步了 offset 的部分数据，所以部分复制的基础就是偏移量 offset) </p>
+</li>
+</ul>
+<p>心跳：</p>
+<blockquote>
+<p>主节点在建立成功后会维护这长连接彼此发送心跳检测</p>
+</blockquote>
+<ul>
+<li>主从节点彼此都有心跳检测机制，各自模拟成对方的客户端进行通信，通过client list命令查看复制相关客户端信息，主节点的连接状态为flags=M,从节点连接状态 flags=S。</li>
+<li>主节点默认每隔10秒对从节点发送ping命令，判断从节点的存活性和连接状态。可通过参数repl-ping-slave-period控制发送频率。</li>
+<li>从节点在主线程中每隔1秒发送replconf ack {offset} 命令，给主节点上报自身当前的复制偏移量。</li>
+</ul>
+<p>缓冲区大小调节：</p>
+<ul>
+<li>由于缓冲区长度固定且有限，因此可以备份的写命令也有限，当主从节点offset的差距过大超过缓冲区长度时，将无法执行部分复制，只能执行全量复制。</li>
+<li>反过来说，为了提高网络中断时部分复制执行的概率，可以根据需要增大复制积压缓冲区的大小(通过配置repl-backlog-size)来设置； </li>
+<li>例如 如果网络中断的平均时间是 60s，而主节点平均每秒产生的写命令(特定协议格式)所占的字节数为100KB，则复制积压缓冲区的平均需求为6MB，保险起见， 可以设置为12MB，来保证绝大多数断线情况都可以使用部分复制。</li>
+</ul>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-05-31T16:55:36.000Z" title="5/31/2020, 4:55:36 PM">2020-05-31</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.014Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Go/">Go</a></span><span class="level-item">8 分钟读完 (大约1125个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/05/31/go%E5%B8%B8%E8%A7%81%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0.html">Go常见架构模式的实现</a></h1><div class="content"><h2 id="实现pipe-filter-framework"><a href="#实现pipe-filter-framework" class="headerlink" title="实现pipe-filter framework"></a>实现pipe-filter framework</h2><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA1LzMxL2I3MWU3ZjRjNDliMTQucG5n?x-oss-process=image/format,png"></p>
+<p>Pipe-Filter 模式：</p>
+<ul>
+<li>⾮常适合与数据处理及数据分析系统</li>
+<li>Filter封装数据处理的功能</li>
+<li>Pipe⽤于连接Filter传递数据或者在异步处理过程中缓冲数据流</li>
+<li>进程内同步调⽤时，pipe演变为数据在⽅法调⽤间传递</li>
+<li>松耦合：Filter只跟数据（格式）耦合</li>
+</ul>
+<p>Filter和组合模式：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA1LzMxL2JjYmI5MWRiNTJhZGQucG5n?x-oss-process=image/format,png"></p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA1LzMxLzY4N2IxNWEzNGU5MmQucG5n?x-oss-process=image/format,png"></p>
+<p>示例：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA1LzMxL2FjZjMyODk5NWI1NDcucG5n?x-oss-process=image/format,png"></p>
+<p>简单示例代码：</p>
+<p><code>filter.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Package pipefilter is to define the interfaces and the structures for pipe-filter style implementation</span></span><br><span class="line"><span class="keyword">package</span> pipefilter</span><br><span class="line"></span><br><span class="line"><span class="comment">// Request is the input of the filter</span></span><br><span class="line"><span class="keyword">type</span> Request <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Response is the output of the filter</span></span><br><span class="line"><span class="keyword">type</span> Response <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Filter interface is the definition of the data processing components</span></span><br><span class="line"><span class="comment">// Pipe-Filter structure</span></span><br><span class="line"><span class="keyword">type</span> Filter <span class="keyword">interface</span> &#123;</span><br><span class="line">	Process(data Request) (Response, error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>split_filter.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> pipefilter</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;errors&quot;</span></span><br><span class="line">	<span class="string">&quot;strings&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> SplitFilterWrongFormatError = errors.New(<span class="string">&quot;input data should be string&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> SplitFilter <span class="keyword">struct</span> &#123;</span><br><span class="line">	delimiter <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewSplitFilter</span><span class="params">(delimiter <span class="keyword">string</span>)</span> *<span class="title">SplitFilter</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;SplitFilter&#123;delimiter&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(sf *SplitFilter)</span> <span class="title">Process</span><span class="params">(data Request)</span> <span class="params">(Response, error)</span></span> &#123;</span><br><span class="line">	str, ok := data.(<span class="keyword">string</span>) <span class="comment">//检查数据格式/类型，是否可以处理</span></span><br><span class="line">	<span class="keyword">if</span> !ok &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, SplitFilterWrongFormatError</span><br><span class="line">	&#125;</span><br><span class="line">	parts := strings.Split(str, sf.delimiter)</span><br><span class="line">	<span class="keyword">return</span> parts, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>split_filter_test.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> pipefilter</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;reflect&quot;</span></span><br><span class="line">	<span class="string">&quot;testing&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestStringSplit</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	sf := NewSplitFilter(<span class="string">&quot;,&quot;</span>)</span><br><span class="line">	resp, err := sf.Process(<span class="string">&quot;1,2,3&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		t.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	parts, ok := resp.([]<span class="keyword">string</span>)</span><br><span class="line">	<span class="keyword">if</span> !ok &#123;</span><br><span class="line">		t.Fatalf(<span class="string">&quot;Repsonse type is %T, but the expected type is string&quot;</span>, parts)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> !reflect.DeepEqual(parts, []<span class="keyword">string</span>&#123;<span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>&#125;) &#123;</span><br><span class="line">		t.Errorf(<span class="string">&quot;Expected value is &#123;\&quot;1\&quot;,\&quot;2\&quot;,\&quot;3\&quot;&#125;, but actual is %v&quot;</span>, parts)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestWrongInput</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	sf := NewSplitFilter(<span class="string">&quot;,&quot;</span>)</span><br><span class="line">	_, err := sf.Process(<span class="number">123</span>)</span><br><span class="line">	<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">		t.Fatal(<span class="string">&quot;An error is expected.&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="实现micro-kernel-framework"><a href="#实现micro-kernel-framework" class="headerlink" title="实现micro-kernel framework"></a>实现micro-kernel framework</h2><p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA1LzMxLzMzYmU0MjlhMzRjYWEucG5n?x-oss-process=image/format,png"></p>
+<ul>
+<li><p>特点</p>
+<ul>
+<li>易于扩展</li>
+<li>错误隔离</li>
+<li>保持架构⼀致性</li>
+</ul>
+</li>
+<li><p>要点</p>
+</li>
+<li><p>内核包含公共流程或通⽤逻辑</p>
+<ul>
+<li>将可变或可扩展部分规划为扩展点</li>
+</ul>
+</li>
+<li><p>抽象扩展点⾏为，定义接⼝</p>
+<ul>
+<li>利⽤插件进⾏扩展</li>
+</ul>
+</li>
+</ul>
+<p>示例：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9xaW5pdS5nYW9iaW56aGFuLmNvbS8yMDIwLzA1LzMxLzhjZjE1NTllNjNlMDIucG5n?x-oss-process=image/format,png"></p>
+<p>简单示例代码：</p>
+<p><code>agent.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> microkernel</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;errors&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;strings&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	Waiting = <span class="literal">iota</span></span><br><span class="line">	Running</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> WrongStateError = errors.New(<span class="string">&quot;can not take the operation in the current state&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> CollectorsError <span class="keyword">struct</span> &#123;</span><br><span class="line">	CollectorErrors []error</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(ce CollectorsError)</span> <span class="title">Error</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> strs []<span class="keyword">string</span></span><br><span class="line">	<span class="keyword">for</span> _, err := <span class="keyword">range</span> ce.CollectorErrors &#123;</span><br><span class="line">		strs = <span class="built_in">append</span>(strs, err.Error())</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> strings.Join(strs, <span class="string">&quot;;&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Event <span class="keyword">struct</span> &#123;</span><br><span class="line">	Source  <span class="keyword">string</span></span><br><span class="line">	Content <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> EventReceiver <span class="keyword">interface</span> &#123;</span><br><span class="line">	OnEvent(evt Event)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Collector <span class="keyword">interface</span> &#123;</span><br><span class="line">	Init(evtReceiver EventReceiver) error</span><br><span class="line">	Start(agtCtx context.Context) error</span><br><span class="line">	Stop() error</span><br><span class="line">	Destory() error</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Agent <span class="keyword">struct</span> &#123;</span><br><span class="line">	collectors <span class="keyword">map</span>[<span class="keyword">string</span>]Collector</span><br><span class="line">	evtBuf     <span class="keyword">chan</span> Event</span><br><span class="line">	cancel     context.CancelFunc</span><br><span class="line">	ctx        context.Context</span><br><span class="line">	state      <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(agt *Agent)</span> <span class="title">EventProcessGroutine</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> evtSeg [<span class="number">10</span>]Event</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">			<span class="keyword">select</span> &#123;</span><br><span class="line">			<span class="keyword">case</span> evtSeg[i] = &lt;-agt.evtBuf:</span><br><span class="line">			<span class="keyword">case</span> &lt;-agt.ctx.Done():</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(evtSeg)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewAgent</span><span class="params">(sizeEvtBuf <span class="keyword">int</span>)</span> *<span class="title">Agent</span></span> &#123;</span><br><span class="line">	agt := Agent&#123;</span><br><span class="line">		collectors: <span class="keyword">map</span>[<span class="keyword">string</span>]Collector&#123;&#125;,</span><br><span class="line">		evtBuf:     <span class="built_in">make</span>(<span class="keyword">chan</span> Event, sizeEvtBuf),</span><br><span class="line">		state:      Waiting,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> &amp;agt</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(agt *Agent)</span> <span class="title">RegisterCollector</span><span class="params">(name <span class="keyword">string</span>, collector Collector)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> agt.state != Waiting &#123;</span><br><span class="line">		<span class="keyword">return</span> WrongStateError</span><br><span class="line">	&#125;</span><br><span class="line">	agt.collectors[name] = collector</span><br><span class="line">	<span class="keyword">return</span> collector.Init(agt)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(agt *Agent)</span> <span class="title">startCollectors</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> err error</span><br><span class="line">	<span class="keyword">var</span> errs CollectorsError</span><br><span class="line">	<span class="keyword">var</span> mutex sync.Mutex</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> name, collector := <span class="keyword">range</span> agt.collectors &#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(name <span class="keyword">string</span>, collector Collector, ctx context.Context)</span></span> &#123;</span><br><span class="line">			<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				mutex.Unlock()</span><br><span class="line">			&#125;()</span><br><span class="line">			err = collector.Start(ctx)</span><br><span class="line">			mutex.Lock()</span><br><span class="line">			<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">				errs.CollectorErrors = <span class="built_in">append</span>(errs.CollectorErrors,</span><br><span class="line">					errors.New(name+<span class="string">&quot;:&quot;</span>+err.Error()))</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(name, collector, agt.ctx)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(errs.CollectorErrors) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> errs</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(agt *Agent)</span> <span class="title">stopCollectors</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> err error</span><br><span class="line">	<span class="keyword">var</span> errs CollectorsError</span><br><span class="line">	<span class="keyword">for</span> name, collector := <span class="keyword">range</span> agt.collectors &#123;</span><br><span class="line">		<span class="keyword">if</span> err = collector.Stop(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			errs.CollectorErrors = <span class="built_in">append</span>(errs.CollectorErrors,</span><br><span class="line">				errors.New(name+<span class="string">&quot;:&quot;</span>+err.Error()))</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(errs.CollectorErrors) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> errs</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(agt *Agent)</span> <span class="title">destoryCollectors</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> err error</span><br><span class="line">	<span class="keyword">var</span> errs CollectorsError</span><br><span class="line">	<span class="keyword">for</span> name, collector := <span class="keyword">range</span> agt.collectors &#123;</span><br><span class="line">		<span class="keyword">if</span> err = collector.Destory(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			errs.CollectorErrors = <span class="built_in">append</span>(errs.CollectorErrors,</span><br><span class="line">				errors.New(name+<span class="string">&quot;:&quot;</span>+err.Error()))</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(errs.CollectorErrors) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> errs</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(agt *Agent)</span> <span class="title">Start</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> agt.state != Waiting &#123;</span><br><span class="line">		<span class="keyword">return</span> WrongStateError</span><br><span class="line">	&#125;</span><br><span class="line">	agt.state = Running</span><br><span class="line">	agt.ctx, agt.cancel = context.WithCancel(context.Background())</span><br><span class="line">	<span class="keyword">go</span> agt.EventProcessGroutine()</span><br><span class="line">	<span class="keyword">return</span> agt.startCollectors()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(agt *Agent)</span> <span class="title">Stop</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> agt.state != Running &#123;</span><br><span class="line">		<span class="keyword">return</span> WrongStateError</span><br><span class="line">	&#125;</span><br><span class="line">	agt.state = Waiting</span><br><span class="line">	agt.cancel()</span><br><span class="line">	<span class="keyword">return</span> agt.stopCollectors()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(agt *Agent)</span> <span class="title">Destory</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> agt.state != Waiting &#123;</span><br><span class="line">		<span class="keyword">return</span> WrongStateError</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> agt.destoryCollectors()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(agt *Agent)</span> <span class="title">OnEvent</span><span class="params">(evt Event)</span></span> &#123;</span><br><span class="line">	agt.evtBuf &lt;- evt</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>agent_test.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> microkernel</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;errors&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;testing&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> DemoCollector <span class="keyword">struct</span> &#123;</span><br><span class="line">	evtReceiver EventReceiver</span><br><span class="line">	agtCtx      context.Context</span><br><span class="line">	stopChan    <span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line">	name        <span class="keyword">string</span></span><br><span class="line">	content     <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewCollect</span><span class="params">(name <span class="keyword">string</span>, content <span class="keyword">string</span>)</span> *<span class="title">DemoCollector</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;DemoCollector&#123;</span><br><span class="line">		stopChan: <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;),</span><br><span class="line">		name:     name,</span><br><span class="line">		content:  content,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *DemoCollector)</span> <span class="title">Init</span><span class="params">(evtReceiver EventReceiver)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;initialize collector&quot;</span>, c.name)</span><br><span class="line">	c.evtReceiver = evtReceiver</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *DemoCollector)</span> <span class="title">Start</span><span class="params">(agtCtx context.Context)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;start collector&quot;</span>, c.name)</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">select</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> &lt;-agtCtx.Done():</span><br><span class="line">			c.stopChan &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			time.Sleep(time.Millisecond * <span class="number">50</span>)</span><br><span class="line">			c.evtReceiver.OnEvent(Event&#123;c.name, c.content&#125;)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *DemoCollector)</span> <span class="title">Stop</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;stop collector&quot;</span>, c.name)</span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> &lt;-c.stopChan:</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	<span class="keyword">case</span> &lt;-time.After(time.Second * <span class="number">1</span>):</span><br><span class="line">		<span class="keyword">return</span> errors.New(<span class="string">&quot;failed to stop for timeout&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *DemoCollector)</span> <span class="title">Destory</span><span class="params">()</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	fmt.Println(c.name, <span class="string">&quot;released resources.&quot;</span>)</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestAgent</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	agt := NewAgent(<span class="number">100</span>)</span><br><span class="line">	c1 := NewCollect(<span class="string">&quot;c1&quot;</span>, <span class="string">&quot;1&quot;</span>)</span><br><span class="line">	c2 := NewCollect(<span class="string">&quot;c2&quot;</span>, <span class="string">&quot;2&quot;</span>)</span><br><span class="line">	agt.RegisterCollector(<span class="string">&quot;c1&quot;</span>, c1)</span><br><span class="line">	agt.RegisterCollector(<span class="string">&quot;c2&quot;</span>, c2)</span><br><span class="line">	<span class="keyword">if</span> err := agt.Start(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;start error %v\n&quot;</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(agt.Start())</span><br><span class="line">	time.Sleep(time.Second * <span class="number">1</span>)</span><br><span class="line">	agt.Stop()</span><br><span class="line">	agt.Destory()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous is-invisible is-hidden-mobile"><a href="/page/0/">上一页</a></div><div class="pagination-next"><a href="/page/2/">下一页</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link is-current" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li><li><a class="pagination-link" href="/page/3/">3</a></li><li><a class="pagination-link" href="/page/4/">4</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/44792981?s=400&amp;u=273c6d745868dcacf7889e5da4499b751179f773&amp;v=4" alt="Stitch"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Stitch</p><p class="is-size-6 is-block">Alien monster</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Alien</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">39</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Stitch-June" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/Stitch-June"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Go/"><span class="level-start"><span class="level-item">Go</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/Kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Laravel/"><span class="level-start"><span class="level-item">Laravel</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Php/"><span class="level-start"><span class="level-item">Php</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/Swoole/"><span class="level-start"><span class="level-item">Swoole</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/uncategorized/"><span class="level-start"><span class="level-item">uncategorized</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li></ul></div></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/06/"><span class="level-start"><span class="level-item">六月 2020</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/05/"><span class="level-start"><span class="level-item">五月 2020</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/04/"><span class="level-start"><span class="level-item">四月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/03/"><span class="level-start"><span class="level-item">三月 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/12/"><span class="level-start"><span class="level-item">十二月 2019</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/08/"><span class="level-start"><span class="level-item">八月 2019</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-04-01T00:48:13.000Z">2021-04-01</time></p><p class="title"><a href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-03-31T01:12:26.000Z">2021-03-31</time></p><p class="title"><a href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-06-30T22:34:23.000Z">2020-06-30</time></p><p class="title"><a href="/2020/06/30/%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BAredis-cluster.html">如何搭建redis-cluster</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-06-22T14:09:55.000Z">2020-06-22</time></p><p class="title"><a href="/2020/06/22/redis%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E5%8F%8A%E5%AE%9E%E7%8E%B0.html">redis哨兵故障转移及实现</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-06-20T01:10:48.000Z">2020-06-20</time></p><p class="title"><a href="/2020/06/20/docker-compose%E6%90%AD%E5%BB%BAredis-sentinel.html">docker-compose搭建redis-sentinel</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Stitch&#039;s Blog</a><p class="is-size-7"><span>&copy; 2021 stitch</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
             article: {
                 highlight: {
                     clipboard: true,

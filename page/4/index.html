@@ -1,100 +1,5 @@
 <!doctype html>
-<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Stitch&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Stitch&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Stitch&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Stitch&#039;s Blog"><meta property="og:url" content="https://stitch.cn/"><meta property="og:site_name" content="Stitch&#039;s Blog"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://stitch.cn/img/og_image.png"><meta property="article:author" content="stitch"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stitch.cn"},"headline":"Stitch's Blog","image":["https://stitch.cn/img/og_image.png"],"author":{"@type":"Person","name":"stitch"},"publisher":{"@type":"Organization","name":"Stitch's Blog","logo":{"@type":"ImageObject","url":{"text":"Stitch's Blog"}}},"description":""}</script><link rel="alternate" href="/atom.xml" title="Stitch&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Stitch&#039;s Blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-12-20T17:41:47.000Z" title="12/20/2019, 5:41:47 PM">2019-12-20</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Linux/">Linux</a></span><span class="level-item">6 分钟读完 (大约878个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/20/linux%E4%BA%94%E5%A4%A7%E7%BD%91%E7%BB%9Cio%E6%A8%A1%E5%9E%8B%E5%9B%BE%E8%A7%A3.html">Linux五大网络IO模型图解</a></h1><div class="content"><blockquote>
-<p>对于一个应用程序即一个操作系统进程来说，它既有内核空间(与其他进程共享),也有用户空间(进程私有)，它们都是处于虚拟地址空间中。用户进程是无法访问内核空间的，它只能访问用户空间，通过用户空间去内核空间复制数据，然后进行处理。</p>
-</blockquote>
-<h1 id="阻塞io-同步io"><a href="#阻塞io-同步io" class="headerlink" title="阻塞io(同步io)"></a>阻塞io(同步io)</h1><p>发起请求就一直等待，直到数据返回。好比你去商场试衣间，里面有人，那你就一直在门外等着。(全程阻塞)</p>
-<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMjAvZjlmYWY2ZGY3YWQxZS5wbmc?x-oss-process=image/format,png" alt="阻塞io(同步io).png"></p>
-<h1 id="非阻塞io-同步io"><a href="#非阻塞io-同步io" class="headerlink" title="非阻塞io(同步io)"></a>非阻塞io(同步io)</h1><p>不管有没有数据都返回，没有就隔一段时间再来请求，如此循环。好比你要喝水，水还没烧开，你就隔段时间去看一下饮水机，直到水烧开为止。(复制数据时阻塞)</p>
-<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMjAvZGMzMWY5NjE5NWI5YS5wbmc?x-oss-process=image/format,png" alt="非阻塞io(同步io).png"></p>
-<h1 id="io复用-同步io"><a href="#io复用-同步io" class="headerlink" title="io复用(同步io)"></a>io复用(同步io)</h1><p>I/O是指网络I/O,多路指多个TCP连接(即socket或者channel）,复用指复用一个或几个线程。意思说一个或一组线程处理多个连接。比如课堂上学生做完了作业就举手，老师就下去检查作业。(对一个IO端口，两次调用，两次返回，比阻塞IO并没有什么优越性；关键是能实现同时对多个IO端口进行监听，可以同时对多个读/写操作的IO函数进行轮询检测，直到有数据可读或可写时，才真正调用IO操作函数。)　<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMjAvZDk2YTU2YTJiMjRiYS5wbmc?x-oss-process=image/format,png" alt="io复用(同步io).png"></p>
-<h1 id="信号驱动io-同步io"><a href="#信号驱动io-同步io" class="headerlink" title="信号驱动io(同步io)"></a>信号驱动io(同步io)</h1><p>事先发出一个请求，当有数据后会返回一个标识回调，这时你可以去请求数据。好比银行排号，当叫到你的时候，你就可以去处理业务了(复制数据时阻塞)。<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMjAvMWE4NjM3MTg3MjcwMi5wbmc?x-oss-process=image/format,png" alt="信号驱动io(同步io).png"></p>
-<h1 id="异步io"><a href="#异步io" class="headerlink" title="异步io"></a>异步io</h1><p>发出请求就返回，剩下的事情会异步自动完成，不需要做任何处理。好比有事秘书干，自己啥也不用管。　　<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMjAvNzk4MGI4MjlhM2YxMS5wbmc?x-oss-process=image/format,png" alt="异步io.png"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>五种IO的模型：阻塞IO、非阻塞IO、多路复用IO、信号驱动IO和异步IO；前四种都是同步IO，在内核数据copy到用户空间时都是阻塞的。</p>
-<p>阻塞IO和非阻塞IO的区别在于第一步，发起IO请求是否会被阻塞，如果会那就是传统的阻塞IO，如果不会那就是非阻塞IO。</p>
-<p>同步IO和异步IO的区别就在于第二个步骤是否阻塞，如果实际的IO读写阻塞请求进程，那么就是同步IO；如果不阻塞，而是操作系统帮你做完IO操作再将结果返回给你，那么就是异步IO</p>
-<hr>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-12-19T17:01:46.000Z" title="12/19/2019, 5:01:46 PM">2019-12-19</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Redis/">Redis</a></span><span class="level-item">10 分钟读完 (大约1539个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/19/docker%E5%AE%9E%E7%8E%B0redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6.html">docker实现redis主从复制</a></h1><div class="content"><h3 id="主从复制说明"><a href="#主从复制说明" class="headerlink" title="主从复制说明"></a>主从复制说明</h3><h4 id="面临问题"><a href="#面临问题" class="headerlink" title="面临问题"></a>面临问题</h4><p>在实际的场景当中单一节点的redis容易面临风险。<br>比如:</p>
-<ul>
-<li>机器故障。我们部署到一台 Redis 服务器，当发生机器故障时，需要迁移到另外一台服务器并且要保证数据是同步的。而数据是最重要的，如果你不在乎， 基本上也就不会使用 Redis 了。</li>
-</ul>
-<p>要实现分布式数据库的更大的存储容量和承受高并发访问量，我们会将原来集中式数据库的数据分别存储到其他多个网络节点上。</p>
-<p>Redis 为了解决这个单一节点的问题，也会把数据复制多个副本部署到其他节点上进行复制，实现 Redis的高可用，实现对数据的冗余备份，从而保证数据和服务 的高可用。</p>
-<h4 id="什么是主从复制"><a href="#什么是主从复制" class="headerlink" title="什么是主从复制"></a>什么是主从复制</h4><ul>
-<li>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master)，后者称为从节点(slave),数据的复制是单向的，只能由主节点到 从节点。</li>
-<li>默认情况下，每台Redis服务器都是主节点，且一个主节点可以有多个从节点(或没有从节点)，但一个从节点只能有一个主节点。</li>
-</ul>
-<h3 id="主从复制的作用"><a href="#主从复制的作用" class="headerlink" title="主从复制的作用"></a>主从复制的作用</h3><ul>
-<li>数据冗余:主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
-<li>故障恢复:当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复;实际上是一种服务的冗余。</li>
-<li>负载均衡:在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务(即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点) 分担服务器负载;尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。</li>
-<li>读写分离:可以用于实现读写分离，主库写、从库读，读写分离不仅可以提高服务器的负载能力，同时可根据需求的变化，改变从库的数量;</li>
-<li>高可用基石:除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础。        </li>
-</ul>
-<h4 id="主从复制启用"><a href="#主从复制启用" class="headerlink" title="主从复制启用"></a>主从复制启用</h4><p>从节点开启主从复制，有3种方式:</p>
-<ol>
-<li>配置文件<br>在从服务器的配置文件中加入:slaveof <masterip> <masterport><br>不推荐使用 配置文件可被动态修改</li>
-<li>启动命令<br>redis-server启动命令后加入 –slaveof <masterip> <masterport></li>
-<li>客户端命令<br>Redis服务器启动后，直接通过客户端执行命令:slaveof <masterip> <masterport>，则该Redis实例成为从节点。<br>通过 info replication 命令可以看到复制的一些参数信息</li>
-</ol>
-<h4 id="主从复制原理"><a href="#主从复制原理" class="headerlink" title="主从复制原理"></a>主从复制原理</h4><p>主从复制的原理以及过程必须要掌握，这样我们才知道为什么会出现这些问题 主从复制过程大体可以分为3个阶段:连接建立阶段(即准备阶段)、数据同步阶段、命令传播阶段。<br>在从节点执行 slaveof 命令后，复制过程便开始运作，下面图示大概可以看到， 从图中可以看出复制过程大致分为6个过程<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNTVmNTM3MmVhNTgzNy5wbmc?x-oss-process=image/format,png"></p>
-<h3 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h3><h4 id="dockerfile构建redis镜像"><a href="#dockerfile构建redis镜像" class="headerlink" title="dockerfile构建redis镜像"></a>dockerfile构建redis镜像</h4><p>DockerFile</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">FROM alpine</span><br><span class="line">RUN sed -i &#x27;s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g&#x27; /etc/apk/repositories \</span><br><span class="line">  &amp;&amp; apk add  gcc g++ libc-dev  wget vim  openssl-dev make  linux-headers \</span><br><span class="line">  &amp;&amp; rm -rf /var/cache/apk/*</span><br><span class="line"></span><br><span class="line">#通过选择更小的镜像，删除不必要文件清理不必要的安装缓存，从而瘦身镜像</span><br><span class="line">#创建相关目录能够看到日志信息跟数据跟配置文件</span><br><span class="line">RUN mkdir -p /usr/src/redis \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/data \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/conf \</span><br><span class="line">      &amp;&amp; mkdir -p /usr/src/redis/log   \</span><br><span class="line">      &amp;&amp; mkdir -p /var/log/redis</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RUN wget  -O /usr/src/redis/redis-4.0.11.tar.gz  &quot;http://download.redis.io/releases/redis-4.0.11.tar.gz&quot; \</span><br><span class="line">   &amp;&amp; tar -xzf /usr/src/redis/redis-4.0.11.tar.gz  -C /usr/src/redis \</span><br><span class="line">   &amp;&amp; rm -rf /usr/src/redis/redis-4.0.11.tar.tgz</span><br><span class="line"></span><br><span class="line">RUN cd /usr/src/redis/redis-4.0.11 &amp;&amp;  make &amp;&amp; make PREFIX=/usr/local/redis install \</span><br><span class="line">&amp;&amp; ln -s /usr/local/redis/bin/*  /usr/local/bin/  &amp;&amp; rm -rf /usr/src/redis/redis-4.0.11</span><br><span class="line"></span><br><span class="line">#COPY ./conf/redis.conf  /usr/src/redis/conf</span><br><span class="line"></span><br><span class="line">CMD [&quot;/usr/local/bin/redis-server&quot;,&quot;/usr/src/redis/conf/redis.conf&quot;]</span><br></pre></td></tr></table></figure>
-<p>切换到当前dockfile文件目录下 执行命令</p>
-<p><code>docker build -t redis .</code></p>
-<p>等待构建完成就可以了</p>
-<h4 id="docker创建自定义网络及redis主从集群规划"><a href="#docker创建自定义网络及redis主从集群规划" class="headerlink" title="docker创建自定义网络及redis主从集群规划"></a>docker创建自定义网络及redis主从集群规划</h4><p>执行自定义网络命令</p>
-<p><code>docker network create --subnet=192.168.1.0/24 redis-network</code></p>
-<table>
-<thead>
-<tr>
-<th>容器名称</th>
-<th>容器IP地址</th>
-<th>映射端口号</th>
-<th>宿主机IP地址</th>
-<th>服务运行模式</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>redis-master</td>
-<td>192.168.1.2</td>
-<td>6380-&gt;6379</td>
-<td>127.0.0.1</td>
-<td>master</td>
-</tr>
-<tr>
-<td>redis-slave</td>
-<td>192.168.1.3</td>
-<td>6381-&gt;6379</td>
-<td>127.0.0.1</td>
-<td>slave</td>
-</tr>
-</tbody></table>
-<h4 id="docker启动容器"><a href="#docker启动容器" class="headerlink" title="docker启动容器"></a>docker启动容器</h4><p>在 /data/ 下面创建该目录结构</p>
-<p>data和log下面文件忽略</p>
-<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNDU2MTlhNWFhOTE5Yi5wbmc?x-oss-process=image/format,png"></p>
-<p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1hi4eAt6RZTBhGNX-bawecA">目录代码</a></p>
-<p>提取码：r8r1</p>
-<p>下载完放到 /data 下面</p>
-<p>用户可自行定义宿主机目录</p>
-<p>master<br><code>docker run -itd --name  redis-master  --net redis-network -v /data/redis/master:/usr/src/redis  -p 6380:6379  --ip 192.168.1.2  redis </code></p>
-<p>slave<br><code>docker run -itd --name  redis-slave  --net redis-network -v /data/redis/slave:/usr/src/redis  -p 6381:6379  --ip 192.168.1.3  redis </code></p>
-<h4 id="测试主从复制"><a href="#测试主从复制" class="headerlink" title="测试主从复制"></a>测试主从复制</h4><p>主从的配置文件 没有设置redis密码</p>
-<p>开两个终端分别执行</p>
-<p><code>docker exec -it redis-master sh</code></p>
-<p><code>docker exec -it redis-slave sh</code></p>
-<p>进入容器后执行(都要执行)</p>
-<p><code>redis-cli</code></p>
-<p>在slave执行</p>
-<p><code>SLAVEOF 192.168.1.2 6379</code></p>
-<p><code>info repliaction</code></p>
-<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvMWMyZGMxMzJmNjczMS5wbmc?x-oss-process=image/format,png"></p>
-<p><code>master_link_status</code>为up就成功了！</p>
-<p>当前是通过内网连接 端口号为6379</p>
-<p>如果通过宿主机IP连接 端口号为6380</p>
-<p>这时候在master进行操作 就可以看到slave的变化了！</p>
-<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3Fpbml1Lmdhb2JpbnpoYW4uY29tLzIwMTkvMTIvMTkvNjM5YjQxZTA3MDIzZi5wbmc?x-oss-process=image/format,png"></p>
-<hr>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-12-15T16:20:41.000Z" title="12/15/2019, 4:20:41 PM">2019-12-15</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Swoole/">Swoole</a></span><span class="level-item">6 分钟读完 (大约946个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/15/swoole%E5%A4%84%E7%90%86tcp%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98%EF%BC%88%E9%9D%A2%E5%90%91%E8%BF%87%E7%A8%8B%EF%BC%89.html">Swoole处理Tcp粘包问题（面向过程）</a></h1><div class="content"><h1 id="TCP通信特点"><a href="#TCP通信特点" class="headerlink" title="TCP通信特点"></a>TCP通信特点</h1><ul>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Stitch&#039;s Blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Stitch&#039;s Blog"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Stitch&#039;s Blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta property="og:type" content="blog"><meta property="og:title" content="Stitch&#039;s Blog"><meta property="og:url" content="https://stitch.cn/"><meta property="og:site_name" content="Stitch&#039;s Blog"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://stitch.cn/img/og_image.png"><meta property="article:author" content="stitch"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stitch.cn"},"headline":"Stitch's Blog","image":["https://stitch.cn/img/og_image.png"],"author":{"@type":"Person","name":"stitch"},"publisher":{"@type":"Organization","name":"Stitch's Blog","logo":{"@type":"ImageObject","url":{"text":"Stitch's Blog"}}},"description":""}</script><link rel="alternate" href="/atom.xml" title="Stitch&#039;s Blog" type="application/atom+xml"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">Stitch&#039;s Blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">文章</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/about">关于</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-12-15T16:20:41.000Z" title="12/15/2019, 4:20:41 PM">2019-12-15</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.018Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Swoole/">Swoole</a></span><span class="level-item">6 分钟读完 (大约946个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/15/swoole%E5%A4%84%E7%90%86tcp%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98%EF%BC%88%E9%9D%A2%E5%90%91%E8%BF%87%E7%A8%8B%EF%BC%89.html">Swoole处理Tcp粘包问题（面向过程）</a></h1><div class="content"><h1 id="TCP通信特点"><a href="#TCP通信特点" class="headerlink" title="TCP通信特点"></a>TCP通信特点</h1><ul>
 <li>TCP 是流式协议没有消息边界，客户端向服务器端发送一次数据，可能会被服务器端分成多次收到。客户端向服务器端发送多条数据。服务器端可能一次全部收到。</li>
 <li>保证传输的可靠性，顺序。</li>
 <li>TCP拥有拥塞控制，所以数据包可能会延后发送。</li>
@@ -124,7 +29,7 @@
 <p>swoole-version 4.4.12</p>
 </blockquote>
 <hr>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-12-14T12:23:11.000Z" title="12/14/2019, 12:23:11 PM">2019-12-14</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Swoole/">Swoole</a></span><span class="level-item">3 分钟读完 (大约378个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/14/Swoole%20TCP%E5%92%8CUDP%EF%BC%88%E5%90%8C%E6%AD%A5%E5%92%8C%E5%BC%82%E6%AD%A5%EF%BC%89.html">Swoole TCP和UDP（同步和异步）</a></h1><div class="content"><blockquote>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-12-14T12:23:11.000Z" title="12/14/2019, 12:23:11 PM">2019-12-14</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.014Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Swoole/">Swoole</a></span><span class="level-item">3 分钟读完 (大约378个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/14/Swoole%20TCP%E5%92%8CUDP%EF%BC%88%E5%90%8C%E6%AD%A5%E5%92%8C%E5%BC%82%E6%AD%A5%EF%BC%89.html">Swoole TCP和UDP（同步和异步）</a></h1><div class="content"><blockquote>
 <p>Tcp: 舔狗行为 可靠 先连接然后发消息等待回复</p>
 </blockquote>
 <blockquote>
@@ -159,63 +64,7 @@
 <p>swoole-version 4.4.12</p>
 </blockquote>
 <hr>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-10-27T15:30:51.000Z" title="10/27/2019, 3:30:51 PM">2019-10-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">4 分钟读完 (大约617个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/10/27/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E5%AE%89%E8%A3%85.html">ElasticSearch全文检索引擎-安装</a></h1><div class="content"><h1 id="ElasticSearch安装"><a href="#ElasticSearch安装" class="headerlink" title="ElasticSearch安装"></a>ElasticSearch安装</h1><h4 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h4><ol>
-<li><p><strong>下载rpm包</strong></p>
-<p> <code>wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.rpm&quot;</code></p>
-</li>
-<li><p><strong>rpm安装</strong></p>
-<p> <code>rpm -ivh jdk-8u201-linux-x64.rpm</code><br> 安装成功后测试 java javac java -version 命令都能使用</p>
-</li>
-</ol>
-<h4 id="安装ElasticSearch"><a href="#安装ElasticSearch" class="headerlink" title="安装ElasticSearch"></a>安装ElasticSearch</h4><ol>
-<li><p><strong>官网</strong><br><a target="_blank" rel="noopener" href="https://www.elastic.co/">ElasticSearch</a></p>
-</li>
-<li><p><strong>下载</strong><br>这里我下载的2.4.6版本</p>
-<p><code>wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/rpm/elasticsearch/2.4.6/elasticsearch-2.4.6.rpm</code></p>
-</li>
-<li><p><strong>安装ElasticSearch</strong></p>
-<p> <code>yum install elasticsearch-2.4.6.rpm</code></p>
-</li>
-<li><p><strong>修改配置文件</strong></p>
-<p><code>vim /etc/elasticsearch/elasticsearch.yml</code></p>
-<p><code>cluster.name: my-application</code>这行取消注释 并且改为自己的应用名称<br><code>node.name: node-1</code>  这行也一样 改为自己的节点名称<br>为了方便操作 应用名称改为 <code>search</code>  节点名称为 <code>master</code><br><code>network.host: 192.168.0.1</code> 取消注释 改为 <code>0.0.0.0</code><br><code>http.port: 9200</code> 取消注释就行 可以自行修改端口号<br>切记 取消注释后 首字母前面不能有空格 不然启动会报错</p>
-</li>
-<li><p><strong>运行ElasticSearch</strong></p>
-<p> <code>service elasticsearch start</code><br> 浏览器访问ip+端口号 如果出现界面证明 成功</p>
-</li>
-</ol>
-<h4 id="安装ik中文分词"><a href="#安装ik中文分词" class="headerlink" title="安装ik中文分词"></a>安装ik中文分词</h4><ol>
-<li><p><strong>ik分词地址</strong></p>
-<p> <a target="_blank" rel="noopener" href="https://github.com/medcl/elasticsearch-analysis-ik">ik</a></p>
-</li>
-<li><p><strong>安装git和maven</strong></p>
-<p> 如果有的话跳过此步</p>
-<p> 安装git<br> <code>yum install -y git</code></p>
-<p> 下载maven包<br> <code>wget https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz</code></p>
-<p> 解压到指定目录<br><code>tar -xzvf apache-maven-3.5.4-bin.tar.gz -C /usr/local</code></p>
-<p>进入指定目录<br><code>cd /usr/local/</code></p>
-<p>创建软连接<br><code>ln -s apache-maven-3.5.4 maven</code></p>
-<p>编辑文件 添加maven环境变量<br><code>vim /etc/profile</code></p>
-<p>在文件末尾添加以下代码<br><code>MAVEN_HOME=//usr/local/maven</code><br><code>export MAVEN_HOME</code><br><code>export PATH=$&#123;PATH&#125;:$&#123;MAVEN_HOME&#125;/bin</code></p>
-<p>运行命令<br><code>source /etc/profile</code></p>
-<p> <code>mvn -v</code><br>出现版本 安装maven成功</p>
-</li>
-<li><p><strong>安装ik分词</strong><br>克隆<br><code>git clone https://github.com/medcl/elasticsearch-analysis-ik.git</code></p>
-<p>根据elasticsearch版本号切换相对应的ik分词版本号 这里es是2.4.6 相对应是1.10.6</p>
-<p>克隆好之后进入该目录<br><code>cd elasticsearch-analysis-ik/</code></p>
-<p>切换版本<br><code>git checkout tags/v1.10.6</code></p>
-<p>执行<br><code>mvn package</code></p>
-<p>执行成功后会在 <code>target/releases/</code>  目录下生成一个插件包 进入该目录<br><code>cd target/releases/</code></p>
-<p>复制到es的插件目录下解压<br><code>cp elasticsearch-analysis-ik-1.10.6.zip /usr/share/elasticsearch/plugins/</code></p>
-<p>进入目录<br><code>cd /usr/share/elasticsearch/plugins/</code></p>
-<p>解压<br><code>unzip elasticsearch-analysis-ik-1.10.6.zip</code></p>
-<p>为了方便管理 新建个文件夹 把刚刚解压出来的文件移动进去<br><code>mkdir ik</code><br><code>mv ./* ik</code></p>
-<p>重启elasticsearch<br><code>service elasticsearch restart</code></p>
-<p>测试下<br><code>curl -XPOST &quot;http://ip:port/_analyze?analyzer=ik&amp;pretty&quot; -d &#39;这是一个商品的标题&#39;</code></p>
-</li>
-</ol>
-<hr>
-<h3 id="ElasticSearch和ik分词安装成功"><a href="#ElasticSearch和ik分词安装成功" class="headerlink" title="ElasticSearch和ik分词安装成功"></a>ElasticSearch和ik分词安装成功</h3></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:40:57.000Z" title="8/27/2019, 5:40:57 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kafka/">Kafka</a></span><span class="level-item">3 分钟读完 (大约502个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6kafka-php%E6%93%8D%E4%BD%9C%E4%BD%BF%E7%94%A8kafka.html">消息中间件Kafka - PHP操作使用Kafka</a></h1><div class="content"><h1 id="PHP使用Kafka"><a href="#PHP使用Kafka" class="headerlink" title="PHP使用Kafka"></a>PHP使用Kafka</h1><blockquote>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:40:57.000Z" title="8/27/2019, 5:40:57 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.018Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kafka/">Kafka</a></span><span class="level-item">3 分钟读完 (大约502个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6kafka-php%E6%93%8D%E4%BD%9C%E4%BD%BF%E7%94%A8kafka.html">消息中间件Kafka - PHP操作使用Kafka</a></h1><div class="content"><h1 id="PHP使用Kafka"><a href="#PHP使用Kafka" class="headerlink" title="PHP使用Kafka"></a>PHP使用Kafka</h1><blockquote>
 <p><strong>我们需要安装<a target="_blank" rel="noopener" href="https://github.com/edenhill/librdkafka">libkafka</a>和<a target="_blank" rel="noopener" href="https://github.com/arnaud-lb/php-rdkafka">rdkafka</a></strong></p>
 </blockquote>
 <h2 id="安装libkafka"><a href="#安装libkafka" class="headerlink" title="安装libkafka"></a>安装libkafka</h2><ol>
@@ -309,7 +158,7 @@
 </code></pre>
 开启两个窗口一个运行consumer 一个运行producer   <code>php consumer.php</code><br>  <code>php producer.php</code>会发现我们已经简单的会使用kafka了。</li>
 </ol>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:36:36.000Z" title="8/27/2019, 5:36:36 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">4 分钟读完 (大约625个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6kafka-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%AE%89%E8%A3%85.html">消息中间件Kafka - 介绍及安装</a></h1><div class="content"><h1 id="Kafka介绍"><a href="#Kafka介绍" class="headerlink" title="Kafka介绍"></a>Kafka介绍</h1><h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><ul>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:36:36.000Z" title="8/27/2019, 5:36:36 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.018Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kafka/">Kafka</a></span><span class="level-item">4 分钟读完 (大约625个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6kafka-%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%AE%89%E8%A3%85.html">消息中间件Kafka - 介绍及安装</a></h1><div class="content"><h1 id="Kafka介绍"><a href="#Kafka介绍" class="headerlink" title="Kafka介绍"></a>Kafka介绍</h1><h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><ul>
 <li><strong>高吞吐量</strong>：非常普通的硬件Kafka也可以支持每秒数百万的消息</li>
 <li>支持通过Kafka服务器和消费机集群来区分消息</li>
 <li>支持Hadoop并行数据加载</li>
@@ -355,7 +204,7 @@
 <p><img src="https://img-blog.csdnimg.cn/20190320100541632.png" alt="d4b0ffa28a974f98c733bb3e054b83ac.png"><br><img src="https://img-blog.csdnimg.cn/20190320100548426.png" alt="8d4e50024a47893502c701ecea979d27.png"></p>
 </li>
 </ol>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:35:51.000Z" title="8/27/2019, 5:35:51 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kafka/">Kafka</a></span><span class="level-item">6 分钟读完 (大约959个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF.html">消息队列 - 应用场景</a></h1><div class="content"><h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><blockquote>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:35:51.000Z" title="8/27/2019, 5:35:51 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.018Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kafka/">Kafka</a></span><span class="level-item">6 分钟读完 (大约959个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF.html">消息队列 - 应用场景</a></h1><div class="content"><h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><blockquote>
 <p><strong>消息队列中间件时分布式系统中重要的组件，主要解决应用耦合，异步消息，流量削锋等问题。实现高性能，高可用，可伸缩和最终一致性架构。是大型分布式系统不可缺少的中间件。</strong></p>
 </blockquote>
 <h5 id="异步处理"><a href="#异步处理" class="headerlink" title="异步处理"></a>异步处理</h5><ul>
@@ -394,7 +243,307 @@
 <h4 id="主要产品"><a href="#主要产品" class="headerlink" title="主要产品"></a>主要产品</h4><blockquote>
 <p><strong>目前在生成环境，使用较多的消息队列有ActiveMQ，RabbitMQ，ZeroMQ，Kafka，MetaMQ，RocketMQ等</strong></p>
 </blockquote>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:33:27.000Z" title="8/27/2019, 5:33:27 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T05:56:08.207Z" title="10/11/2021, 5:56:08 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Laravel/">Laravel</a></span><span class="level-item">4 分钟读完 (大约571个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/laravel%E4%BD%BF%E7%94%A8repository%E6%A8%A1%E5%BC%8F.html">Laravel使用repository模式</a></h1><div class="content"><blockquote>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:35:08.000Z" title="8/27/2019, 5:35:08 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.014Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">5 分钟读完 (大约812个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BD%BF%E7%94%A8.html">ElasticSearch全文检索引擎-使用</a></h1><div class="content"><h1 id="ElasticSearch使用"><a href="#ElasticSearch使用" class="headerlink" title="ElasticSearch使用"></a>ElasticSearch使用</h1><h4 id="手册官网"><a href="#手册官网" class="headerlink" title="手册官网"></a>手册官网</h4><p><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">es-docs</a><br><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/cn/elasticsearch/php/current/index.html">es-php-docs</a></p>
+<h4 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h4><ol>
+<li><p><strong>创建索引</strong></p>
+<p> <code>vim createindex.json</code></p>
+<pre><code> &#123;
+     &quot;settings&quot;: &#123;
+         &quot;refresh_interval&quot;: &quot;5s&quot;,
+         &quot;number_of_shards&quot;: 1,
+         &quot;number_of_replicas&quot;: 0
+     &#125;,
+     &quot;mappings&quot;: &#123;
+         &quot;_default_&quot;: &#123;
+             &quot;_all&quot;: &#123;
+                 &quot;enabled&quot;: true
+             &#125;
+         &#125;
+     &#125;,
+     &quot;products&quot;: &#123;
+         &quot;dynamic&quot;: false,
+         &quot;properties&quot;: &#123;
+             &quot;productid&quot;: &#123;
+                 &quot;type&quot;: &quot;long&quot;
+             &#125;,
+             &quot;title&quot;: &#123;
+                 &quot;type&quot;: &quot;string&quot;,
+                 &quot;index&quot;: &quot;analyzed&quot;,
+                 &quot;analyzer&quot;: &quot;ik&quot;
+             &#125;,
+             &quot;descr&quot;: &#123;
+                 &quot;type&quot;: &quot;string&quot;,
+                 &quot;index&quot;: &quot;analyzed&quot;,
+                 &quot;analyzer&quot;: &quot;ik&quot;
+             &#125;
+         &#125;
+     &#125;
+ &#125;
+</code></pre>
+<p> 具体的字段意思手册上都有</p>
+<p> 创建 </p>
+<p><code>curl -XPOST &quot;http://ip:port/shop&quot; -d&#39;@createindex.json</code>    </p>
+<p>这里的shop就是我们要设置的索引名称 可以自定义<br>products 是 索引的type类型 可以自定义</p>
+</li>
+<li><p><strong>添加数据</strong></p>
+<p> <code>curl -XPUT &quot;http://119.23.51.33:9200/shop/products/1&quot; -d&#39;&#123;&quot;productid&quot;:1,&quot;title&quot;:&quot;这是一个商品的标题&quot;,&quot;descr&quot;:&quot;这是一个商品的描述&quot;&#125;&#39;</code></p>
+</li>
+</ol>
+<pre><code>`curl -XPUT &quot;http://ip:port/shop/products/2?pretty&quot; -d&#39;&#123;&quot;productid&quot;:2,&quot;title&quot;:&quot;这是一部手机&quot;,&quot;descr&quot;:&quot;这是一个苹果手机的描述信息&quot;&#125;&#39;`
+
+url地址后面的整值要跟文章id一致
+
+pretty就是 Elasticsearch美化输出(pretty-print)JSON响应以便更加容易阅读。
+</code></pre>
+<ol start="3">
+<li><p><strong>搜索数据</strong></p>
+<p> <code>vim search.json</code></p>
+<pre><code>  &#123;
+     &quot;query&quot;: &#123;
+         &quot;multi_match&quot;: &#123;
+             &quot;query&quot;: &quot;苹果&quot;,
+             &quot;fields&quot;: [
+                 &quot;title&quot;,
+                 &quot;descr&quot;
+             ]
+         &#125;
+     &#125;,
+     &quot;highlight&quot;: &#123;
+         &quot;pre_tags&quot;: [
+             &quot;&lt;em&gt;&quot;
+         ],
+         &quot;post_tags&quot;: [
+             &quot;&lt;/em&gt;&quot;
+         ],
+         &quot;fields&quot;: &#123;
+             &quot;title&quot;: &#123;&#125;,
+             &quot;descr&quot;: &#123;&#125;
+         &#125;
+     &#125;
+ &#125;
+ 
+</code></pre>
+<p> query 要查询的关键字<br> fields 哪些字段需要被查询<br> highlight 被查询出来的关键字 进行一些改变 相当于高亮显示<br> pre_tags 标签开始 post_tags标签结束</p>
+<p> 测试</p>
+<p> <code>curl -XGET &quot;http://ip:port/shop/_search?pretty&quot; -d&quot;@search.json&quot;</code></p>
+</li>
+</ol>
+<h4 id="elasticsearch-jdbc"><a href="#elasticsearch-jdbc" class="headerlink" title="elasticsearch-jdbc"></a>elasticsearch-jdbc</h4><p>   将数据库的数据同步到elasticsearch</p>
+<ol>
+<li><p><strong>下载</strong></p>
+<p> <code>wget http://xbib.org/repository/org/xbib/elasticsearch/importer/elasticsearch-jdbc/2.3.4.0/elasticsearch-jdbc-2.3.4.0-dist.zip</code></p>
+<p> <code>unzip elasticsearch-jdbc-2.3.4.0-dist.zip</code> </p>
+</li>
+</ol>
+<ol start="2">
+<li><p><strong>修改配置</strong></p>
+<p> <code> cd elasticsearch-jdbc-2.3.4.0/bin</code></p>
+<p> 为了防止出错 先备份一下</p>
+<p> <code>cp mysql-blog.sh mysql-blog.sh.bak</code></p>
+<p> <code>vim mysql-blog.sh</code></p>
+<p> 将 echo  下的内容替换成以下内容</p>
+<pre><code> &#123;
+     &quot;type&quot; : &quot;jdbc&quot;,
+     &quot;jdbc&quot; : &#123;
+         &quot;url&quot; : &quot;jdbc:mysql://localhost:3306/good&quot;,
+         &quot;user&quot; : &quot;root&quot;,
+         &quot;password&quot; : &quot;1C292567e208&quot;,
+         &quot;sql&quot; : &quot;select productid,title,descr,productid as _id from test&quot;,
+         &quot;index&quot; : &quot;shop&quot;,
+         &quot;type&quot; : &quot;products&quot;,
+         &quot;elasticsearch&quot; : &#123;
+              &quot;cluster&quot; : &quot;search&quot;,
+              &quot;host&quot; : &quot;ip&quot;,
+              &quot;port&quot; : 9300
+         &#125;   
+     &#125;
+ &#125;
+</code></pre>
+<p> url 是我们的数据库 good是库名 对哪个库进行操作<br> user password 用户名和密码<br> sql语句 就是 执行后 把查询出来的数据添加到es中<br> 这里呢productid as _id 是因为es的唯一标识是根据_id生成的<br> index 我们刚刚创建的索引名称<br> products 是索引type类型<br> cluster 是我们es配置文件中的项目名称<br> host port 分别为ip和端口号 port为9300 这个地方不可以改</p>
+</li>
+<li><p><strong>运行</strong></p>
+<p><code>./mysql-blog.sh</code></p>
+<p><code>curl -XGET &quot;http://119.23.51.33:9200/shop/_search?pretty&quot;</code></p>
+<p>可以看到数据库的内容被添加进去了</p>
+<p>但是修改数据库内容 或者 添加内容 es却不会改变  下面怎么改变呢</p>
+</li>
+<li><p><strong>监控 实时同步</strong></p>
+<pre><code> &#123;
+     &quot;type&quot; : &quot;jdbc&quot;,
+     &quot;jdbc&quot; : &#123;
+         &quot;url&quot; : &quot;jdbc:mysql://localhost:3306/good&quot;,
+         &quot;schedule&quot; : &quot;0 0-59 0-23 ? * *&quot;,
+         &quot;user&quot; : &quot;root&quot;,
+         &quot;password&quot; : &quot;1C292567e208&quot;,
+         &quot;sql&quot; : [&#123;
+                 &quot;statement&quot;: &quot;select productid,title,descr,productid as _id from test where updatetime &gt; unix_timestamp(?) &quot;,
+                 &quot;parameter&quot;: [&quot;$metrics.lastexecutionstart&quot;]&#125;
+             ],
+         &quot;index&quot; : &quot;shop&quot;,
+         &quot;type&quot; : &quot;products&quot;,
+         &quot;metrics&quot;: &#123;
+             &quot;enabled&quot; : true
+         &#125;,
+         &quot;elasticsearch&quot; : &#123;
+              &quot;cluster&quot; : &quot;search&quot;,
+              &quot;host&quot; : &quot;ip&quot;,
+              &quot;port&quot; : 9300
+         &#125;   
+     &#125;
+ &#125;
+ 
+</code></pre>
+<p> 这时需要一个字段去判断  那就是我们数据的修改时间<br> parameter 里面的内容 就是获取上次脚本执行时间<br> sql 的where条件 就是判断 修改时间大于上次脚本执行时间 就属于新数据</p>
+<p> 重新执行下脚本 就可以了</p>
+<p> 怎么用php操作呢 </p>
+<p> 现在有好多框架的轮子</p>
+<p> 或者直接看<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/cn/elasticsearch/php/current/index.html">es-php-docs</a></p>
+<p> php框架：</p>
+<p> <a target="_blank" rel="noopener" href="https://github.com/cviebrock/laravel-elasticsearch">laravel-elasticsearch</a><br> <a target="_blank" rel="noopener" href="https://github.com/yiisoft/yii2-elasticsearch">yii2-elasticsearch</a><br> 去GitHub上查找就行</p>
+</li>
+</ol>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:34:43.000Z" title="8/27/2019, 5:34:43 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.014Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">4 分钟读完 (大约617个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E5%AE%89%E8%A3%85.html">ElasticSearch全文检索引擎-安装</a></h1><div class="content"><h1 id="ElasticSearch安装"><a href="#ElasticSearch安装" class="headerlink" title="ElasticSearch安装"></a>ElasticSearch安装</h1><h4 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h4><ol>
+<li><p><strong>下载rpm包</strong></p>
+<p> <code>wget --no-cookies --no-check-certificate --header &quot;Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie&quot; &quot;https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.rpm&quot;</code></p>
+</li>
+<li><p><strong>rpm安装</strong></p>
+<p> <code>rpm -ivh jdk-8u201-linux-x64.rpm</code><br> 安装成功后测试 java javac java -version 命令都能使用</p>
+</li>
+</ol>
+<h4 id="安装ElasticSearch"><a href="#安装ElasticSearch" class="headerlink" title="安装ElasticSearch"></a>安装ElasticSearch</h4><ol>
+<li><p><strong>官网</strong><br><a target="_blank" rel="noopener" href="https://www.elastic.co/">ElasticSearch</a></p>
+</li>
+<li><p><strong>下载</strong><br>这里我下载的2.4.6版本</p>
+<p><code>wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/rpm/elasticsearch/2.4.6/elasticsearch-2.4.6.rpm</code></p>
+</li>
+<li><p><strong>安装ElasticSearch</strong></p>
+<p> <code>yum install elasticsearch-2.4.6.rpm</code></p>
+</li>
+<li><p><strong>修改配置文件</strong></p>
+<p><code>vim /etc/elasticsearch/elasticsearch.yml</code></p>
+<p><code>cluster.name: my-application</code>这行取消注释 并且改为自己的应用名称<br><code>node.name: node-1</code>  这行也一样 改为自己的节点名称<br>为了方便操作 应用名称改为 <code>search</code>  节点名称为 <code>master</code><br><code>network.host: 192.168.0.1</code> 取消注释 改为 <code>0.0.0.0</code><br><code>http.port: 9200</code> 取消注释就行 可以自行修改端口号<br>切记 取消注释后 首字母前面不能有空格 不然启动会报错</p>
+</li>
+<li><p><strong>运行ElasticSearch</strong></p>
+<p> <code>service elasticsearch start</code><br> 浏览器访问ip+端口号 如果出现界面证明 成功</p>
+</li>
+</ol>
+<h4 id="安装ik中文分词"><a href="#安装ik中文分词" class="headerlink" title="安装ik中文分词"></a>安装ik中文分词</h4><ol>
+<li><p><strong>ik分词地址</strong></p>
+<p> <a target="_blank" rel="noopener" href="https://github.com/medcl/elasticsearch-analysis-ik">ik</a></p>
+</li>
+<li><p><strong>安装git和maven</strong></p>
+<p> 如果有的话跳过此步</p>
+<p> 安装git<br> <code>yum install -y git</code></p>
+<p> 下载maven包<br> <code>wget https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz</code></p>
+<p> 解压到指定目录<br><code>tar -xzvf apache-maven-3.5.4-bin.tar.gz -C /usr/local</code></p>
+<p>进入指定目录<br><code>cd /usr/local/</code></p>
+<p>创建软连接<br><code>ln -s apache-maven-3.5.4 maven</code></p>
+<p>编辑文件 添加maven环境变量<br><code>vim /etc/profile</code></p>
+<p>在文件末尾添加以下代码<br><code>MAVEN_HOME=//usr/local/maven</code><br><code>export MAVEN_HOME</code><br><code>export PATH=$&#123;PATH&#125;:$&#123;MAVEN_HOME&#125;/bin</code></p>
+<p>运行命令<br><code>source /etc/profile</code></p>
+<p> <code>mvn -v</code><br>出现版本 安装maven成功</p>
+</li>
+<li><p><strong>安装ik分词</strong><br>克隆<br><code>git clone https://github.com/medcl/elasticsearch-analysis-ik.git</code></p>
+<p>根据elasticsearch版本号切换相对应的ik分词版本号 这里es是2.4.6 相对应是1.10.6</p>
+<p>克隆好之后进入该目录<br><code>cd elasticsearch-analysis-ik/</code></p>
+<p>切换版本<br><code>git checkout tags/v1.10.6</code></p>
+<p>执行<br><code>mvn package</code></p>
+<p>执行成功后会在 <code>target/releases/</code>  目录下生成一个插件包 进入该目录<br><code>cd target/releases/</code></p>
+<p>复制到es的插件目录下解压<br><code>cp elasticsearch-analysis-ik-1.10.6.zip /usr/share/elasticsearch/plugins/</code></p>
+<p>进入目录<br><code>cd /usr/share/elasticsearch/plugins/</code></p>
+<p>解压<br><code>unzip elasticsearch-analysis-ik-1.10.6.zip</code></p>
+<p>为了方便管理 新建个文件夹 把刚刚解压出来的文件移动进去<br><code>mkdir ik</code><br><code>mv ./* ik</code></p>
+<p>重启elasticsearch<br><code>service elasticsearch restart</code></p>
+<p>测试下<br><code>curl -XPOST &quot;http://ip:port/_analyze?analyzer=ik&amp;pretty&quot; -d &#39;这是一个商品的标题&#39;</code></p>
+</li>
+</ol>
+<hr>
+<h3 id="ElasticSearch和ik分词安装成功"><a href="#ElasticSearch和ik分词安装成功" class="headerlink" title="ElasticSearch和ik分词安装成功"></a>ElasticSearch和ik分词安装成功</h3></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:34:04.000Z" title="8/27/2019, 5:34:04 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.014Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/uncategorized/">uncategorized</a></span><span class="level-item">5 分钟读完 (大约814个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BB%8B%E7%BB%8D.html">ElasticSearch全文检索引擎-介绍</a></h1><div class="content"><h1 id="全文检索"><a href="#全文检索" class="headerlink" title="全文检索"></a>全文检索</h1><blockquote>
+<p>一<strong>种将文件种或者数据库中所有文本与检索项匹配的文字资料检索方法。对全文数据的检索</strong></p>
+</blockquote>
+<h4 id="数据分类："><a href="#数据分类：" class="headerlink" title="数据分类："></a>数据分类：</h4><ul>
+<li><p>结构化数据</p>
+<pre><code>  行数据，存储在数据库里，可以用二维表结构来逻辑表达实现的数据 
+  能够用数据或统一的结构加以表示 
+  数字、符号去表示
+</code></pre>
+</li>
+<li><p>非结构化数据</p>
+<pre><code>  无法用数字或统一的结构表示
+  文本、图像、声音、网页
+  结构化数据属于非结构化数据
+  非结构化数据即为全文数据
+</code></pre>
+</li>
+</ul>
+<h5 id="两种方法"><a href="#两种方法" class="headerlink" title="两种方法"></a>两种方法</h5><ul>
+<li><p>顺序扫描法</p>
+<pre><code>  将数据库中所有的内容挨个扫描
+</code></pre>
+</li>
+<li><p>索引扫描法</p>
+<pre><code>  全文检索的基本思路，也即将非结构化数据中的一部分信息提取出来，重新组织，使其变得有一定结构，然后对此有一定结构的数据进行搜索，从而达到搜索相对较快的目的。
+</code></pre>
+</li>
+</ul>
+<h5 id="全文检索过程"><a href="#全文检索过程" class="headerlink" title="全文检索过程"></a>全文检索过程</h5><ul>
+<li><strong>索引创建</strong><pre><code>  索引保存的是一个词元，对应文档的id
+  索引只会创建一次
+</code></pre>
+</li>
+</ul>
+<blockquote>
+<p><em>如何创建：</em></p>
+</blockquote>
+<ol>
+<li><pre><code>    一些要索引的原文档(Document)
+</code></pre>
+</li>
+<li><pre><code>    将原文档传给分词组件(Tokenizer)
+</code></pre>
+</li>
+<li><pre><code>    将得到的词元(Token)传给语言处理组件(LinguisticProcessor)
+</code></pre>
+</li>
+<li><pre><code> 将得到的词(Term)传给索引组件(Indexer)
+
+     
+</code></pre>
+</li>
+</ol>
+<ul>
+<li><strong>搜索索引</strong></li>
+</ul>
+<ol>
+<li><pre><code>    用户输入查询语句
+</code></pre>
+</li>
+<li><pre><code>    对查询语句进行词法分析，语法分析，及语言处理
+</code></pre>
+</li>
+<li><pre><code>    搜索索引，得到符号文档
+</code></pre>
+</li>
+</ol>
+<h4 id="全文检索引擎"><a href="#全文检索引擎" class="headerlink" title="全文检索引擎"></a>全文检索引擎</h4><blockquote>
+<p><strong>全文检索引擎是目前广泛应用的主流搜索引擎。<br>它的工作原理是计算机索引程序通过扫描文章中的每一个词，对每一个词建立一个索引，指明该词在文章中出现的次数和位置，当用户查询时，检索程序就根据事先建立的索引进行查找，并将查找的结果反馈给用户的检索方式。</strong></p>
+</blockquote>
+<h5 id="相关产品"><a href="#相关产品" class="headerlink" title="相关产品"></a>相关产品</h5><blockquote>
+<p>Lucene,Sphinx,Xapian,Nutch,DataparkSearch…</p>
+</blockquote>
+<h4 id="ElasticSearch"><a href="#ElasticSearch" class="headerlink" title="ElasticSearch"></a>ElasticSearch</h4><blockquote>
+<p><strong>ElasticSearch是一个基于Apache Lucene(TM)的开源搜索引擎。无论在开源还是专有领域，Lucene可以被认为是迄今为止最先进、性能最好的，功能最全的搜索引擎库。</strong></p>
+</blockquote>
+<h5 id="为什么要选择ElasticSearch"><a href="#为什么要选择ElasticSearch" class="headerlink" title="为什么要选择ElasticSearch"></a>为什么要选择ElasticSearch</h5><blockquote>
+<p><strong>ElasticSearch也使用Java开发并使用Lucene作为其核心来实现所有索引和搜索的功能，但是它的目的是通过简单的RESTful API来隐藏Lucene的复杂性，从而让全文搜索变得简单。</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>分布式的实时文件存储，每个字段都被索引可被搜索<br>分布式的实时分析搜索引擎<br>可以扩展到上百台服务器，处理PB级结构化或非结构化数据</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>所有功能都集成在一个服务里面，可以通过RESTful API、各种语言的客户端甚至命令行与之交互<br>上手容易，提供了很多合理的缺省值，开箱即用，学习成本低<br>可免费下载、使用和修改 配置灵活</strong></p>
+</blockquote>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2019-08-27T17:33:27.000Z" title="8/27/2019, 5:33:27 PM">2019-08-27</time>发表</span><span class="level-item"><time dateTime="2021-10-11T06:01:29.014Z" title="10/11/2021, 6:01:29 AM">2021-10-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Laravel/">Laravel</a></span><span class="level-item">4 分钟读完 (大约571个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/08/27/laravel%E4%BD%BF%E7%94%A8repository%E6%A8%A1%E5%BC%8F.html">Laravel使用repository模式</a></h1><div class="content"><blockquote>
 <p><strong>什么是Repository模式？</strong>Repository 模式是架构模式，在设计架构时，才有参考价值； Repository 模式主要是封装数据查询和存储逻辑； Repository 模式实际用途：更换、升级 ORM 引擎，不影响业务逻辑； Repository 模式能提高测试效率，单元测试时，用 Mock 对象代替实际的数据库存取，可以成倍地提高测试用例运行速度。</p>
 <p>详细了解 <a target="_blank" rel="noopener" href="https://blog.csdn.net/ZuoAnYinXiang/article/details/80711936">https://blog.csdn.net/ZuoAnYinXiang/article/details/80711936</a></p>
 <p><strong>REPOSITORY模式是怎样工作的呢？</strong>Repository 是一个独立的层，介于领域层与数据映射层（数据访问层）之间。它的存在让领域层感觉不到数据访问层的存在，它提供一个类似集合的接口提供给领域层进行领域对象的访问。Repository 是仓库管理员，领域层需要什么东西只需告诉仓库管理员，由仓库管理员把东西拿给它，并不需要知道东西实际放在哪。</p>
@@ -415,7 +564,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">namespace App\Http\Controllers;</span><br><span class="line"></span><br><span class="line">use App\PostRepository;</span><br><span class="line"></span><br><span class="line">class PostsController extends Controller &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @var PostRepository</span><br><span class="line">     */</span><br><span class="line">    protected $repository;</span><br><span class="line"></span><br><span class="line">    public function __construct(PostRepository $repository)&#123;</span><br><span class="line">        $this-&gt;repository = $repository;</span><br><span class="line">    &#125;</span><br><span class="line">    public function index()&#123;</span><br><span class="line">        return $this-&gt;repository-&gt;all();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>更多操作：GitHub : <a target="_blank" rel="noopener" href="https://github.com/andersao/l5-repository/tree/3.0-develop">https://github.com/andersao/l5-repository/tree/3.0-develop</a></p>
-</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/page/3/">上一页</a></div><div class="pagination-next is-invisible is-hidden-mobile"><a href="/page/5/">下一页</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li><li><a class="pagination-link" href="/page/3/">3</a></li><li><a class="pagination-link is-current" href="/page/4/">4</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/44792981?s=400&amp;u=273c6d745868dcacf7889e5da4499b751179f773&amp;v=4" alt="Stitch"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Stitch</p><p class="is-size-6 is-block">Alien monster</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Alien</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">39</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Stitch-June" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/Stitch-June"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Go/"><span class="level-start"><span class="level-item">Go</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/Kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Laravel/"><span class="level-start"><span class="level-item">Laravel</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Php/"><span class="level-start"><span class="level-item">Php</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/Swoole/"><span class="level-start"><span class="level-item">Swoole</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/uncategorized/"><span class="level-start"><span class="level-item">uncategorized</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li></ul></div></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/09/"><span class="level-start"><span class="level-item">九月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/06/"><span class="level-start"><span class="level-item">六月 2020</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/05/"><span class="level-start"><span class="level-item">五月 2020</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/04/"><span class="level-start"><span class="level-item">四月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/03/"><span class="level-start"><span class="level-item">三月 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/12/"><span class="level-start"><span class="level-item">十二月 2019</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/10/"><span class="level-start"><span class="level-item">十月 2019</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/08/"><span class="level-start"><span class="level-item">八月 2019</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-04-01T00:48:13.000Z">2021-04-01</time></p><p class="title"><a href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-03-31T01:12:26.000Z">2021-03-31</time></p><p class="title"><a href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-23T06:52:22.000Z">2020-09-23</time></p><p class="title"><a href="/2020/09/23/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BD%BF%E7%94%A8.html">ElasticSearch全文检索引擎-使用</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-20T19:06:20.000Z">2020-09-20</time></p><p class="title"><a href="/2020/09/20/elasticsearch%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%BC%95%E6%93%8E-%E4%BB%8B%E7%BB%8D.html">ElasticSearch全文检索引擎-介绍</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-09-20T18:52:44.000Z">2020-09-20</time></p><p class="title"><a href="/2020/09/20/go%E5%9F%BA%E6%9C%AC%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84.html">Go基本程序结构</a></p><p class="categories"><a href="/categories/uncategorized/">uncategorized</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Stitch&#039;s Blog</a><p class="is-size-7"><span>&copy; 2021 stitch</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+</div></article></div><nav class="pagination" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/page/3/">上一页</a></div><div class="pagination-next is-invisible is-hidden-mobile"><a href="/page/5/">下一页</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/">1</a></li><li><a class="pagination-link" href="/page/2/">2</a></li><li><a class="pagination-link" href="/page/3/">3</a></li><li><a class="pagination-link is-current" href="/page/4/">4</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="https://avatars.githubusercontent.com/u/44792981?s=400&amp;u=273c6d745868dcacf7889e5da4499b751179f773&amp;v=4" alt="Stitch"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Stitch</p><p class="is-size-6 is-block">Alien monster</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Alien</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">39</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Stitch-June" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/Stitch-June"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Go/"><span class="level-start"><span class="level-item">Go</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/Kafka/"><span class="level-start"><span class="level-item">Kafka</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Laravel/"><span class="level-start"><span class="level-item">Laravel</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Php/"><span class="level-start"><span class="level-item">Php</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Redis/"><span class="level-start"><span class="level-item">Redis</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/Swoole/"><span class="level-start"><span class="level-item">Swoole</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/uncategorized/"><span class="level-start"><span class="level-item">uncategorized</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li></ul></div></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2021/04/"><span class="level-start"><span class="level-item">四月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2021/03/"><span class="level-start"><span class="level-item">三月 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/06/"><span class="level-start"><span class="level-item">六月 2020</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/05/"><span class="level-start"><span class="level-item">五月 2020</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/04/"><span class="level-start"><span class="level-item">四月 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/archives/2020/03/"><span class="level-start"><span class="level-item">三月 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/12/"><span class="level-start"><span class="level-item">十二月 2019</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2019/08/"><span class="level-start"><span class="level-item">八月 2019</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-04-01T00:48:13.000Z">2021-04-01</time></p><p class="title"><a href="/2021/04/01/redis-%E9%93%BE%E8%A1%A8.html">Redis-链表</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-03-31T01:12:26.000Z">2021-03-31</time></p><p class="title"><a href="/2021/03/31/redis-%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds.html">Redis-简单动态字符串SDS</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-06-30T22:34:23.000Z">2020-06-30</time></p><p class="title"><a href="/2020/06/30/%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BAredis-cluster.html">如何搭建redis-cluster</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-06-22T14:09:55.000Z">2020-06-22</time></p><p class="title"><a href="/2020/06/22/redis%E5%93%A8%E5%85%B5%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%E5%8F%8A%E5%AE%9E%E7%8E%B0.html">redis哨兵故障转移及实现</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2020-06-20T01:10:48.000Z">2020-06-20</time></p><p class="title"><a href="/2020/06/20/docker-compose%E6%90%AD%E5%BB%BAredis-sentinel.html">docker-compose搭建redis-sentinel</a></p><p class="categories"><a href="/categories/Redis/">Redis</a></p></div></article></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">Stitch&#039;s Blog</a><p class="is-size-7"><span>&copy; 2021 stitch</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
             article: {
                 highlight: {
                     clipboard: true,
