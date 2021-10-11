@@ -3,7 +3,7 @@ title: 消息中间件Kafka - 介绍及安装
 tags: []
 id: '57'
 categories:
-  - - uncategorized
+  - - Kafka
 date: 2019-08-27 17:36:36
 ---
 

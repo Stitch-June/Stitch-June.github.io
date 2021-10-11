@@ -3,8 +3,8 @@ title: Go基本程序结构
 tags: []
 id: '45'
 categories:
-  - - uncategorized
-date: 2020-09-20 18:52:44
+  - - Go
+date: 2020-05-11 23:28:12
 ---
 
 ## 编写测试程序

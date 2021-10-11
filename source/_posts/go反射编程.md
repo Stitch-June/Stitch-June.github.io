@@ -3,7 +3,7 @@ title: Go反射编程
 tags: []
 id: '65'
 categories:
-  - - uncategorized
+  - - Go
 date: 2020-05-31 00:37:19
 ---
 
