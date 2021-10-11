@@ -3,7 +3,7 @@ title: Laravel使用repository模式
 tags: []
 id: '17'
 categories:
-  - - uncategorized
+  - - laravel
 date: 2019-10-27 15:31:22
 ---
 

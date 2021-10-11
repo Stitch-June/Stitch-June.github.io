@@ -62,10 +62,7 @@ ignore: null
 theme: icarus
 deploy:
   type: ''
-# Extensions
-plugins:
-  hexo-generator-feed
-# Feed Atom
+plugins: hexo-generator-feed
 feed:
   type: atom
   path: atom.xml
